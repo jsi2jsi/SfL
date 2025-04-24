@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  
+<!-- 
+    <link rel="apple-touch-icon" type="image/png" href="https://cpwebassets.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png" />
+-->
+    <meta name="apple-mobile-web-app-title" content="CodePen">
+<!--
+    <link rel="icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico" />
+
+    <link rel="mask-icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/logo-pin-b4b4269c16397ad2f0f7a01bcdf513a1994f4c94b8af2f191c09eb0d601762b1.svg" color="#111" />
+
+  
+    <script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-2c7831bb44f98c1391d6a4ffda0e1fd302503391ca806e7fcc7b9b87197aec26.js"></script>
+-->
+
+  <title>Pure JavaScript Book Effect</title>
+
+    <link rel="canonical" href="https://codepen.io/captain_anonym0us/pen/ybVbpv">
+  
+  
+  
+  
+<style>
+.book {
+  transition: opacity 0.4s 0.2s;
+}
+p{
+  margin-top: 8vw;
+  text-align: center;
+  font-size: 5vw;
+  color: #000000;
+}
+.page {
+  width: 30vw;
+  height: 44vw;
+  background-color: #111111;
+  float: left;
+  margin-bottom: 0.5em;
+  background: left top no-repeat;
+  background-size: cover;
+}
+.page:nth-child(even) {
+  clear: both;
+}
+.book {
+  perspective: 250vw;
+}
+.book .pages {
+  width: 60vw;
+  height: 44vw;
+  position: relative;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  border-radius: 4px;
+  /*box-shadow: 0 0 0 1px #e3dfd8;*/
+}
+.book .page {
+  float: none;
+  clear: none;
+  margin: 0;
+  position: absolute;
+  top: 0;
+  width: 30vw;
+  height: 44vw;
+  transform-origin: 0 0;
+  transition: transform 1.4s;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  user-select: none;
+  background-color: #f0f0f0;
+}
+.book .page:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.7s;
+  z-index: 2;
+}
+.book .page:nth-child(odd) {
+  pointer-events: all;
+  transform: rotateY(0deg);
+  right: 0;
+  border-radius: 0 4px 4px 0;
+  background-image: linear-gradient(to right, rgba(0,0,0,.15) 0%, rgba(0,0,0,0) 10%);
+}
+.book .page:nth-child(odd):hover {
+  transform: rotateY(-15deg);
+}
+.book .page:nth-child(odd):hover:before {
+  background: rgba(0, 0, 0, 0.03);
+}
+.book .page:nth-child(odd):before {
+  background: rgba(0, 0, 0, 0);
+}
+.book .page:nth-child(even) {
+  pointer-events: none;
+  transform: rotateY(180deg);
+  transform-origin: 100% 0;
+  left: 0;
+  border-radius: 4px 0 0 4px;
+  border-color: black;
+  background-image: linear-gradient(to left, rgba(0,0,0,.12) 0%, rgba(0,0,0,0) 10%);
+}
+.book .page:nth-child(even):before {
+  background: rgba(0, 0, 0, 0.2);
+}
+.book .page.grabbing {
+  transition: none;
+}
+.book .page.flipped:nth-child(odd) {
+  pointer-events: none;
+  transform: rotateY(-180deg);
+}
+.book .page.flipped:nth-child(odd):before {
+  background: rgba(0, 0, 0, 0.2);
+}
+.book .page.flipped:nth-child(even) {
+  pointer-events: all;
+  transform: rotateY(0deg);
+}
+.book .page.flipped:nth-child(even):hover {
+  transform: rotateY(15deg);
+}
+.book .page.flipped:nth-child(even):hover:before {
+  background: rgba(0, 0, 0, 0.03);
+}
+.book .page.flipped:nth-child(even):before {
+  background: rgba(0, 0, 0, 0);
+}
+*,
+* :before,
+*:after {
+  box-sizing: border-box;
+}
+html,
+body {
+  font-family: 'Lovers Quarrel', cursive;
+  background: #333;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+html {
+  height: 100%;
+}
+body {
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2em 0;
+  line-height: 1.5em;
+}
+.page:nth-child(odd){
+  background-position: right top;
+}
+</style>
+
+  
+  
+</head>
+
+<body translate="no">
+  <link href="https://fonts.googleapis.com/css?family=Lovers+Quarrel" rel="stylesheet">
+<div class="book">
+  <div id="pages" class="pages">
+    <div style="background-image: url('M0_CE_U2/M0_CE_U2 (1).png'); background-size: 100% 100%;" class="page" ><p ></div>
+    <div class="page" style="background-image: url('M0_CE_U2/M0_CE_U2 (2).png'); background-size: 100% 100%;"></div>
+    <div class="page" style="background-image: url('M0_CE_U2/M0_CE_U2 (3).png'); background-size: 100% 100%;"><p></p></div>
+    <div class="page" style="background-image: url('M0_CE_U2/M0_CE_U2 (4).png'); background-size: 100% 100%;"></div>
+    <div class="page" style="background-image: url('M0_CE_U2/M0_CE_U2 (5).png'); background-size: 100% 100%;"></div>
+    <div class="page" style="background-image: url('M0_CE_U2/M0_CE_U2 (6).png'); background-size: 100% 100%;"></div>
+    <div class="page" style="background-image: url('M0_CE_U2/M0_CE_U2 (7).png'); background-size: 100% 100%;"></div>
+    <div class="page" style="background-image: url('M0_CE_U2/M0_CE_U2 (8).png'); background-size: 100% 100%;"></div>
+    <div class="page" style="background-image: url('M0_CE_U2/M0_CE_U2 (9).png'); background-size: 100% 100%;"></div>
+    <div class="page" style="background-image: url('M0_CE_U2/M0_CE_U2 (10).png'); background-size: 100% 100%;"></div>
+    <div class="page" style="background-image: url('M0_CE_U2/M0_CE_U2 (11).png'); background-size: 100% 100%;"></div>
+    <div class="page" style="background-image: url('M0_CE_U2/M0_CE_U2 (12).png'); background-size: 100% 100%;"></div>
+    <div class="page" style="background-image: url('M0_CE_U2/M0_CE_U2 (13).png'); background-size: 100% 100%;"></div>
+    <div class="page"  style="background-image: url('M0_CE_U2/M0_CE_U2 (14).png'); background-size: 100% 100%;"></div>
+    <div class="page" style="background-image: url('M0_CE_U2/M0_CE_U2 (15).png'); background-size: 100% 100%;"></div>
+    <div class="page" style="background-image: url('M0_CE_U2/M0_CE_U2 (16).png'); background-size: 100% 100%;"></div>
+    <div class="page" style="background-image: url('M0_CE_U2/M0_CE_U2 (17).png'); background-size: 100% 100%;"></div>
+    <div class="page"></div>
+    
+  </div>
+</div>
+  
+      <script id="rendered-js" >
+  var pages = document.getElementsByClassName('page');
+  for(var i = 0; i < pages.length; i++)
+    {
+      var page = pages[i];
+      if (i % 2 === 0)
+        {
+          page.style.zIndex = (pages.length - i);
+        }
+    }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    for(var i = 0; i < pages.length; i++)
+      {
+        //Or var page = pages[i];
+        pages[i].pageNum = i + 1;
+        pages[i].onclick=function()
+          {
+            if (this.pageNum % 2 === 0)
+              {
+                this.classList.remove('flipped');
+                this.previousElementSibling.classList.remove('flipped');
+              }
+            else
+              {
+                this.classList.add('flipped');
+                this.nextElementSibling.classList.add('flipped');
+              }
+           }
+        }
+  })    </script>
+
+  
+</body>
+
+</html>
