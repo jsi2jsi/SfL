@@ -61,7 +61,7 @@
     </style>
     <p>Jair emplea el sistema de mensajes de la plataforma para comunicarse con diversos agentes educativos, sin embargo cuando pulsa la tecla “enter” para pasar a otra línea, lo escrito se envía al destinatario. Quiere evitar esto y que solo se envíe el mensaje cuando pulse el botón de envío.</p>
     <p>¿Cómo le puedes orientar para solucionar este aspecto?.</p>
-    <p>Considerando las pautas de cordialidad, ordena el texto del mensaje.</p>
+    <p>Considerando las pautas de cordialidad, ordena el texto del mensaje.<br>1) Clic en la frase, 2) mueve el puntero a otra posición, 3) da clic. <br>4) Pulsa el boton -Evalua tu propuesta-. 5)Así para cada frase hasta resolver correctamente</p>
    </prevScreen>
    <document>
     <style name="targetError" base="target" foreground="0xFF0000" />
@@ -132,4 +132,5 @@
  </activities>
  <mediaBag />
 </JClicProject>
+
 
