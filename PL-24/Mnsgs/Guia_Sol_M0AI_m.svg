@@ -105,7 +105,7 @@ animation-iteration-count: infinite;
 .marquesina-moderna {
 	width: 64%;
 	overflow: hidden;
-	background: #f0f0f0;
+	/* background: #f0f0f0;  */
 	border: 1px solid #ccc;
 	box-sizing: border-box;
 }
