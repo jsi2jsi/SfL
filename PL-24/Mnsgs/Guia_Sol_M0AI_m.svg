@@ -10,7 +10,7 @@
    version="1.1"
    id="svg5"
    inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
-   sodipodi:docname="2a-Plantilla_Diapos_Guia_Col_M0AI_Marq.svg"
+   sodipodi:docname="Guia_Sol_M0AI_m.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -34,7 +34,7 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="0.69130191"
-     inkscape:cx="315.34702"
+     inkscape:cx="462.89471"
      inkscape:cy="329.81248"
      inkscape:window-width="1920"
      inkscape:window-height="974"
@@ -665,14 +665,6 @@ animation-iteration-count: infinite;
        x="216.25862"
        y="136.74104"
        rx="0.92301327" />
-    <rect
-       style="display:inline;fill:#f6f8e1;fill-opacity:1;stroke:#f6f8e1;stroke-width:2.09716;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:3.7;stroke-dashoffset:0.302363;stroke-opacity:1"
-       id="rect383-5"
-       width="64.877586"
-       height="14.97175"
-       x="391.7608"
-       y="327.215"
-       rx="0.70583367" />
   </g>
   <foreignObject
      class="marquesina-moderna"
