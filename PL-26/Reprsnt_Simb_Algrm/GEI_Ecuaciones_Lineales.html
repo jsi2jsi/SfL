@@ -1,0 +1,2643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="handbook">
+  <title>Guía de estudio interactiva: Ecuaciones lineales (de primer grado)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/contrib/auto-render.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces */
+      --background: #ffffff;
+      --surface-container-low: #f3f2f1;
+      --surface-container: #e8e7e5;
+      --surface-container-high: #dbdad9;
+
+      /* Ink */
+      --on-surface: #0b0c0c;
+      --on-surface-variant: #505a5f;
+
+      /* Rules */
+      --outline: #0b0c0c;
+      --outline-variant: #b1b4b6;
+
+      /* Accents */
+      --primary: #162e51;
+      --on-primary: #ffffff;
+      --primary-container: #d2e2f1;
+      --on-primary-container: #0c2d4a;
+      --secondary: #4c2c92;
+      --tertiary: #1a569e;
+      --error: #d4351c;
+      --on-error: #ffffff;
+      --primary-ledge: #091526;
+      --secondary-ledge: #858686;
+
+      /* Data series */
+      --data-1: #1a569e;
+      --data-2: #c75a0a;
+      --data-3: #28a197;
+      --data-4: #4c2c92;
+      --data-context: #b1b4b6;
+
+      /* Fonts */
+      --font-headline: 'Public Sans', sans-serif;
+      --font-body: 'Public Sans', sans-serif;
+      --font-label: 'Public Sans', sans-serif;
+
+      /* Shape */
+      --rounded: 0;
+      --rounded-lg: 0;
+      --rounded-full: 0;
+
+      /* Style effects */
+      --top-index-rule: 6px solid var(--primary);
+      --inset-rule: 5px solid var(--tertiary);
+      --inset-rule-error: 5px solid var(--error);
+      --inset-rule-positive: 5px solid var(--positive);
+      --inset-rule-warning: 5px solid var(--warning);
+      --button-ground: 0 2px 0 var(--primary-ledge);
+      --button-ground-secondary: 0 2px 0 var(--secondary-ledge);
+      --focus-yellow: #ffdd00;
+      --focus-ring: 3px solid var(--focus-yellow);
+      --focus-bar: inset 0 0 0 2px var(--on-surface);
+      --focus-underline: 0 -2px var(--focus-yellow), 0 4px var(--on-surface);
+
+      /* Shared semantic tokens */
+      --positive: #00703c;
+      --positive-container: #e8f3ee;
+      --warning: #9a4a00;
+      --warning-container: #fdf4eb;
+      --focus: var(--primary);
+
+      /* Type scale (Narrative) */
+      --display-size: clamp(2.25rem, 1.4rem + 3.4vw, 3.75rem);
+      --headline-size: clamp(1.65rem, 1.2rem + 1.8vw, 2.35rem);
+      --subhead-size: clamp(1.2rem, 1.05rem + 0.55vw, 1.45rem);
+      --body-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --label-size: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1160px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Two-column editorial layout on wide viewports (2/3 main, 1/3 rail) */
+    .guide-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr);
+      gap: var(--space-2xl);
+      align-items: start;
+    }
+
+    .main-column {
+      max-width: 70ch;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2xl);
+    }
+
+    /* Index Header */
+    .index-header {
+      border-top: var(--top-index-rule);
+      border-bottom: 1px solid var(--on-surface);
+      padding: var(--space-sm) 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--on-surface);
+    }
+
+    .hero-block {
+      padding-top: var(--space-lg);
+      padding-bottom: var(--space-xl);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+
+    h1 {
+      font-family: var(--font-headline);
+      font-weight: 800;
+      font-size: var(--display-size);
+      line-height: 1.08;
+      letter-spacing: -0.015em;
+      margin: 0 0 var(--space-md) 0;
+      color: var(--on-surface);
+    }
+
+    .hero-lede {
+      font-size: var(--subhead-size);
+      line-height: 1.45;
+      color: var(--on-surface-variant);
+      margin: 0 0 var(--space-xl) 0;
+      max-width: 62ch;
+    }
+
+    /* Key figure inset tiles */
+    .key-figures-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+      gap: var(--space-lg);
+    }
+
+    .key-figure {
+      border-left: var(--inset-rule);
+      background: var(--surface-container-low);
+      padding: var(--space-md) var(--space-lg);
+    }
+
+    .key-figure__label {
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--on-surface-variant);
+      margin-bottom: var(--space-xs);
+    }
+
+    .key-figure__value {
+      font-size: var(--headline-size);
+      font-weight: 800;
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+      color: var(--on-surface);
+      margin-bottom: var(--space-xs);
+    }
+
+    .key-figure__desc {
+      font-size: 0.9375rem;
+      color: var(--on-surface);
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    /* Headings & Sections */
+    section {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      padding-bottom: var(--space-xl);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-md);
+      margin-bottom: var(--space-xs);
+    }
+
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      background: var(--primary);
+      color: var(--on-primary);
+      font-weight: 800;
+      font-size: 0.9375rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    h2 {
+      font-family: var(--font-headline);
+      font-weight: 800;
+      font-size: var(--headline-size);
+      line-height: 1.12;
+      letter-spacing: -0.01em;
+      margin: 0;
+      color: var(--on-surface);
+    }
+
+    h3 {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--subhead-size);
+      line-height: 1.25;
+      margin: var(--space-md) 0 var(--space-xs) 0;
+      color: var(--on-surface);
+    }
+
+    p {
+      margin: 0;
+      max-width: 66ch;
+    }
+
+    ul, ol {
+      margin: 0;
+      padding-left: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    /* Links */
+    a {
+      color: var(--tertiary);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-thickness: 1px;
+    }
+    a:hover {
+      text-decoration-thickness: 3px;
+    }
+    a:visited {
+      color: var(--secondary);
+    }
+    a:focus-visible {
+      outline: none;
+      background: var(--focus-yellow);
+      color: var(--on-surface);
+      text-decoration: none;
+      box-shadow: var(--focus-underline);
+    }
+
+    /* Inset callouts */
+    .inset {
+      border-left: var(--inset-rule);
+      background: var(--surface-container-low);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .inset--white {
+      background: var(--background);
+    }
+
+    .inset--positive {
+      border-left: var(--inset-rule-positive);
+      background: var(--background);
+    }
+
+    .inset--error {
+      border-left: var(--inset-rule-error);
+      background: var(--background);
+    }
+
+    .inset--warning {
+      border-left: var(--inset-rule-warning);
+      background: var(--background);
+    }
+
+    .inset__title {
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+
+    /* Status tags */
+    .status-tag {
+      display: inline-block;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--rounded);
+      width: fit-content;
+    }
+
+    .status-tag--positive {
+      background: var(--positive-container);
+      color: var(--positive);
+    }
+
+    .status-tag--error {
+      background: var(--background);
+      color: var(--error);
+      border: 1px solid var(--error);
+    }
+
+    /* Tables (no vertical borders, grey hairlines) */
+    .table-wrap {
+      overflow-x: auto;
+      width: 100%;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.96875rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    th, td {
+      text-align: left;
+      padding: var(--space-sm) var(--space-md) var(--space-sm) 0;
+      border-bottom: 1px solid var(--outline-variant);
+      vertical-align: top;
+    }
+
+    th {
+      font-weight: 700;
+      border-bottom: 2px solid var(--on-surface);
+      color: var(--on-surface);
+    }
+
+    .td-num {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Buttons (Handbook grounded ledge) */
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: 1rem;
+      line-height: 1.2;
+      background: var(--primary);
+      color: var(--on-primary);
+      border: 0;
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+      box-shadow: var(--button-ground);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+    }
+
+    .button:hover:not(:disabled) {
+      background: var(--on-primary-container);
+    }
+
+    .button:active:not(:disabled) {
+      transform: translateY(2px);
+      box-shadow: none;
+    }
+
+    .button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .button--secondary {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      box-shadow: var(--button-ground-secondary);
+    }
+
+    .button--secondary:hover:not(:disabled) {
+      background: var(--surface-container);
+    }
+
+    .button--secondary.is-active {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      box-shadow: inset 0 -3px 0 var(--primary);
+    }
+
+    .button:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+      outline: var(--focus-ring);
+      outline-offset: 0;
+      box-shadow: var(--focus-bar);
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+
+    /* Form Controls */
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .control-label {
+      font-weight: 700;
+      font-size: 0.9375rem;
+      color: var(--on-surface);
+    }
+
+    .control-hint {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-sm);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-variant-numeric: tabular-nums;
+      background: var(--background);
+      color: var(--on-surface);
+      border: 2px solid var(--outline);
+      border-radius: var(--rounded);
+    }
+
+    select {
+      padding-right: var(--space-xl);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      min-height: 44px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .dual-input-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 96px;
+      gap: var(--space-md);
+      align-items: end;
+    }
+
+    /* Interactive Workbench Containers */
+    .lab-panel {
+      background: var(--surface-container-low);
+      border-top: 3px solid var(--primary);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      container-type: inline-size;
+    }
+
+    .lab-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    @container (max-width: 580px) {
+      .lab-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .chart-frame {
+      background: var(--background);
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .chart-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--on-surface);
+    }
+
+    .chart-svg-wrap {
+      width: 100%;
+      min-height: 290px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chart-svg-wrap svg {
+      width: 100%;
+      height: auto;
+      max-height: 340px;
+      display: block;
+    }
+
+    /* Summary list (Handbook component) */
+    .summary-list {
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid var(--outline-variant);
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-md);
+      padding: var(--space-sm) 0;
+      border-bottom: 1px solid var(--outline-variant);
+    }
+
+    .summary-row__key {
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+
+    .summary-row__val {
+      font-variant-numeric: tabular-nums;
+      color: var(--on-surface);
+      text-align: right;
+    }
+
+    /* Detector Linear vs Nonlinear */
+    .detector-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .detector-item {
+      background: var(--background);
+      border-bottom: 1px solid var(--outline-variant);
+      padding: var(--space-md) 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .detector-item__head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .detector-eq {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    /* Step-by-step Explorer */
+    .step-viewer {
+      background: var(--background);
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .step-row {
+      display: grid;
+      grid-template-columns: 32px minmax(0, 1fr);
+      gap: var(--space-md);
+      padding: var(--space-sm) 0;
+      border-bottom: 1px solid var(--outline-variant);
+      align-items: start;
+      transition: opacity var(--dur-short) var(--ease-out);
+    }
+
+    .step-row.is-hidden {
+      display: none;
+    }
+
+    .step-row.is-current {
+      border-left: 4px solid var(--tertiary);
+      padding-left: var(--space-sm);
+      background: var(--surface-container-low);
+    }
+
+    .step-row__math {
+      font-weight: 700;
+      font-size: 1.125rem;
+      margin-bottom: var(--space-xs);
+    }
+
+    .step-row__note {
+      font-size: 0.9375rem;
+      color: var(--on-surface-variant);
+    }
+
+    /* Sandbox Solver */
+    .solver-inputs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(130px, 100%), 1fr));
+      gap: var(--space-md);
+      align-items: end;
+    }
+
+    /* Practice Section */
+    .tf-card {
+      background: var(--background);
+      border-bottom: 1px solid var(--outline-variant);
+      padding: var(--space-md) 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .exercise-card {
+      border-top: 2px solid var(--on-surface);
+      padding: var(--space-lg) 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .exercise-card__meta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .exercise-card__prompt {
+      font-size: 1.125rem;
+      font-weight: 700;
+    }
+
+    .exercise-input-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      align-items: flex-end;
+    }
+
+    .feedback-box {
+      padding: var(--space-sm) var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      font-size: 0.96875rem;
+    }
+
+    .feedback-box--ok {
+      border-left: var(--inset-rule-positive);
+      background: var(--background);
+      color: var(--on-surface);
+    }
+
+    .feedback-box--err {
+      border-left: var(--inset-rule-error);
+      background: var(--background);
+      color: var(--on-surface);
+    }
+
+    .feedback-box--err .feedback-title {
+      color: var(--error);
+      font-weight: 700;
+    }
+
+    .feedback-box--ok .feedback-title {
+      color: var(--positive);
+      font-weight: 700;
+    }
+
+    /* Side Reference Rail */
+    aside {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+      position: sticky;
+      top: var(--space-lg);
+    }
+
+    .rail-panel {
+      background: var(--surface-container-low);
+      border-left: var(--inset-rule);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .rail-nav {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .rail-nav a {
+      display: block;
+      padding: var(--space-xs) 0;
+      font-weight: 600;
+      font-size: 0.9375rem;
+    }
+
+    .progress-bar-track {
+      width: 100%;
+      height: 10px;
+      background: var(--surface-container-high);
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    /* Compact inline progress strip visible on mobile & desktop inside Practice */
+    .practice-scoreboard {
+      border-left: var(--inset-rule);
+      background: var(--surface-container-low);
+      padding: var(--space-md) var(--space-lg);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+      gap: var(--space-md);
+      align-items: center;
+    }
+
+    .sources-note {
+      font-size: 0.9375rem;
+      color: var(--on-surface-variant);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    /* Mobile adaptation */
+    @media (max-width: 900px) {
+      .guide-shell {
+        grid-template-columns: 1fr;
+      }
+      aside {
+        position: static;
+        order: -1;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-grid {
+        grid-template-columns: 1fr;
+        padding: var(--space-md);
+      }
+      aside {
+        display: none;
+      }
+      .lab-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-grid">
+<header>
+      <div class="index-header">
+        <span>Interactua con Álgebra</span>
+        <span>Ecuaciones de primer grado</span>
+      </div>
+</header>
+
+    <div class="guide-shell">
+      <main class="main-column">
+        <!-- SECCIÓN 1 -->
+        <section id="sec-concepto" aria-labelledby="h-concepto">
+          <div class="section-head">
+            <span class="step-badge" aria-hidden="true">1</span>
+            <h2 id="h-concepto">Qué es una ecuación lineal y el principio de igualdad</h2>
+          </div>
+
+          <p>
+            En álgebra, una <strong>ecuación</strong> es una igualdad matemática en la que aparecen letras con valor desconocido llamadas <strong>incógnitas</strong> (habitualmente \(x\), \(y\) o \(z\)). Resolver una ecuación consiste en encontrar el valor o conjunto de valores que transforman esa igualdad en una identidad verdadera, logrando que el miembro izquierdo valga exactamente lo mismo que el derecho.
+          </p>
+
+          <p>
+            Una <strong>ecuación lineal</strong> —también llamada <strong>ecuación de primer grado</strong>— es aquella en la que todas las incógnitas tienen exponente \(1\), no se multiplican entre sí, no aparecen dentro de raíces, logaritmos ni funciones trigonométricas, y tampoco figuran en el denominador de una fracción.
+          </p>
+
+          <div class="inset">
+            <span class="inset__title">El principio de igualdad: la regla de la balanza</span>
+            <p>
+              Una ecuación funciona como una balanza perfectamente equilibrada. Cualquier operación que apliques en un lado de la igualdad debes aplicarla exactamente igual en el otro para conservar el equilibrio:
+            </p>
+            <ul>
+              <li><strong>Suma y resta:</strong> si sumas o restas el mismo número en ambos miembros, la igualdad persiste.</li>
+              <li><strong>Multiplicación y división:</strong> si multiplicas o divides ambos miembros por un mismo número distinto de cero, la igualdad persiste. Nunca multipliques por \(0\), pues destruirías la solución original.</li>
+            </ul>
+          </div>
+
+          <h3>Formas habituales de escribir una ecuación lineal</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Forma</th>
+                  <th>Expresión general</th>
+                  <th>Ejemplo</th>
+                  <th>Uso principal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Estándar (1 variable)</strong></td>
+                  <td>\(ax + b = c\)</td>
+                  <td>\(3x - 5 = 10\)</td>
+                  <td>Despeje directo de una incógnita (\(a \neq 0\))</td>
+                </tr>
+                <tr>
+                  <td><strong>General (1 variable)</strong></td>
+                  <td>\(ax + b = 0\)</td>
+                  <td>\(2x - 4 = 0\)</td>
+                  <td>Forma simplificada e igualada a cero</td>
+                </tr>
+                <tr>
+                  <td><strong>Estándar (2 variables)</strong></td>
+                  <td>\(Ax + By = C\)</td>
+                  <td>\(2x + 3y = 12\)</td>
+                  <td>Sistemas de ecuaciones e intersecciones con ejes</td>
+                </tr>
+                <tr>
+                  <td><strong>Pendiente-ordenada</strong></td>
+                  <td>\(y = mx + b\)</td>
+                  <td>\(y = 2x + 3\)</td>
+                  <td>Trazado gráfico: \(m\) es pendiente, \(b\) corte en \(y\)</td>
+                </tr>
+                <tr>
+                  <td><strong>Punto-pendiente</strong></td>
+                  <td>\(y - y_1 = m(x - x_1)\)</td>
+                  <td>\(y - 2 = 3(x - 1)\)</td>
+                  <td>Construir la recta desde un punto y su pendiente</td>
+                </tr>
+              </tbody>
+            </table>
+		<img src="https://jsi2jsi.github.io/SfL/PL-26/Orentc_vr_M11/Formas_Ec_Lineales.png" width="600" height="300">
+          </div>
+
+          <h3>Laboratorio gráfico: explora la pendiente \(m\) y la ordenada \(b\)</h3>
+          <p>
+            Cuando una ecuación lineal tiene dos variables (\(y = mx + b\)), cada par \((x, y)\) que la satisface forma un punto sobre una misma línea recta. Cambia la pendiente \(m\) (inclinación) y la ordenada \(b\) (corte con el eje \(y\)) para observar cómo responde la recta.
+          </p>
+
+          <div class="lab-panel" aria-label="Explorador gráfico de la ecuación lineal">
+            <div class="lab-grid">
+              <div style="display:flex; flex-direction:column; gap: var(--space-md);">
+                <div class="control-group">
+                  <label class="control-label" for="input-slope">Pendiente (\(m\))</label>
+                  <span class="control-hint">Cuánto sube o baja \(y\) por cada unidad que avanza \(x\) hacia la derecha.</span>
+                  <div class="dual-input-row">
+                    <input type="range" id="slider-slope" min="-4" max="4" step="0.5" value="2" oninput="syncSlopeFromSlider(this.value)" aria-label="Deslizador de pendiente m">
+                    <input type="number" id="input-slope" min="-4" max="4" step="0.5" value="2" oninput="syncSlopeFromNumber(this.value)">
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label" for="input-intercept">Ordenada al origen (\(b\))</label>
+                  <span class="control-hint">Valor de \(y\) donde la recta cruza el eje vertical (\(x = 0\)).</span>
+                  <div class="dual-input-row">
+                    <input type="range" id="slider-intercept" min="-5" max="5" step="0.5" value="3" oninput="syncInterceptFromSlider(this.value)" aria-label="Deslizador de ordenada al origen b">
+                    <input type="number" id="input-intercept" min="-5" max="5" step="0.5" value="3" oninput="syncInterceptFromNumber(this.value)">
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <span class="control-label">Casos frecuentes</span>
+                  <div class="button-row">
+                    <button type="button" class="button button--secondary" onclick="setLinePreset(2, 3)">\(y = 2x + 3\)</button>
+                    <button type="button" class="button button--secondary" onclick="setLinePreset(-1.5, 2)">Decreciente</button>
+                    <button type="button" class="button button--secondary" onclick="setLinePreset(0, 4)">Horizontal (\(y = 4\))</button>
+                  </div>
+                </div>
+
+                <div class="summary-list" aria-live="polite">
+                  <div class="summary-row">
+                    <span class="summary-row__key">Ecuación actual</span>
+                    <span class="summary-row__val" id="line-eq-readout">y = 2x + 3</span>
+                  </div>
+                  <div class="summary-row">
+                    <span class="summary-row__key">Corte eje Y</span>
+                    <span class="summary-row__val" id="line-yint-readout">(0, 3)</span>
+                  </div>
+                  <div class="summary-row">
+                    <span class="summary-row__key">Corte eje X</span>
+                    <span class="summary-row__val" id="line-xint-readout">(-1.5, 0)</span>
+                  </div>
+                  <div class="summary-row">
+                    <span class="summary-row__key">Comportamiento</span>
+                    <span class="summary-row__val" id="line-behavior-readout">Recta creciente</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chart-frame">
+                <div class="chart-title" id="line-chart-title">Gráfica de la recta en el plano cartesiano</div>
+                <div class="chart-svg-wrap" id="line-svg-wrap">
+                  <svg id="line-plot-svg" viewBox="0 0 360 320" role="img" aria-label="Plano cartesiano interactivo mostrando la ecuación lineal"></svg>
+                </div>
+                <div class="control-hint" id="line-interpretation">
+                  Por cada 1 unidad que avanza x, y sube 2 unidades.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECCIÓN 2 -->
+        <section id="sec-diferencias" aria-labelledby="h-diferencias">
+          <div class="section-head">
+            <span class="step-badge" aria-hidden="true">2</span>
+            <h2 id="h-diferencias">Diferencia entre ecuaciones lineales y no lineales</h2>
+          </div>
+
+          <p>
+            No toda igualdad algebraica es lineal. Reconocer rápidamente cuándo una ecuación deja de ser de primer grado evita errores al elegir el método de resolución. Puedes comprobarlo tanto observando su <strong>expresión algebraica</strong> como analizando su <strong>gráfica</strong>.
+          </p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Criterio</th>
+                  <th>Ecuación lineal</th>
+                  <th>Ecuación no lineal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Grado de la incógnita</strong></td>
+                  <td>Siempre grado \(1\) (sin exponentes visibles mayores a \(1\)).</td>
+                  <td>Grado distinto de \(1\): cuadrática (\(x^2\)), cúbica (\(x^3\)), fraccionario (\(x^{3/2}\)).</td>
+                </tr>
+                <tr>
+                  <td><strong>Operaciones prohibidas</strong></td>
+                  <td>Solo sumas, restas y multiplicación por constantes.</td>
+                  <td>Incógnitas multiplicadas entre sí (\(xy\)), en raíces (\(\sqrt{x}\)), exponentes (\(2^x\)) o logaritmos.</td>
+                </tr>
+                <tr>
+                  <td><strong>Forma de la gráfica</strong></td>
+                  <td>Siempre una <strong>línea recta</strong> (inclinada, horizontal o vertical).</td>
+                  <td><strong>Curvas:</strong> parábolas, ondas sinusoidales, curvas exponenciales o hipérbolas.</td>
+                </tr>
+                <tr>
+                  <td><strong>Uso habitual</strong></td>
+                  <td>Relaciones proporcionales: precio según peso, repartos, movimiento uniforme.</td>
+                  <td>Fenómenos científicos complejos: mitosis celular (exponencial), proyectiles, ondas.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="inset">
+            <span class="inset__title">Cuidado con las ecuaciones «disfrazadas»</span>
+            <p>
+              Antes de clasificar una ecuación, conviene simplificar los paréntesis. Por ejemplo, en \((x + 4)(x - 3) - 2(3x - 2) = (x - 4)^2\), al desarrollar ambos lados aparece \(x^2\), pero se cancela al restar \(x^2\) en los dos miembros, quedando \(-5x - 8 = -8x + 16\), que sí es lineal (\(x = 8\)).
+            </p>
+          </div>
+
+          <h3>Comparador visual: recta lineal frente a curvas no lineales</h3>
+          <div class="lab-panel" aria-label="Comparador gráfico lineal y no lineal">
+            <div class="button-row" role="group" aria-label="Seleccionar función para comparar con la recta lineal">
+              <button type="button" class="button button--secondary is-active" id="cmp-btn-quad" onclick="selectComparison('quad')">Cuadrática: \(y = x^2 - 2\)</button>
+              <button type="button" class="button button--secondary" id="cmp-btn-exp" onclick="selectComparison('exp')">Exponencial: \(y = 2^x\)</button>
+              <button type="button" class="button button--secondary" id="cmp-btn-sin" onclick="selectComparison('sin')">Sinusoidal: \(y = 2\sin(x)\)</button>
+              <button type="button" class="button button--secondary" id="cmp-btn-hyp" onclick="selectComparison('hyp')">Inversa: \(xy = 4\)</button>
+            </div>
+
+            <div class="lab-grid">
+              <div class="chart-frame">
+                <div class="chart-title">Recta lineal (\(y = x + 1\)) vs. curva no lineal</div>
+                <div class="chart-svg-wrap">
+                  <svg id="compare-plot-svg" viewBox="0 0 360 300" role="img" aria-label="Comparación gráfica entre una función lineal y una función no lineal"></svg>
+                </div>
+              </div>
+              <div style="display:flex; flex-direction:column; gap: var(--space-md);">
+                <span class="status-tag" id="cmp-tag">No lineal · Segundo grado</span>
+                <h3 id="cmp-title" style="margin-top:0;">Parábola: \(y = x^2 - 2\)</h3>
+                <p id="cmp-desc">
+                  La incógnita \(x\) está elevada al cuadrado (\(x^2\)). Por eso su razón de cambio no es constante y la gráfica se curva formando una parábola simétrica en lugar de una línea recta.
+                </p>
+                <div class="inset inset--white">
+                  <span class="inset__title">Diferencia clave en la gráfica</span>
+                  <p id="cmp-diff">
+                    La línea azul (\(y = x + 1\)) mantiene siempre la misma inclinación. La curva naranja cambia de pendiente en cada punto.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3>Verificador rápido: ¿lineal o no lineal?</h3>
+          <p>
+            Clasifica estas seis expresiones antes de revisar su justificación algebraica.
+          </p>
+          <div class="detector-list" id="detector-container"></div>
+        </section>
+
+        <!-- SECCIÓN 3 -->
+        <section id="sec-niveles" aria-labelledby="h-niveles">
+          <div class="section-head">
+            <span class="step-badge" aria-hidden="true">3</span>
+            <h2 id="h-niveles">Resolución paso a paso en cuatro niveles de complejidad</h2>
+          </div>
+
+          <p>
+            Cualquier ecuación lineal de una incógnita se resuelve siguiendo un orden sistemático. Aunque el aspecto inicial parezca complejo, el objetivo siempre es aislar la variable siguiendo esta secuencia de cinco pasos:
+          </p>
+
+          <ol>
+            <li><strong>Eliminar paréntesis:</strong> aplica la propiedad distributiva multiplicando el factor externo por cada término interior.</li>
+            <li><strong>Eliminar denominadores:</strong> calcula el mínimo común múltiplo (m.c.m.) de todos los denominadores y multiplica cada término de ambos miembros por él.</li>
+            <li><strong>Transponer términos:</strong> agrupa todos los términos con la incógnita en un lado y los números independientes en el otro (invirtiendo la operación al cambiar de lado).</li>
+            <li><strong>Reducir y despejar:</strong> suma o resta términos semejantes y divide ambos lados por el coeficiente que multiplica a la incógnita.</li>
+            <li><strong>Comprobar:</strong> sustituye el valor hallado en la ecuación original para verificar que ambos lados arrojan el mismo número.</li>
+          </ol>
+
+          <div class="inset">
+            <span class="inset__title">Los tres desenlaces posibles de una ecuación lineal</span>
+            <ul>
+              <li><strong>Solución única (determinada):</strong> obtienes un valor concreto, como \(3x + 7 = 22 \implies x = 5\).</li>
+              <li><strong>Sin solución (imposible o contradicción):</strong> la incógnita desaparece y queda algo falso, como \(2x + 3 = 2x + 7 \implies 3 = 7\). En dos variables corresponde a dos rectas paralelas que nunca se cruzan.</li>
+              <li><strong>Infinitas soluciones (identidad):</strong> ambos lados son idénticos, como \(3(x + 2) = 3x + 6 \implies 0 = 0\). Cualquier número real satisface la igualdad.</li>
+            </ul>
+          </div>
+
+          <h3>Explorador interactivo de ejemplos resueltos por nivel</h3>
+          <p>
+            Selecciona un nivel y un ejemplo, y avanza paso a paso para observar qué regla algebraica se aplica en cada línea.
+          </p>
+
+          <div class="lab-panel" aria-label="Visor de ejemplos resueltos paso a paso">
+            <div class="button-row" role="group" aria-label="Niveles de complejidad">
+              <button type="button" class="button button--secondary is-active" id="lvl-btn-1" onclick="selectLevel(1)">Nivel 1: Una incógnita</button>
+              <button type="button" class="button button--secondary" id="lvl-btn-2" onclick="selectLevel(2)">Nivel 2: Paréntesis</button>
+              <button type="button" class="button button--secondary" id="lvl-btn-3" onclick="selectLevel(3)">Nivel 3: Fracciones</button>
+              <button type="button" class="button button--secondary" id="lvl-btn-4" onclick="selectLevel(4)">Nivel 4: Sistemas 2×2</button>
+            </div>
+
+            <div class="button-row" id="example-tabs-row" role="group" aria-label="Elegir ejemplo del nivel"></div>
+
+            <div class="step-viewer">
+              <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap: var(--space-sm);">
+                <div>
+                  <span class="status-tag" id="ex-level-tag">Nivel 1 · Una incógnita</span>
+                  <h3 id="ex-title" style="margin-top: var(--space-xs);">Ecuación inicial: \(3x - 5 = 10\)</h3>
+                </div>
+                <span class="control-hint" id="ex-progress-label">Paso 1 de 4</span>
+              </div>
+
+              <div id="ex-system-graph-wrap" class="chart-frame" style="display:none;">
+                <div class="chart-title">Interpretación gráfica del sistema: punto de intersección</div>
+                <div class="chart-svg-wrap" style="min-height:240px;">
+                  <svg id="system-plot-svg" viewBox="0 0 360 260" role="img" aria-label="Gráfica del sistema de dos ecuaciones lineales"></svg>
+                </div>
+              </div>
+
+              <ol class="step-list" id="ex-steps-list"></ol>
+
+              <div class="button-row">
+                <button type="button" class="button button--secondary" id="btn-step-prev" onclick="stepPrev()">Paso anterior</button>
+                <button type="button" class="button" id="btn-step-next" onclick="stepNext()">Siguiente paso</button>
+                <button type="button" class="button button--secondary" id="btn-step-all" onclick="stepShowAll()">Mostrar todos</button>
+              </div>
+            </div>
+          </div>
+
+          <h3>Laboratorio de prueba: resuelve tu propia ecuación \(ax + b = cx + d\)</h3>
+          <p>
+            Introduce los coeficientes que prefieras para comprobar cómo actúa el despeje paso a paso, incluyendo los casos especiales sin solución o con infinitas soluciones.
+          </p>
+
+          <div class="lab-panel" aria-label="Resolvedor interactivo de ecuaciones ax + b = cx + d">
+            <div class="solver-inputs">
+              <div class="control-group">
+                <label class="control-label" for="solv-a">Coeficiente \(a\)</label>
+                <input type="number" id="solv-a" value="7" step="1" oninput="updateCustomSolver()">
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="solv-b">Término \(b\)</label>
+                <input type="number" id="solv-b" value="-3" step="1" oninput="updateCustomSolver()">
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="solv-c">Coeficiente \(c\)</label>
+                <input type="number" id="solv-c" value="4" step="1" oninput="updateCustomSolver()">
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="solv-d">Término \(d\)</label>
+                <input type="number" id="solv-d" value="12" step="1" oninput="updateCustomSolver()">
+              </div>
+            </div>
+            <div class="button-row">
+              <button type="button" class="button button--secondary" onclick="loadSolverPreset(7,-3,4,12)">Ejemplo estándar</button>
+              <button type="button" class="button button--secondary" onclick="loadSolverPreset(2,3,2,7)">Sin solución</button>
+              <button type="button" class="button button--secondary" onclick="loadSolverPreset(3,6,3,6)">Infinitas soluciones</button>
+            </div>
+            <div class="step-viewer" id="custom-solver-output" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <!-- SECCIÓN 4 -->
+        <section id="sec-ejercicios" aria-labelledby="h-ejercicios">
+          <div class="section-head">
+            <span class="step-badge" aria-hidden="true">4</span>
+            <h2 id="h-ejercicios">Ejercicios interactivos con retroalimentación inmediata</h2>
+          </div>
+
+          <p>
+            Pon a prueba lo aprendido en dos etapas: primero evalúa afirmaciones conceptuales (Verdadero o Falso) y después resuelve ocho ecuaciones de dificultad progresiva. Tu progreso se guarda automáticamente en esta sesión.
+          </p>
+
+          <div class="practice-scoreboard" aria-live="polite">
+            <div>
+              <div class="key-figure__label">Progreso total</div>
+              <div class="key-figure__value" id="score-total-readout" style="font-size: var(--subhead-size);">0 / 12</div>
+            </div>
+            <div>
+              <div class="key-figure__label">Aciertos verificados</div>
+              <div class="key-figure__value" id="score-correct-readout" style="font-size: var(--subhead-size);">0</div>
+            </div>
+            <div>
+              <button type="button" class="button button--secondary" id="btn-reset-practice" onclick="resetPractice(this)">Reiniciar ejercicios</button>
+            </div>
+          </div>
+
+          <h3>Parte A: Comprensión conceptual (Verdadero o Falso)</h3>
+          <div id="tf-container"></div>
+
+          <h3>Parte B: Práctica de resolución por niveles</h3>
+          <p class="control-hint">
+            Puedes introducir enteros (ej. <code>5</code> o <code>-4</code>) o fracciones exactas (ej. <code>1/2</code>). Si necesitas orientación, solicita una pista antes de comprobar.
+          </p>
+          <div id="exercises-container"></div>
+        </section>
+
+        <!-- SECCIÓN 5: Fuentes -->
+        <section id="sec-fuentes" aria-labelledby="h-fuentes">
+          <h2 id="h-fuentes" style="font-size: var(--subhead-size);">Fuentes de referencia</h2>
+          <div class="sources-note">
+            <p>Contenido conceptual, ejemplos graduados y ejercicios adaptados de las siguientes fuentes educativas:</p>
+            <ul>
+              <li><strong>unPROFESOR</strong> — «Diferencia entre ecuaciones lineales y no lineales - con ejemplos» (Saray Espinosa, 2024).</li>
+              <li><strong>Mathos AI</strong> — «Dominando las ecuaciones lineales: definición, fórmulas, gráficas y ejemplos sencillos» (2024).</li>
+              <li><strong>Khan Academy (es)</strong> — «Unidad 7: Ecuaciones lineales — 1° Semestre Bachillerato».</li>
+              <li><strong>MathBasics</strong> — «Ecuaciones lineales: guía y 20 ejercicios resueltos».</li>
+              <li><strong>Pimath</strong> — «Ecuaciones lineales: 20 ejercicios resueltos paso a paso».</li>
+              <li><strong>Disfruta las Matemáticas</strong> — «Ecuaciones lineales» (Rod Pierce).</li>
+              <li><strong>Portal Académico del CCH (UNAM)</strong> — «Ecuaciones lineales: propiedades de la igualdad».</li>
+              <li><strong>Matematix, Math10, KeepCoding, Trasteando en la Escuela y Problemas y Ecuaciones</strong> — Métodos de resolución, casos especiales y clasificación.</li>
+            </ul>
+          </div>
+        </section>
+      </main>
+
+      <!-- Lateral de navegación y estado -->
+      <aside aria-label="Índice y resumen de estudio">
+        <div class="rail-panel">
+          <div class="key-figure__label">Mapa de interacción</div>
+          <ul class="rail-nav">
+            <li><a href="#sec-concepto">1. Qué es una ecuación lineal</a></li>
+            <li><a href="#sec-diferencias">2. Lineales vs. no lineales</a></li>
+            <li><a href="#sec-niveles">3. Resolución en 4 niveles</a></li>
+            <li><a href="#sec-ejercicios">4. Ejercicios interactivos</a></li>
+            <li><a href="#sec-fuentes">5. Fuentes de referencia</a></li>
+          </ul>
+        </div>
+
+        <div class="rail-panel" aria-live="polite">
+          <div class="key-figure__label">Tu avance en la práctica</div>
+          <div class="key-figure__value" id="rail-score-value" style="font-size: var(--subhead-size);">0% completado</div>
+          <div class="progress-bar-track" aria-hidden="true">
+            <div class="progress-bar-fill" id="rail-progress-fill"></div>
+          </div>
+          <p class="control-hint" id="rail-score-detail">
+            Responde los 4 enunciados conceptuales y los 8 ejercicios prácticos.
+          </p>
+        </div>
+
+        <div class="rail-panel">
+          <div class="key-figure__label">Recordatorio rápido</div>
+          <div class="summary-list">
+            <div class="summary-row">
+              <span class="summary-row__key">Paso 1</span>
+              <span class="summary-row__val">Quita paréntesis</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-row__key">Paso 2</span>
+              <span class="summary-row__val">Multiplica por m.c.m.</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-row__key">Paso 3</span>
+              <span class="summary-row__val">Agrupa \(x\) y números</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-row__key">Paso 4</span>
+              <span class="summary-row__val">Despeja dividiendo</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-row__key">Paso 5</span>
+              <span class="summary-row__val">Comprueba en la original</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <api-shim></api-shim>
+
+  <script>
+    // =========================================================================
+    // DATOS DEL CONTENIDO (todos los strings en template literals con backticks)
+    // =========================================================================
+
+    const DETECTOR_ITEMS = [
+      {
+        id: `det-1`,
+        tex: `3x - 4y - 2 = 0`,
+        isLinear: true,
+        reason: `Es lineal: las dos incógnitas (x e y) tienen exponente 1 y solo se suman o restan con coeficientes numéricos.`
+      },
+      {
+        id: `det-2`,
+        tex: `3x^2 - 5 = 10`,
+        isLinear: false,
+        reason: `No es lineal: la incógnita x está elevada al cuadrado (grado 2), por lo que su gráfica sería una parábola.`
+      },
+      {
+        id: `det-3`,
+        tex: `x - 3xy + 1 = 0`,
+        isLinear: false,
+        reason: `No es lineal: contiene el término -3xy, donde dos incógnitas se multiplican entre sí.`
+      },
+      {
+        id: `det-4`,
+        tex: `x + y = 2(y - x)`,
+        isLinear: true,
+        reason: `Es lineal: al aplicar la distributiva queda x + y = 2y - 2x; todas las variables mantienen exponente 1.`
+      },
+      {
+        id: `det-5`,
+        tex: `2x + \\sqrt{x} = y`,
+        isLinear: false,
+        reason: `No es lineal: la incógnita x aparece dentro de una raíz cuadrada (equivalente a exponente 1/2).`
+      },
+      {
+        id: `det-6`,
+        tex: `\\dfrac{y}{2} = 3 - x`,
+        isLinear: true,
+        reason: `Es lineal: dividir y entre 2 es lo mismo que multiplicar por 1/2; ninguna incógnita está en el denominador.`
+      }
+    ];
+
+    const COMPARISON_DATA = {
+      quad: {
+        tag: `No lineal · Segundo grado`,
+        title: `Parábola: y = x² − 2`,
+        desc: `La incógnita x está elevada al cuadrado (x²). Su tasa de cambio aumenta o disminuye según el valor de x, generando una curva en forma de U llamada parábola.`,
+        diff: `La recta lineal y = x + 1 mantiene siempre la misma inclinación (+1 por cada paso). La parábola cambia de inclinación continuamente.`,
+        fn: function (x) { return x * x - 2; },
+        labelText: `y = x² − 2`
+      },
+      exp: {
+        tag: `No lineal · Exponencial`,
+        title: `Crecimiento exponencial: y = 2ˣ`,
+        desc: `La incógnita x se encuentra en el exponente. Este modelo explica procesos como la reproducción celular por mitosis, donde la población se duplica en cada ciclo.`,
+        diff: `Mientras la recta crece sumando una cantidad constante, la curva exponencial crece multiplicando y se dispara rápidamente.`,
+        fn: function (x) { return Math.pow(2, x); },
+        labelText: `y = 2ˣ`
+      },
+      sin: {
+        tag: `No lineal · Sinusoidal`,
+        title: `Onda periódica: y = 2·sen(x)`,
+        desc: `Incluye una función trigonométrica que oscila arriba y abajo formando un conjunto de ondas repetitivas, imposible de representar con una única línea recta.`,
+        diff: `La función lineal sigue una sola dirección indefinidamente; la sinusoidal sube y baja de manera cíclica.`,
+        fn: function (x) { return 2 * Math.sin(x); },
+        labelText: `y = 2·sen(x)`
+      },
+      hyp: {
+        tag: `No lineal · Producto de variables`,
+        title: `Hipérbola: x · y = 4`,
+        desc: `Al multiplicarse x por y entre sí (o despejar y = 4/x dejando la variable en el denominador), la ecuación deja de ser de primer grado y se divide en dos ramas curvas.`,
+        diff: `En x = 0 no existe valor definido para y, mientras que una recta continua atraviesa el eje sin saltos.`,
+        fn: function (x) { return Math.abs(x) < 0.2 ? NaN : 4 / x; },
+        labelText: `xy = 4`
+      }
+    };
+
+    const LEVELS_DATA = {
+      1: {
+        tag: `Nivel 1 · Una incógnita`,
+        examples: [
+          {
+            id: `l1-a`,
+            btnLabel: `3x − 5 = 10`,
+            title: `Ecuación de dos pasos: 3x − 5 = 10`,
+            steps: [
+              { tex: `3x - 5 = 10`, note: `Partimos de la ecuación original en su forma estándar.` },
+              { tex: `3x - 5 + 5 = 10 + 5 \\implies 3x = 15`, note: `Sumamos 5 a ambos miembros para aislar el término con x.` },
+              { tex: `x = \\dfrac{15}{3} = 5`, note: `Dividimos ambos miembros entre el coeficiente 3.` },
+              { tex: `3(5) - 5 = 15 - 5 = 10 \\;\\checkmark`, note: `Comprobación: sustituimos x = 5 en la ecuación original y confirmamos la identidad.` }
+            ]
+          },
+          {
+            id: `l1-b`,
+            btnLabel: `7x − 3 = 4x + 12`,
+            title: `Incógnita en ambos lados: 7x − 3 = 4x + 12`,
+            steps: [
+              { tex: `7x - 3 = 4x + 12`, note: `La variable x aparece en los dos miembros de la igualdad.` },
+              { tex: `7x - 4x - 3 = 12 \\implies 3x - 3 = 12`, note: `Restamos 4x en ambos lados para agrupar las x en el primer miembro.` },
+              { tex: `3x = 12 + 3 \\implies 3x = 15`, note: `Sumamos 3 en ambos lados para agrupar los términos independientes.` },
+              { tex: `x = \\dfrac{15}{3} = 5`, note: `Dividimos entre 3 para despejar la incógnita.` },
+              { tex: `7(5) - 3 = 32 \\quad | \\quad 4(5) + 12 = 32 \\;\\checkmark`, note: `Comprobación: ambos miembros equivalen a 32.` }
+            ]
+          }
+        ]
+      },
+      2: {
+        tag: `Nivel 2 · Con paréntesis`,
+        examples: [
+          {
+            id: `l2-a`,
+            btnLabel: `3(2x − 5) = 9`,
+            title: `Propiedad distributiva simple: 3(2x − 5) = 9`,
+            steps: [
+              { tex: `3(2x - 5) = 9`, note: `Hay un paréntesis multiplicado por el factor 3.` },
+              { tex: `3 \\cdot 2x - 3 \\cdot 5 = 9 \\implies 6x - 15 = 9`, note: `Aplicamos la propiedad distributiva a cada término del interior.` },
+              { tex: `6x = 9 + 15 \\implies 6x = 24`, note: `Sumamos 15 a ambos lados para transponer el término numérico.` },
+              { tex: `x = \\dfrac{24}{6} = 4`, note: `Dividimos ambos lados entre 6.` },
+              { tex: `3(2 \\cdot 4 - 5) = 3(3) = 9 \\;\\checkmark`, note: `Comprobación: el resultado coincide con el miembro derecho.` }
+            ]
+          },
+          {
+            id: `l2-b`,
+            btnLabel: `5(x − 2) = 3(x + 4)`,
+            title: `Paréntesis en ambos lados: 5(x − 2) = 3(x + 4)`,
+            steps: [
+              { tex: `5(x - 2) = 3(x + 4)`, note: `Partimos de dos productos distributivos enfrentados.` },
+              { tex: `5x - 10 = 3x + 12`, note: `Distribuimos el 5 a la izquierda y el 3 a la derecha.` },
+              { tex: `5x - 3x = 12 + 10 \\implies 2x = 22`, note: `Restamos 3x y sumamos 10 en ambos miembros para agrupar semejantes.` },
+              { tex: `x = \\dfrac{22}{2} = 11`, note: `Dividimos entre 2 para despejar x.` },
+              { tex: `5(11 - 2) = 45 \\quad | \\quad 3(11 + 4) = 45 \\;\\checkmark`, note: `Comprobación: ambos lados suman 45.` }
+            ]
+          }
+        ]
+      },
+      3: {
+        tag: `Nivel 3 · Con fracciones (m.c.m.)`,
+        examples: [
+          {
+            id: `l3-a`,
+            btnLabel: `x/3 + x/4 = 7`,
+            title: `Suma de fracciones: x/3 + x/4 = 7`,
+            steps: [
+              { tex: `\\dfrac{x}{3} + \\dfrac{x}{4} = 7`, note: `Identificamos los denominadores: 3 y 4. Su mínimo común múltiplo es 12.` },
+              { tex: `12 \\cdot \\dfrac{x}{3} + 12 \\cdot \\dfrac{x}{4} = 12 \\cdot 7`, note: `Multiplicamos todos los términos de ambos miembros por 12 para eliminar denominadores.` },
+              { tex: `4x + 3x = 84 \\implies 7x = 84`, note: `Simplificamos las divisiones (12/3 = 4 y 12/4 = 3) y sumamos términos semejantes.` },
+              { tex: `x = \\dfrac{84}{7} = 12`, note: `Dividimos entre 7 para hallar x.` },
+              { tex: `\\dfrac{12}{3} + \\dfrac{12}{4} = 4 + 3 = 7 \\;\\checkmark`, note: `Comprobación: la suma fraccionaria da exactamente 7.` }
+            ]
+          },
+          {
+            id: `l3-b`,
+            btnLabel: `(x−5)/4 + 6x = (284−x)/5`,
+            title: `Numeradores compuestos: (x − 5)/4 + 6x = (284 − x)/5`,
+            steps: [
+              { tex: `\\dfrac{x - 5}{4} + 6x = \\dfrac{284 - x}{5}`, note: `Calculamos el m.c.m. de 4 y 5, que es 20. Protegemos cada numerador compuesto con paréntesis.` },
+              { tex: `20\\left(\\dfrac{x - 5}{4}\\right) + 20(6x) = 20\\left(\\dfrac{284 - x}{5}\\right)`, note: `Multiplicamos cada término —incluyendo 6x— por 20.` },
+              { tex: `5(x - 5) + 120x = 4(284 - x)`, note: `Simplificamos (20/4 = 5 y 20/5 = 4) y desaparecen las fracciones.` },
+              { tex: `5x - 25 + 120x = 1136 - 4x`, note: `Aplicamos la propiedad distributiva para eliminar los paréntesis.` },
+              { tex: `125x + 4x = 1136 + 25 \\implies 129x = 1161`, note: `Agrupamos términos con x a la izquierda y constantes a la derecha.` },
+              { tex: `x = \\dfrac{1161}{129} = 9`, note: `Dividimos entre 129 y comprobamos: (9−5)/4 + 54 = 1 + 54 = 55; (284−9)/5 = 275/5 = 55 ✓.` }
+            ]
+          }
+        ]
+      },
+      4: {
+        tag: `Nivel 4 · Sistemas de ecuaciones 2×2`,
+        examples: [
+          {
+            id: `l4-a`,
+            btnLabel: `Sustitución (x=3, y=2)`,
+            title: `Método de sustitución: 2x + 3y = 12  y  x − y = 1`,
+            systemLines: [
+              { a: 2, b: 3, c: 12, label: `2x + 3y = 12` },
+              { a: 1, b: -1, c: 1, label: `x − y = 1` },
+              { solX: 3, solY: 2 }
+            ],
+            steps: [
+              { tex: `\\begin{cases} 2x + 3y = 12 \\\\ x - y = 1 \\end{cases}`, note: `Buscamos el par (x, y) que satisface ambas rectas al mismo tiempo.` },
+              { tex: `x = y + 1`, note: `Despejamos x en la segunda ecuación por tener coeficiente 1.` },
+              { tex: `2(y + 1) + 3y = 12`, note: `Sustituimos la expresión de x dentro de la primera ecuación.` },
+              { tex: `2y + 2 + 3y = 12 \\implies 5y = 10 \\implies y = 2`, note: `Distribuimos, reducimos términos semejantes y despejamos y.` },
+              { tex: `x = 2 + 1 = 3`, note: `Sustituimos y = 2 en la expresión despejada para hallar x.` },
+              { tex: `2(3) + 3(2) = 12 \\quad | \\quad 3 - 2 = 1 \\;\\checkmark`, note: `Comprobación: el punto (3, 2) pertenece a ambas rectas y es su cruce.` }
+            ]
+          },
+          {
+            id: `l4-b`,
+            btnLabel: `Eliminación (x=10, y=7)`,
+            title: `Método de eliminación: x − 4y = −18  y  −x + 3y = 11`,
+            systemLines: [
+              { a: 1, b: -4, c: -18, label: `x − 4y = −18` },
+              { a: -1, b: 3, c: 11, label: `−x + 3y = 11` },
+              { solX: 10, solY: 7 }
+            ],
+            steps: [
+              { tex: `\\begin{cases} x - 4y = -18 \\\\ -x + 3y = 11 \\end{cases}`, note: `Observamos que los coeficientes de x son opuestos (+1 y −1).` },
+              { tex: `(x - x) + (-4y + 3y) = -18 + 11`, note: `Sumamos ambas ecuaciones verticalmente para eliminar la incógnita x.` },
+              { tex: `-y = -7 \\implies y = 7`, note: `Multiplicamos por −1 ambos lados para obtener el valor de y.` },
+              { tex: `x - 4(7) = -18 \\implies x - 28 = -18 \\implies x = 10`, note: `Sustituimos y = 7 en la primera ecuación para despejar x.` },
+              { tex: `10 - 4(7) = -18 \\quad | \\quad -10 + 3(7) = 11 \\;\\checkmark`, note: `Comprobación: el punto (10, 7) verifica las dos igualdades.` }
+            ]
+          }
+        ]
+      }
+    };
+
+    const TF_QUESTIONS = [
+      {
+        id: `tf-1`,
+        statement: `Una ecuación no lineal puede ser una recta, siempre y cuando sea decreciente.`,
+        answer: false,
+        explanation: `Falso. Si su representación gráfica es una línea recta (creciente, decreciente u horizontal), se trata necesariamente de una ecuación lineal.`
+      },
+      {
+        id: `tf-2`,
+        statement: `Una ecuación lineal puede tener una incógnita con exponente 10.`,
+        answer: false,
+        explanation: `Falso. Una ecuación lineal siempre es de primer grado, es decir, el exponente de sus incógnitas debe ser exactamente 1.`
+      },
+      {
+        id: `tf-3`,
+        statement: `Una ecuación lineal no puede tener dos incógnitas, ya que tiene que ser de grado 1.`,
+        answer: false,
+        explanation: `Falso. El grado (exponente 1) es independiente de la cantidad de incógnitas: existen ecuaciones lineales con dos variables (2x + 3y = 12) o tres (x + 2y − z = 4).`
+      },
+      {
+        id: `tf-4`,
+        statement: `La única manera de diferenciar si una ecuación es lineal o no lineal es analizando su gráfica.`,
+        answer: false,
+        explanation: `Falso. También se diferencian algebraicamente revisando el grado de las incógnitas y verificando que no haya productos entre ellas, raíces ni logaritmos.`
+      }
+    ];
+
+    const EXERCISES = [
+      {
+        id: `ex-1`,
+        level: `Nivel 1 · Una incógnita`,
+        type: `single`,
+        promptTex: `2x + 5 = 13`,
+        promptText: `Resuelve para x:`,
+        expected: 4,
+        hint: `Resta 5 en ambos lados para aislar 2x y luego divide entre 2.`,
+        commonMistake: function (val) {
+          if (val === 9) return `Sumaste 5 en lugar de restarlo (13 + 5 = 18; 18/2 = 9). Invierte la suma restando 5.`;
+          return ``;
+        },
+        checkExpr: function (v) { return `2(${v}) + 5 = ${2 * v + 5}`; },
+        targetVal: `13`,
+        solutionSteps: `2x = 13 - 5 = 8 \\implies x = \\dfrac{8}{2} = 4`
+      },
+      {
+        id: `ex-2`,
+        level: `Nivel 1 · Incógnita en ambos lados`,
+        type: `single`,
+        promptTex: `7x - 5 = 3x + 7`,
+        promptText: `Resuelve para x:`,
+        expected: 3,
+        hint: `Agrupa los términos con x restando 3x en ambos lados, y suma 5 para mover los números al lado derecho.`,
+        commonMistake: function (val) {
+          if (val === 0.5) return `Cuidado al transponer: −5 pasa sumando al lado derecho (+5), no restando.`;
+          return ``;
+        },
+        checkExpr: function (v) { return `7(${v}) - 5 = ${7 * v - 5} \\text{ y } 3(${v}) + 7 = ${3 * v + 7}`; },
+        targetVal: `16 en ambos lados`,
+        solutionSteps: `7x - 3x = 7 + 5 \\implies 4x = 12 \\implies x = 3`
+      },
+      {
+        id: `ex-3`,
+        level: `Nivel 2 · Paréntesis`,
+        type: `single`,
+        promptTex: `3(x + 4) = 18`,
+        promptText: `Resuelve para x:`,
+        expected: 2,
+        hint: `Aplica la propiedad distributiva (3·x + 3·4 = 18) o divide primero ambos miembros entre 3.`,
+        commonMistake: function (val) {
+          if (Math.abs(val - 14 / 3) < 0.01) return `Multiplicaste 3 por x, pero olvidaste multiplicar 3 por 4.`;
+          return ``;
+        },
+        checkExpr: function (v) { return `3(${v} + 4) = ${3 * (v + 4)}`; },
+        targetVal: `18`,
+        solutionSteps: `3x + 12 = 18 \\implies 3x = 6 \\implies x = 2`
+      },
+      {
+        id: `ex-4`,
+        level: `Nivel 2 · Doble paréntesis`,
+        type: `single`,
+        promptTex: `2(3x + 1) = 4(x - 2)`,
+        promptText: `Resuelve para x:`,
+        expected: -5,
+        hint: `Distribuye el 2 en el primer miembro y el 4 en el segundo: 6x + 2 = 4x − 8.`,
+        commonMistake: function (val) {
+          if (val === 5) return `Revisa el signo: −8 − 2 = −10, por lo que al dividir entre 2 el resultado es negativo.`;
+          return ``;
+        },
+        checkExpr: function (v) { return `2(3(${v})+1) = ${2 * (3 * v + 1)} \\text{ y } 4(${v}-2) = ${4 * (v - 2)}`; },
+        targetVal: `−28 en ambos lados`,
+        solutionSteps: `6x + 2 = 4x - 8 \\implies 2x = -10 \\implies x = -5`
+      },
+      {
+        id: `ex-5`,
+        level: `Nivel 3 · Fracciones`,
+        type: `single`,
+        promptTex: `\\dfrac{x}{2} + 3 = 7`,
+        promptText: `Resuelve para x:`,
+        expected: 8,
+        hint: `Primero resta 3 en ambos lados para despejar x/2, y después multiplica por 2.`,
+        commonMistake: function (val) {
+          if (val === 11) return `Al multiplicar toda la ecuación por 2, también debes multiplicar el 3 (3·2 = 6).`;
+          return ``;
+        },
+        checkExpr: function (v) { return `\\dfrac{${formatNumberClean(v)}}{2} + 3 = ${formatNumberClean(v / 2 + 3)}`; },
+        targetVal: `7`,
+        solutionSteps: `\\dfrac{x}{2} = 4 \\implies x = 4 \\cdot 2 = 8`
+      },
+      {
+        id: `ex-6`,
+        level: `Nivel 3 · Fracciones con m.c.m.`,
+        type: `single`,
+        promptTex: `\\dfrac{x}{3} + \\dfrac{x}{6} = 5`,
+        promptText: `Resuelve para x:`,
+        expected: 10,
+        hint: `El mínimo común múltiplo de 3 y 6 es 6. Multiplica cada término (incluido el 5) por 6.`,
+        commonMistake: function (val) {
+          if (Math.abs(val - 5 / 3) < 0.02) return `Recordaste multiplicar las fracciones por 6, pero olvidaste multiplicar el 5 del lado derecho por 6.`;
+          return ``;
+        },
+        checkExpr: function (v) { return `\\dfrac{${formatNumberClean(v)}}{3} + \\dfrac{${formatNumberClean(v)}}{6} = ${formatNumberClean(v / 3 + v / 6)}`; },
+        targetVal: `5`,
+        solutionSteps: `2x + x = 30 \\implies 3x = 30 \\implies x = 10`
+      },
+      {
+        id: `ex-7`,
+        level: `Nivel 3 · Problema aplicado`,
+        type: `single`,
+        promptTex: `\\text{El triple de un número menos 7 es igual a 20.}`,
+        promptText: `Plantea la ecuación lineal y halla el número x:`,
+        expected: 9,
+        hint: `Traduce el enunciado a álgebra: 3x − 7 = 20.`,
+        commonMistake: function () { return ``; },
+        checkExpr: function (v) { return `3(${v}) - 7 = ${3 * v - 7}`; },
+        targetVal: `20`,
+        solutionSteps: `3x - 7 = 20 \\implies 3x = 27 \\implies x = 9`
+      },
+      {
+        id: `ex-8`,
+        level: `Nivel 4 · Sistema 2×2`,
+        type: `system`,
+        promptTex: `\\begin{cases} 2x + y = 7 \\\\ x - y = 2 \\end{cases}`,
+        promptText: `Halla la solución (x, y) del sistema:`,
+        expectedX: 3,
+        expectedY: 1,
+        hint: `Suma ambas ecuaciones directamente: (+y) y (−y) se cancelan de inmediato para despejar x.`,
+        solutionSteps: `3x = 9 \\implies x = 3; \\quad 3 - y = 2 \\implies y = 1`
+      }
+    ];
+
+    // =========================================================================
+    // ESTADO DE LA APLICACIÓN
+    // =========================================================================
+
+    const DEFAULT_STATE = {
+      slope: 2,
+      intercept: 3,
+      comparisonKey: `quad`,
+      activeLevel: 1,
+      activeExampleIdx: 0,
+      visibleStepsCount: 1,
+      detectorAnswers: {},
+      tfAnswers: {},
+      exerciseInputs: {},
+      exerciseStatus: {},
+      exerciseHints: {},
+      exerciseShowSol: {}
+    };
+
+    let appState = cloneState(DEFAULT_STATE);
+
+    function cloneState(obj) {
+      return JSON.parse(JSON.stringify(obj));
+    }
+
+    async function saveState() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+        try {
+          await window.notebookAppApi.setAppState(appState);
+        } catch (err) {
+          // Silently ignore persistence errors in standalone previews
+        }
+      }
+    }
+
+    // =========================================================================
+    // UTILIDAD DE RENDERIZADO MATEMÁTICO (KaTeX con respaldo seguro)
+    // =========================================================================
+
+    function renderTexToHtml(tex) {
+      if (typeof katex !== `undefined` && typeof katex.renderToString === `function`) {
+        try {
+          return katex.renderToString(tex, { throwOnError: false, displayMode: false });
+        } catch (e) {
+          return escapeHtml(tex);
+        }
+      }
+      return `<span>` + escapeHtml(tex) + `</span>`;
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, `&amp;`)
+        .replace(/</g, `&lt;`)
+        .replace(/>/g, `&gt;`)
+        .replace(/"/g, `&quot;`);
+    }
+
+    function renderAllMathIn(el) {
+      if (!el) return;
+      if (typeof renderMathInElement === `function`) {
+        try {
+          renderMathInElement(el, {
+            delimiters: [
+              { left: `\\(`, right: `\\)`, display: false },
+              { left: `\\[`, right: `\\]`, display: true }
+            ],
+            throwOnError: false
+          });
+        } catch (e) {
+          // Fallback already readable
+        }
+      }
+    }
+
+    function parseNumericAnswer(raw) {
+      const cleaned = String(raw || ``).trim().replace(/,/g, `.`).replace(/\s+/g, ``);
+      if (!cleaned) return NaN;
+      if (/^[+-]?\d+(\.\d+)?\/[+-]?\d+(\.\d+)?$/.test(cleaned)) {
+        const parts = cleaned.split(`/`);
+        const num = Number(parts[0]);
+        const den = Number(parts[1]);
+        if (den === 0) return NaN;
+        return num / den;
+      }
+      return Number(cleaned);
+    }
+
+    function formatNumberClean(n) {
+      if (!Number.isFinite(n)) return `—`;
+      const rounded = Math.round(n * 100) / 100;
+      return String(rounded).replace(`-`, `−`);
+    }
+
+    // =========================================================================
+    // SECCIÓN 1: EXPLORADOR GRÁFICO DE LA RECTA y = mx + b
+    // =========================================================================
+
+    function syncSlopeFromSlider(val) {
+      const numEl = document.getElementById(`input-slope`);
+      if (numEl) numEl.value = val;
+      appState.slope = clampNum(Number(val), -4, 4);
+      renderLineExplorer();
+      saveState();
+    }
+
+    function syncSlopeFromNumber(val) {
+      const parsed = Number(val);
+      if (Number.isNaN(parsed)) return;
+      const clamped = clampNum(parsed, -4, 4);
+      const sliderEl = document.getElementById(`slider-slope`);
+      if (sliderEl) sliderEl.value = clamped;
+      appState.slope = clamped;
+      renderLineExplorer();
+      saveState();
+    }
+
+    function syncInterceptFromSlider(val) {
+      const numEl = document.getElementById(`input-intercept`);
+      if (numEl) numEl.value = val;
+      appState.intercept = clampNum(Number(val), -5, 5);
+      renderLineExplorer();
+      saveState();
+    }
+
+    function syncInterceptFromNumber(val) {
+      const parsed = Number(val);
+      if (Number.isNaN(parsed)) return;
+      const clamped = clampNum(parsed, -5, 5);
+      const sliderEl = document.getElementById(`slider-intercept`);
+      if (sliderEl) sliderEl.value = clamped;
+      appState.intercept = clamped;
+      renderLineExplorer();
+      saveState();
+    }
+
+    function setLinePreset(m, b) {
+      appState.slope = m;
+      appState.intercept = b;
+      const sSlider = document.getElementById(`slider-slope`);
+      const sInput = document.getElementById(`input-slope`);
+      const iSlider = document.getElementById(`slider-intercept`);
+      const iInput = document.getElementById(`input-intercept`);
+      if (sSlider) sSlider.value = m;
+      if (sInput) sInput.value = m;
+      if (iSlider) iSlider.value = b;
+      if (iInput) iInput.value = b;
+      renderLineExplorer();
+      saveState();
+    }
+
+    function clampNum(v, min, max) {
+      return Math.max(min, Math.min(max, v));
+    }
+
+    function formatLinearEquation(m, b) {
+      let termX = ``;
+      if (m === 0) {
+        return `y = ${formatNumberClean(b)}`;
+      }
+      if (m === 1) termX = `x`;
+      else if (m === -1) termX = `−x`;
+      else termX = `${formatNumberClean(m)}x`;
+
+      if (b === 0) return `y = ${termX}`;
+      if (b > 0) return `y = ${termX} + ${formatNumberClean(b)}`;
+      return `y = ${termX} − ${formatNumberClean(Math.abs(b))}`;
+    }
+
+    function renderLineExplorer() {
+      const m = appState.slope;
+      const b = appState.intercept;
+
+      const eqEl = document.getElementById(`line-eq-readout`);
+      const yIntEl = document.getElementById(`line-yint-readout`);
+      const xIntEl = document.getElementById(`line-xint-readout`);
+      const behEl = document.getElementById(`line-behavior-readout`);
+      const interpEl = document.getElementById(`line-interpretation`);
+      const svg = document.getElementById(`line-plot-svg`);
+
+      if (eqEl) eqEl.textContent = formatLinearEquation(m, b);
+      if (yIntEl) yIntEl.textContent = `(0, ${formatNumberClean(b)})`;
+
+      if (xIntEl) {
+        if (m === 0) {
+          xIntEl.textContent = b === 0 ? `Todo el eje X` : `Ninguno (paralela al eje X)`;
+        } else {
+          const xZero = -b / m;
+          xIntEl.textContent = `(${formatNumberClean(xZero)}, 0)`;
+        }
+      }
+
+      if (behEl) {
+        if (m > 0) behEl.textContent = `Recta creciente`;
+        else if (m < 0) behEl.textContent = `Recta decreciente`;
+        else behEl.textContent = `Recta horizontal (pendiente 0)`;
+      }
+
+      if (interpEl) {
+        if (m > 0) {
+          interpEl.textContent = `Por cada 1 unidad que avanza x hacia la derecha, y sube ${formatNumberClean(m)} unidades.`;
+        } else if (m < 0) {
+          interpEl.textContent = `Por cada 1 unidad que avanza x hacia la derecha, y baja ${formatNumberClean(Math.abs(m))} unidades.`;
+        } else {
+          interpEl.textContent = `Para cualquier valor de x, la variable y permanece constante en ${formatNumberClean(b)}.`;
+        }
+      }
+
+      if (!svg) return;
+
+      const w = 360;
+      const h = 320;
+      const pad = 32;
+      const domainMin = -6;
+      const domainMax = 6;
+      const rangeMin = -6;
+      const rangeMax = 6;
+
+      function mapX(x) {
+        return pad + ((x - domainMin) / (domainMax - domainMin)) * (w - 2 * pad);
+      }
+      function mapY(y) {
+        return h - pad - ((y - rangeMin) / (rangeMax - rangeMin)) * (h - 2 * pad);
+      }
+
+      let out = ``;
+
+      // Gridlines
+      for (let g = -6; g <= 6; g += 2) {
+        const gx = mapX(g);
+        const gy = mapY(g);
+        out += `<line x1="${gx}" y1="${pad}" x2="${gx}" y2="${h - pad}" stroke="var(--outline-variant)" stroke-width="1" />`;
+        out += `<line x1="${pad}" y1="${gy}" x2="${w - pad}" y2="${gy}" stroke="var(--outline-variant)" stroke-width="1" />`;
+        if (g !== 0) {
+          out += `<text x="${gx}" y="${mapY(0) + 14}" text-anchor="middle" font-size="10" fill="var(--on-surface-variant)" font-family="Public Sans, sans-serif">${g}</text>`;
+          out += `<text x="${mapX(0) - 8}" y="${gy + 3}" text-anchor="end" font-size="10" fill="var(--on-surface-variant)" font-family="Public Sans, sans-serif">${g}</text>`;
+        }
+      }
+
+      // Main axes
+      out += `<line x1="${pad}" y1="${mapY(0)}" x2="${w - pad}" y2="${mapY(0)}" stroke="var(--on-surface)" stroke-width="1.5" />`;
+      out += `<line x1="${mapX(0)}" y1="${pad}" x2="${mapX(0)}" y2="${h - pad}" stroke="var(--on-surface)" stroke-width="1.5" />`;
+      out += `<text x="${w - pad + 8}" y="${mapY(0) + 4}" font-size="11" font-weight="700" fill="var(--on-surface)">x</text>`;
+      out += `<text x="${mapX(0) - 4}" y="${pad - 8}" font-size="11" font-weight="700" fill="var(--on-surface)">y</text>`;
+
+      // Slope step triangle at x=0 -> x=1 (when visible in range)
+      if (m !== 0 && Math.abs(b) <= 5 && Math.abs(b + m) <= 6) {
+        const sx0 = mapX(0);
+        const sy0 = mapY(b);
+        const sx1 = mapX(1);
+        const sy1 = mapY(b + m);
+        out += `<polyline points="${sx0},${sy0} ${sx1},${sy0} ${sx1},${sy1}" fill="none" stroke="var(--data-2)" stroke-width="2" stroke-dasharray="4 3" />`;
+        out += `<text x="${(sx0 + sx1) / 2}" y="${sy0 + (m > 0 ? 13 : -6)}" text-anchor="middle" font-size="10" font-weight="700" fill="var(--data-2)">+1</text>`;
+        out += `<text x="${sx1 + 6}" y="${(sy0 + sy1) / 2 + 3}" text-anchor="start" font-size="10" font-weight="700" fill="var(--data-2)">${m > 0 ? `+` : ``}${formatNumberClean(m)}</text>`;
+      }
+
+      // Clip line to plot box
+      const pts = [];
+      const xLeft = domainMin;
+      const yAtLeft = m * xLeft + b;
+      const xRight = domainMax;
+      const yAtRight = m * xRight + b;
+
+      // Compute clipped segment using Liang-Barsky simple sampling
+      const linePts = [];
+      for (let xs = domainMin; xs <= domainMax; xs += 0.25) {
+        const ys = m * xs + b;
+        if (ys >= rangeMin && ys <= rangeMax) {
+          linePts.push(`${mapX(xs).toFixed(1)},${mapY(ys).toFixed(1)}`);
+        }
+      }
+      if (linePts.length >= 2) {
+        out += `<polyline points="${linePts.join(` `)}" fill="none" stroke="var(--data-1)" stroke-width="3" />`;
+      } else {
+        out += `<line x1="${mapX(xLeft)}" y1="${mapY(clampNum(yAtLeft, rangeMin, rangeMax))}" x2="${mapX(xRight)}" y2="${mapY(clampNum(yAtRight, rangeMin, rangeMax))}" stroke="var(--data-1)" stroke-width="3" />`;
+      }
+
+      // Y-intercept point
+      const py = mapY(b);
+      const px = mapX(0);
+      out += `<rect x="${px - 4}" y="${py - 4}" width="8" height="8" fill="var(--primary)" />`;
+      const labelYOffset = m >= 0 ? -10 : 16;
+      out += `<text x="${px + 8}" y="${py + labelYOffset}" font-size="11" font-weight="700" fill="var(--primary)">(0, ${formatNumberClean(b)})</text>`;
+
+      // X-intercept point if visible and distinct
+      if (m !== 0) {
+        const xZero = -b / m;
+        if (xZero >= -5.5 && xZero <= 5.5 && Math.abs(xZero) > 0.15) {
+          const zx = mapX(xZero);
+          const zy = mapY(0);
+          out += `<circle cx="${zx}" cy="${zy}" r="4" fill="var(--data-3)" />`;
+          out += `<text x="${zx}" y="${zy - 9}" text-anchor="middle" font-size="10" font-weight="700" fill="var(--on-surface)">(${formatNumberClean(xZero)}, 0)</text>`;
+        }
+      }
+
+      svg.innerHTML = out;
+    }
+
+    // =========================================================================
+    // SECCIÓN 2: COMPARADOR LINEAL VS NO LINEAL Y DETECTOR
+    // =========================================================================
+
+    function selectComparison(key) {
+      if (!COMPARISON_DATA[key]) return;
+      appState.comparisonKey = key;
+      const keys = [`quad`, `exp`, `sin`, `hyp`];
+      keys.forEach(function (k) {
+        const btn = document.getElementById(`cmp-btn-${k}`);
+        if (btn) btn.classList.toggle(`is-active`, k === key);
+      });
+      renderComparisonChart();
+      saveState();
+    }
+
+    function renderComparisonChart() {
+      const item = COMPARISON_DATA[appState.comparisonKey] || COMPARISON_DATA.quad;
+      const tagEl = document.getElementById(`cmp-tag`);
+      const titleEl = document.getElementById(`cmp-title`);
+      const descEl = document.getElementById(`cmp-desc`);
+      const diffEl = document.getElementById(`cmp-diff`);
+      const svg = document.getElementById(`compare-plot-svg`);
+
+      if (tagEl) tagEl.textContent = item.tag;
+      if (titleEl) titleEl.textContent = item.title;
+      if (descEl) descEl.textContent = item.desc;
+      if (diffEl) diffEl.textContent = item.diff;
+      if (!svg) return;
+
+      const w = 360;
+      const h = 300;
+      const pad = 30;
+      const xMin = -4;
+      const xMax = 4;
+      const yMin = -4;
+      const yMax = 6;
+
+      function mx(x) { return pad + ((x - xMin) / (xMax - xMin)) * (w - 2 * pad); }
+      function my(y) { return h - pad - ((y - yMin) / (yMax - yMin)) * (h - 2 * pad); }
+
+      let out = ``;
+      for (let gx = -4; gx <= 4; gx += 2) {
+        out += `<line x1="${mx(gx)}" y1="${pad}" x2="${mx(gx)}" y2="${h - pad}" stroke="var(--outline-variant)" stroke-width="1" />`;
+      }
+      for (let gy = -4; gy <= 6; gy += 2) {
+        out += `<line x1="${pad}" y1="${my(gy)}" x2="${w - pad}" y2="${my(gy)}" stroke="var(--outline-variant)" stroke-width="1" />`;
+      }
+
+      // Axes
+      out += `<line x1="${pad}" y1="${my(0)}" x2="${w - pad}" y2="${my(0)}" stroke="var(--on-surface)" stroke-width="1.5" />`;
+      out += `<line x1="${mx(0)}" y1="${pad}" x2="${mx(0)}" y2="${h - pad}" stroke="var(--on-surface)" stroke-width="1.5" />`;
+
+      // Reference linear line y = x + 1
+      out += `<line x1="${mx(-4)}" y1="${my(-3)}" x2="${mx(4)}" y2="${my(5)}" stroke="var(--data-1)" stroke-width="2.5" />`;
+      out += `<text x="${mx(2.4)}" y="${my(4.2)}" font-size="11" font-weight="700" fill="var(--data-1)">Lineal: y = x + 1</text>`;
+
+      // Nonlinear curve segments (handle discontinuities like 4/x)
+      let currentSeg = [];
+      const segments = [];
+      for (let x = xMin; x <= xMax + 0.001; x += 0.08) {
+        const y = item.fn(x);
+        if (Number.isFinite(y) && y >= yMin - 0.5 && y <= yMax + 0.5) {
+          currentSeg.push(`${mx(x).toFixed(1)},${my(clampNum(y, yMin, yMax)).toFixed(1)}`);
+        } else {
+          if (currentSeg.length > 1) segments.push(currentSeg);
+          currentSeg = [];
+        }
+      }
+      if (currentSeg.length > 1) segments.push(currentSeg);
+
+      segments.forEach(function (seg) {
+        out += `<polyline points="${seg.join(` `)}" fill="none" stroke="var(--data-2)" stroke-width="3" />`;
+      });
+
+      // Direct label for nonlinear curve
+      out += `<text x="${pad + 8}" y="${pad + 16}" font-size="11" font-weight="700" fill="var(--data-2)">No lineal: ${escapeHtml(item.labelText)}</text>`;
+
+      svg.innerHTML = out;
+    }
+
+    function renderDetectorList() {
+      const container = document.getElementById(`detector-container`);
+      if (!container) return;
+
+      let html = ``;
+      DETECTOR_ITEMS.forEach(function (item) {
+        const chosen = appState.detectorAnswers[item.id];
+        const hasAnswered = chosen === true || chosen === false;
+        const isCorrect = hasAnswered && chosen === item.isLinear;
+
+        html += `<div class="detector-item">`;
+        html += `  <div class="detector-item__head">`;
+        html += `    <div class="detector-eq">${renderTexToHtml(item.tex)}</div>`;
+        html += `    <div class="button-row">`;
+        html += `      <button type="button" class="button button--secondary ${chosen === true ? `is-active` : ``}" onclick="answerDetector('${item.id}', true)">Lineal</button>`;
+        html += `      <button type="button" class="button button--secondary ${chosen === false ? `is-active` : ``}" onclick="answerDetector('${item.id}', false)">No lineal</button>`;
+        html += `    </div>`;
+        html += `  </div>`;
+
+        if (hasAnswered) {
+          html += `  <div class="feedback-box ${isCorrect ? `feedback-box--ok` : `feedback-box--err`}">`;
+          html += `    <span class="feedback-title">${isCorrect ? `Correcto` : `Revisa el criterio algebraico`}</span>`;
+          html += `    <span>${escapeHtml(item.reason)}</span>`;
+          html += `  </div>`;
+        }
+        html += `</div>`;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function answerDetector(id, choice) {
+      appState.detectorAnswers[id] = choice;
+      renderDetectorList();
+      saveState();
+    }
+
+    // =========================================================================
+    // SECCIÓN 3: EXPLORADOR PASO A PASO EN 4 NIVELES Y SANDBOX
+    // =========================================================================
+
+    function selectLevel(levelNum) {
+      appState.activeLevel = levelNum;
+      appState.activeExampleIdx = 0;
+      appState.visibleStepsCount = 1;
+      [1, 2, 3, 4].forEach(function (n) {
+        const btn = document.getElementById(`lvl-btn-${n}`);
+        if (btn) btn.classList.toggle(`is-active`, n === levelNum);
+      });
+      renderLevelViewer();
+      saveState();
+    }
+
+    function selectExample(idx) {
+      appState.activeExampleIdx = idx;
+      appState.visibleStepsCount = 1;
+      renderLevelViewer();
+      saveState();
+    }
+
+    function stepNext() {
+      const levelObj = LEVELS_DATA[appState.activeLevel];
+      if (!levelObj) return;
+      const ex = levelObj.examples[appState.activeExampleIdx] || levelObj.examples[0];
+      if (appState.visibleStepsCount < ex.steps.length) {
+        appState.visibleStepsCount += 1;
+        renderLevelViewer();
+        saveState();
+      }
+    }
+
+    function stepPrev() {
+      if (appState.visibleStepsCount > 1) {
+        appState.visibleStepsCount -= 1;
+        renderLevelViewer();
+        saveState();
+      }
+    }
+
+    function stepShowAll() {
+      const levelObj = LEVELS_DATA[appState.activeLevel];
+      if (!levelObj) return;
+      const ex = levelObj.examples[appState.activeExampleIdx] || levelObj.examples[0];
+      appState.visibleStepsCount = ex.steps.length;
+      renderLevelViewer();
+      saveState();
+    }
+
+    function renderLevelViewer() {
+      const levelObj = LEVELS_DATA[appState.activeLevel] || LEVELS_DATA[1];
+      const ex = levelObj.examples[appState.activeExampleIdx] || levelObj.examples[0];
+      const maxSteps = ex.steps.length;
+      const visible = clampNum(appState.visibleStepsCount, 1, maxSteps);
+
+      const tabsRow = document.getElementById(`example-tabs-row`);
+      const tagEl = document.getElementById(`ex-level-tag`);
+      const titleEl = document.getElementById(`ex-title`);
+      const progEl = document.getElementById(`ex-progress-label`);
+      const listEl = document.getElementById(`ex-steps-list`);
+      const sysWrap = document.getElementById(`ex-system-graph-wrap`);
+      const btnPrev = document.getElementById(`btn-step-prev`);
+      const btnNext = document.getElementById(`btn-step-next`);
+
+      if (tabsRow) {
+        let tabsHtml = ``;
+        levelObj.examples.forEach(function (item, idx) {
+          tabsHtml += `<button type="button" class="button button--secondary ${idx === appState.activeExampleIdx ? `is-active` : ``}" onclick="selectExample(${idx})">${escapeHtml(item.btnLabel)}</button>`;
+        });
+        tabsRow.innerHTML = tabsHtml;
+      }
+
+      if (tagEl) tagEl.textContent = levelObj.tag;
+      if (titleEl) titleEl.textContent = ex.title;
+      if (progEl) progEl.textContent = `Paso ${visible} de ${maxSteps}`;
+      if (btnPrev) btnPrev.disabled = visible <= 1;
+      if (btnNext) btnNext.disabled = visible >= maxSteps;
+
+      if (listEl) {
+        let stepsHtml = ``;
+        ex.steps.forEach(function (st, idx) {
+          const isHidden = idx >= visible;
+          const isCurrent = idx === visible - 1;
+          stepsHtml += `<li class="step-row ${isHidden ? `is-hidden` : ``} ${isCurrent ? `is-current` : ``}">`;
+          stepsHtml += `  <span class="step-badge">${idx + 1}</span>`;
+          stepsHtml += `  <div>`;
+          stepsHtml += `    <div class="step-row__math">${renderTexToHtml(st.tex)}</div>`;
+          stepsHtml += `    <div class="step-row__note">${escapeHtml(st.note)}</div>`;
+          stepsHtml += `  </div>`;
+          stepsHtml += `</li>`;
+        });
+        listEl.innerHTML = stepsHtml;
+      }
+
+      if (sysWrap) {
+        if (ex.systemLines) {
+          sysWrap.style.display = `flex`;
+          renderSystemSvg(ex.systemLines);
+        } else {
+          sysWrap.style.display = `none`;
+        }
+      }
+    }
+
+    function renderSystemSvg(lines) {
+      const svg = document.getElementById(`system-plot-svg`);
+      if (!svg) return;
+      const line1 = lines[0];
+      const line2 = lines[1];
+      const sol = lines[2];
+
+      const w = 360;
+      const h = 260;
+      const pad = 30;
+      const xMin = -2;
+      const xMax = 12;
+      const yMin = -2;
+      const yMax = 10;
+
+      function mx(x) { return pad + ((x - xMin) / (xMax - xMin)) * (w - 2 * pad); }
+      function my(y) { return h - pad - ((y - yMin) / (yMax - yMin)) * (h - 2 * pad); }
+
+      let out = ``;
+      for (let gx = 0; gx <= 12; gx += 2) {
+        out += `<line x1="${mx(gx)}" y1="${pad}" x2="${mx(gx)}" y2="${h - pad}" stroke="var(--outline-variant)" stroke-width="1" />`;
+      }
+      for (let gy = 0; gy <= 10; gy += 2) {
+        out += `<line x1="${pad}" y1="${my(gy)}" x2="${w - pad}" y2="${my(gy)}" stroke="var(--outline-variant)" stroke-width="1" />`;
+      }
+      out += `<line x1="${pad}" y1="${my(0)}" x2="${w - pad}" y2="${my(0)}" stroke="var(--on-surface)" stroke-width="1.5" />`;
+      out += `<line x1="${mx(0)}" y1="${pad}" x2="${mx(0)}" y2="${h - pad}" stroke="var(--on-surface)" stroke-width="1.5" />`;
+
+      function drawLinearConstraint(ln, colorToken) {
+        const pts = [];
+        for (let x = xMin; x <= xMax; x += 0.2) {
+          const y = (ln.c - ln.a * x) / ln.b;
+          if (y >= yMin && y <= yMax) {
+            pts.push(`${mx(x).toFixed(1)},${my(y).toFixed(1)}`);
+          }
+        }
+        if (pts.length >= 2) {
+          out += `<polyline points="${pts.join(` `)}" fill="none" stroke="${colorToken}" stroke-width="2.5" />`;
+        }
+      }
+
+      drawLinearConstraint(line1, `var(--data-1)`);
+      drawLinearConstraint(line2, `var(--data-2)`);
+
+      const sx = mx(sol.solX);
+      const sy = my(sol.solY);
+      out += `<circle cx="${sx}" cy="${sy}" r="5" fill="var(--primary)" />`;
+      out += `<text x="${sx - 8}" y="${sy - 10}" text-anchor="end" font-size="11" font-weight="700" fill="var(--primary)">Solución (${sol.solX}, ${sol.solY})</text>`;
+      out += `<text x="${pad + 8}" y="${pad + 14}" font-size="11" font-weight="700" fill="var(--data-1)">${escapeHtml(line1.label)}</text>`;
+      out += `<text x="${pad + 8}" y="${pad + 28}" font-size="11" font-weight="700" fill="var(--data-2)">${escapeHtml(line2.label)}</text>`;
+
+      svg.innerHTML = out;
+    }
+
+    // Custom Solver ax + b = cx + d
+    function loadSolverPreset(a, b, c, d) {
+      const elA = document.getElementById(`solv-a`);
+      const elB = document.getElementById(`solv-b`);
+      const elC = document.getElementById(`solv-c`);
+      const elD = document.getElementById(`solv-d`);
+      if (elA) elA.value = a;
+      if (elB) elB.value = b;
+      if (elC) elC.value = c;
+      if (elD) elD.value = d;
+      updateCustomSolver();
+    }
+
+    function updateCustomSolver() {
+      const outEl = document.getElementById(`custom-solver-output`);
+      if (!outEl) return;
+
+      const a = Number(document.getElementById(`solv-a`)?.value ?? 0);
+      const b = Number(document.getElementById(`solv-b`)?.value ?? 0);
+      const c = Number(document.getElementById(`solv-c`)?.value ?? 0);
+      const d = Number(document.getElementById(`solv-d`)?.value ?? 0);
+
+      if ([a, b, c, d].some(Number.isNaN)) {
+        outEl.innerHTML = `<p>Introduce valores numéricos válidos en los cuatro coeficientes.</p>`;
+        return;
+      }
+
+      const leftTex = formatSideTex(a, b);
+      const rightTex = formatSideTex(c, d);
+      const diffA = a - c;
+      const diffB = d - b;
+
+      let html = ``;
+      html += `<div class="step-row__math">Ecuación planteada: ${renderTexToHtml(`${leftTex} = ${rightTex}`)}</div>`;
+      html += `<ol class="step-list" style="margin-top: var(--space-sm);">`;
+      html += `<li class="step-row"><span class="step-badge">1</span><div><div class="step-row__math">${renderTexToHtml(`(${a} - ${c})x = ${d} - (${b})`)}</div><div class="step-row__note">Transponemos términos con x a la izquierda y constantes a la derecha.</div></div></li>`;
+      html += `<li class="step-row"><span class="step-badge">2</span><div><div class="step-row__math">${renderTexToHtml(`${diffA}x = ${diffB}`)}</div><div class="step-row__note">Reducimos los términos semejantes en ambos miembros.</div></div></li>`;
+
+      if (diffA === 0 && diffB === 0) {
+        html += `<li class="step-row is-current"><span class="step-badge">3</span><div><div class="step-row__math">${renderTexToHtml(`0 = 0`)}</div><div class="step-row__note"><strong>Identidad (infinitas soluciones):</strong> ambos lados son idénticos para cualquier número real x.</div></div></li>`;
+      } else if (diffA === 0 && diffB !== 0) {
+        html += `<li class="step-row is-current"><span class="step-badge">3</span><div><div class="step-row__math">${renderTexToHtml(`0 = ${diffB}`)}</div><div class="step-row__note"><strong>Contradicción (sin solución):</strong> la igualdad es imposible; ningún valor de x la satisface.</div></div></li>`;
+      } else {
+        const sol = diffB / diffA;
+        const cleanSol = formatNumberClean(sol);
+        html += `<li class="step-row is-current"><span class="step-badge">3</span><div><div class="step-row__math">${renderTexToHtml(`x = \\dfrac{${diffB}}{${diffA}} = ${cleanSol}`)}</div><div class="step-row__note"><strong>Solución única:</strong> dividimos ambos lados entre ${diffA}.</div></div></li>`;
+      }
+
+      html += `</ol>`;
+      outEl.innerHTML = html;
+    }
+
+    function formatSideTex(coef, constant) {
+      let partX = ``;
+      if (coef === 1) partX = `x`;
+      else if (coef === -1) partX = `-x`;
+      else if (coef !== 0) partX = `${coef}x`;
+
+      if (coef === 0) return `${constant}`;
+      if (constant === 0) return partX;
+      if (constant > 0) return `${partX} + ${constant}`;
+      return `${partX} - ${Math.abs(constant)}`;
+    }
+
+    // =========================================================================
+    // SECCIÓN 4: EJERCICIOS INTERACTIVOS CON RETROALIMENTACIÓN
+    // =========================================================================
+
+    function renderTrueFalse() {
+      const container = document.getElementById(`tf-container`);
+      if (!container) return;
+
+      let html = ``;
+      TF_QUESTIONS.forEach(function (q, idx) {
+        const chosen = appState.tfAnswers[q.id];
+        const answered = chosen === true || chosen === false;
+        const ok = answered && chosen === q.answer;
+
+        html += `<div class="tf-card">`;
+        html += `  <p><strong>${idx + 1}.</strong> ${escapeHtml(q.statement)}</p>`;
+        html += `  <div class="button-row">`;
+        html += `    <button type="button" class="button button--secondary ${chosen === true ? `is-active` : ``}" onclick="answerTF('${q.id}', true)">Verdadero</button>`;
+        html += `    <button type="button" class="button button--secondary ${chosen === false ? `is-active` : ``}" onclick="answerTF('${q.id}', false)">Falso</button>`;
+        html += `  </div>`;
+        if (answered) {
+          html += `  <div class="feedback-box ${ok ? `feedback-box--ok` : `feedback-box--err`}">`;
+          html += `    <span class="feedback-title">${ok ? `Respuesta correcta` : `Respuesta incorrecta`}</span>`;
+          html += `    <span>${escapeHtml(q.explanation)}</span>`;
+          html += `  </div>`;
+        }
+        html += `</div>`;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function answerTF(id, val) {
+      appState.tfAnswers[id] = val;
+      renderTrueFalse();
+      updateScoreboard();
+      saveState();
+    }
+
+    function renderExercises() {
+      const container = document.getElementById(`exercises-container`);
+      if (!container) return;
+
+      let html = ``;
+      EXERCISES.forEach(function (ex, idx) {
+        const st = appState.exerciseStatus[ex.id] || null;
+        const showHint = Boolean(appState.exerciseHints[ex.id]);
+        const showSol = Boolean(appState.exerciseShowSol[ex.id]);
+        const savedInput = appState.exerciseInputs[ex.id] || {};
+
+        html += `<div class="exercise-card" id="card-${ex.id}">`;
+        html += `  <div class="exercise-card__meta">`;
+        html += `    <span class="status-tag">${escapeHtml(ex.level)}</span>`;
+        if (st && st.correct) {
+          html += `    <span class="status-tag status-tag--positive">Resuelto correctamente</span>`;
+        } else if (st && st.checked && !st.correct) {
+          html += `    <span class="status-tag status-tag--error">Requiere revisión</span>`;
+        }
+        html += `  </div>`;
+
+        html += `  <div>`;
+        html += `    <p class="control-hint" style="margin-bottom: var(--space-xs);">Ejercicio ${idx + 1}: ${escapeHtml(ex.promptText)}</p>`;
+        html += `    <div class="exercise-card__prompt">${renderTexToHtml(ex.promptTex)}</div>`;
+        html += `  </div>`;
+
+        html += `  <div class="exercise-input-row">`;
+        if (ex.type === `single`) {
+          const valAttr = escapeHtml(savedInput.x ?? ``);
+          html += `    <div class="control-group">`;
+          html += `      <label class="control-label" for="ans-${ex.id}">Valor de x</label>`;
+          html += `      <input type="text" id="ans-${ex.id}" value="${valAttr}" oninput="storeExerciseInput('${ex.id}', 'x', this.value)" style="width: 140px;">`;
+          html += `    </div>`;
+        } else {
+          const valX = escapeHtml(savedInput.x ?? ``);
+          const valY = escapeHtml(savedInput.y ?? ``);
+          html += `    <div class="control-group">`;
+          html += `      <label class="control-label" for="ans-${ex.id}-x">Valor de x</label>`;
+          html += `      <input type="text" id="ans-${ex.id}-x" value="${valX}" oninput="storeExerciseInput('${ex.id}', 'x', this.value)" style="width: 120px;">`;
+          html += `    </div>`;
+          html += `    <div class="control-group">`;
+          html += `      <label class="control-label" for="ans-${ex.id}-y">Valor de y</label>`;
+          html += `      <input type="text" id="ans-${ex.id}-y" value="${valY}" oninput="storeExerciseInput('${ex.id}', 'y', this.value)" style="width: 120px;">`;
+          html += `    </div>`;
+        }
+
+        html += `    <button type="button" class="button" onclick="checkExercise('${ex.id}')">Comprobar respuesta</button>`;
+        html += `    <button type="button" class="button button--secondary" onclick="toggleHint('${ex.id}')">${showHint ? `Ocultar pista` : `Ver pista`}</button>`;
+        html += `    <button type="button" class="button button--secondary" onclick="toggleSolution('${ex.id}')">${showSol ? `Ocultar solución` : `Ver resolución`}</button>`;
+        html += `  </div>`;
+
+        if (showHint) {
+          html += `  <div class="inset inset--warning">`;
+          html += `    <span class="inset__title">Pista de resolución</span>`;
+          html += `    <span>${escapeHtml(ex.hint)}</span>`;
+          html += `  </div>`;
+        }
+
+        if (st && st.checked) {
+          html += `  <div class="feedback-box ${st.correct ? `feedback-box--ok` : `feedback-box--err`}">`;
+          html += `    <span class="feedback-title">${escapeHtml(st.title)}</span>`;
+          html += `    <div>${st.messageHtml}</div>`;
+          html += `  </div>`;
+        }
+
+        if (showSol) {
+          html += `  <div class="inset">`;
+          html += `    <span class="inset__title">Resolución paso a paso</span>`;
+          html += `    <div>${renderTexToHtml(ex.solutionSteps)}</div>`;
+          html += `  </div>`;
+        }
+
+        html += `</div>`;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function storeExerciseInput(exId, field, value) {
+      if (!appState.exerciseInputs[exId]) appState.exerciseInputs[exId] = {};
+      appState.exerciseInputs[exId][field] = value;
+      saveState();
+    }
+
+    function checkExercise(exId) {
+      const ex = EXERCISES.find(function (item) { return item.id === exId; });
+      if (!ex) return;
+
+      if (ex.type === `single`) {
+        const inputEl = document.getElementById(`ans-${ex.id}`);
+        const rawVal = inputEl ? inputEl.value : (appState.exerciseInputs[exId]?.x ?? ``);
+        const numVal = parseNumericAnswer(rawVal);
+
+        if (Number.isNaN(numVal)) {
+          appState.exerciseStatus[exId] = {
+            checked: true,
+            correct: false,
+            title: `Falta un valor numérico válido`,
+            messageHtml: escapeHtml(`Escribe un número entero o una fracción como 1/2 en el campo de x antes de comprobar.`)
+          };
+        } else if (Math.abs(numVal - ex.expected) < 0.001) {
+          const verif = renderTexToHtml(ex.checkExpr(ex.expected));
+          appState.exerciseStatus[exId] = {
+            checked: true,
+            correct: true,
+            title: `¡Correcto! x = ${formatNumberClean(ex.expected)}`,
+            messageHtml: `Comprobación en la ecuación original: ${verif} (igual a ${escapeHtml(ex.targetVal)}).`
+          };
+        } else {
+          const mistake = ex.commonMistake(numVal);
+          const attemptCheck = renderTexToHtml(ex.checkExpr(numVal));
+          const detail = mistake
+            ? escapeHtml(mistake)
+            : `Si sustituimos tu valor x = ${formatNumberClean(numVal)}, obtenemos ${attemptCheck}, que no coincide con ${escapeHtml(ex.targetVal)}. Intenta de nuevo o solicita una pista.`;
+          appState.exerciseStatus[exId] = {
+            checked: true,
+            correct: false,
+            title: `Todavía no coincide`,
+            messageHtml: detail
+          };
+        }
+      } else {
+        const elX = document.getElementById(`ans-${ex.id}-x`);
+        const elY = document.getElementById(`ans-${ex.id}-y`);
+        const valX = parseNumericAnswer(elX ? elX.value : ``);
+        const valY = parseNumericAnswer(elY ? elY.value : ``);
+
+        if (Number.isNaN(valX) || Number.isNaN(valY)) {
+          appState.exerciseStatus[exId] = {
+            checked: true,
+            correct: false,
+            title: `Completa ambas incógnitas`,
+            messageHtml: escapeHtml(`Introduce valores numéricos tanto para x como para y.`)
+          };
+        } else if (Math.abs(valX - ex.expectedX) < 0.001 && Math.abs(valY - ex.expectedY) < 0.001) {
+          const checkSys = renderTexToHtml(`2(3) + 1 = 7 \\quad | \\quad 3 - 1 = 2`);
+          appState.exerciseStatus[exId] = {
+            checked: true,
+            correct: true,
+            title: `¡Sistema resuelto! (x = ${ex.expectedX}, y = ${ex.expectedY})`,
+            messageHtml: `Ambos valores satisfacen las dos ecuaciones simultáneamente: ${checkSys}.`
+          };
+        } else {
+          const eq1 = 2 * valX + valY;
+          const eq2 = valX - valY;
+          appState.exerciseStatus[exId] = {
+            checked: true,
+            correct: false,
+            title: `La pareja (${formatNumberClean(valX)}, ${formatNumberClean(valY)}) no verifica ambas ecuaciones`,
+            messageHtml: escapeHtml(`Con esos valores la primera ecuación da ${formatNumberClean(eq1)} (debe dar 7) y la segunda da ${formatNumberClean(eq2)} (debe dar 2).`)
+          };
+        }
+      }
+
+      renderExercises();
+      updateScoreboard();
+      saveState();
+    }
+
+    function toggleHint(exId) {
+      appState.exerciseHints[exId] = !appState.exerciseHints[exId];
+      renderExercises();
+      saveState();
+    }
+
+    function toggleSolution(exId) {
+      appState.exerciseShowSol[exId] = !appState.exerciseShowSol[exId];
+      renderExercises();
+      saveState();
+    }
+
+    function updateScoreboard() {
+      let tfCorrect = 0;
+      let tfAnswered = 0;
+      TF_QUESTIONS.forEach(function (q) {
+        const a = appState.tfAnswers[q.id];
+        if (a === true || a === false) {
+          tfAnswered += 1;
+          if (a === q.answer) tfCorrect += 1;
+        }
+      });
+
+      let exCorrect = 0;
+      let exChecked = 0;
+      EXERCISES.forEach(function (ex) {
+        const st = appState.exerciseStatus[ex.id];
+        if (st && st.checked) {
+          exChecked += 1;
+          if (st.correct) exCorrect += 1;
+        }
+      });
+
+      const totalItems = TF_QUESTIONS.length + EXERCISES.length;
+      const totalDone = tfAnswered + exChecked;
+      const totalCorrect = tfCorrect + exCorrect;
+      const pct = Math.round((totalCorrect / totalItems) * 100);
+
+      const totEl = document.getElementById(`score-total-readout`);
+      const corEl = document.getElementById(`score-correct-readout`);
+      const railValEl = document.getElementById(`rail-score-value`);
+      const railFillEl = document.getElementById(`rail-progress-fill`);
+      const railDetailEl = document.getElementById(`rail-score-detail`);
+
+      if (totEl) totEl.textContent = `${totalDone} / ${totalItems}`;
+      if (corEl) corEl.textContent = `${totalCorrect} de ${totalItems}`;
+      if (railValEl) railValEl.textContent = `${pct}% dominado`;
+      if (railFillEl) railFillEl.style.width = `${pct}%`;
+      if (railDetailEl) {
+        railDetailEl.textContent = `${tfCorrect}/${TF_QUESTIONS.length} conceptuales y ${exCorrect}/${EXERCISES.length} ejercicios resueltos con éxito.`;
+      }
+    }
+
+    function resetPractice(btn) {
+      if (btn && btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `Pulsa de nuevo para confirmar`;
+        return;
+      }
+      if (btn) {
+        btn.dataset.armed = `false`;
+        btn.textContent = `Reiniciar ejercicios`;
+      }
+      appState.tfAnswers = {};
+      appState.exerciseInputs = {};
+      appState.exerciseStatus = {};
+      appState.exerciseHints = {};
+      appState.exerciseShowSol = {};
+      appState.detectorAnswers = {};
+      renderDetectorList();
+      renderTrueFalse();
+      renderExercises();
+      updateScoreboard();
+      saveState();
+    }
+
+    // =========================================================================
+    // INICIALIZACIÓN Y RESTAURACIÓN DE ESTADO
+    // =========================================================================
+
+    function applyStateToUI() {
+      const sSlider = document.getElementById(`slider-slope`);
+      const sInput = document.getElementById(`input-slope`);
+      const iSlider = document.getElementById(`slider-intercept`);
+      const iInput = document.getElementById(`input-intercept`);
+
+      if (sSlider) sSlider.value = appState.slope;
+      if (sInput) sInput.value = appState.slope;
+      if (iSlider) iSlider.value = appState.intercept;
+      if (iInput) iInput.value = appState.intercept;
+
+      [`quad`, `exp`, `sin`, `hyp`].forEach(function (k) {
+        const btn = document.getElementById(`cmp-btn-${k}`);
+        if (btn) btn.classList.toggle(`is-active`, k === appState.comparisonKey);
+      });
+
+      [1, 2, 3, 4].forEach(function (n) {
+        const btn = document.getElementById(`lvl-btn-${n}`);
+        if (btn) btn.classList.toggle(`is-active`, n === appState.activeLevel);
+      });
+
+      renderLineExplorer();
+      renderComparisonChart();
+      renderDetectorList();
+      renderLevelViewer();
+      updateCustomSolver();
+      renderTrueFalse();
+      renderExercises();
+      updateScoreboard();
+      renderAllMathIn(document.body);
+    }
+
+    async function initApp() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+        try {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            appState = Object.assign(cloneState(DEFAULT_STATE), saved);
+          }
+        } catch (err) {
+          // Proceed with default state
+        }
+      }
+
+      applyStateToUI();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    if (document.readyState === `loading`) {
+      document.addEventListener(`DOMContentLoaded`, initApp);
+    } else {
+      initApp();
+    }
+  </script>
+</body>
+</html>

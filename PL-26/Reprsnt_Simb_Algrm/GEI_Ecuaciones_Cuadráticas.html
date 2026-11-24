@@ -1,0 +1,2754 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="figure">
+  <title>Ecuaciones de segundo grado: anatomía, métodos y parábolas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Roboto+Mono:wght@100..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.css">
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* 1. Figure style tokens */
+      --background: #ffffff;
+      --surface-container-low: #f7f7f7;
+      --surface-container: #f2f2f2;
+      --surface-container-high: #ececec;
+
+      --on-surface: #121212;
+      --on-surface-variant: #5f5f5f;
+
+      --outline: #8a8a8a;
+      --outline-variant: #e3e3e3;
+
+      --primary: #121212;
+      --on-primary: #ffffff;
+      --primary-container: #e8e8e8;
+      --on-primary-container: #121212;
+      --secondary: #1f5fa8;
+      --tertiary: #b43c0b;
+      --error: #b42318;
+      --on-error: #ffffff;
+
+      --data-1: #e8590c;
+      --data-2: #2f6db5;
+      --data-3: #1b8a6b;
+      --data-4: #8e5bb5;
+      --data-context: #c4c4c4;
+
+      --font-headline: 'Schibsted Grotesk', sans-serif;
+      --font-body: 'Newsreader', serif;
+      --font-label: 'Roboto Mono', monospace;
+
+      --rounded: 0.25rem;
+      --rounded-lg: 0;
+      --rounded-full: 0.25rem;
+
+      --ink-rule: 1px solid var(--on-surface);
+      --hairline: 1px solid var(--outline-variant);
+      --grid-dash: 2 3;
+      --story-stroke: 3px;
+      --compare-stroke: 2px;
+      --context-stroke: 1.4px;
+      --bar-height: 6px;
+      --highlight-1: linear-gradient(transparent 60%, color-mix(in srgb, var(--data-1) 15%, var(--background)) 60%);
+      --highlight-2: linear-gradient(transparent 60%, color-mix(in srgb, var(--data-2) 15%, var(--background)) 60%);
+
+      /* 3. Shared foundation tokens */
+      --positive: #157347;
+      --positive-bg: #eef7f1;
+      --warning: #9a5b00;
+      --warning-bg: #fdf5e6;
+      --error-bg: #fdf0ef;
+      --focus: #121212;
+
+      /* Narrative type scale */
+      --display-size: clamp(2.35rem, 1.35rem + 3.8vw, 4.15rem);
+      --headline-size: clamp(1.65rem, 1.2rem + 1.6vw, 2.35rem);
+      --subhead-size: clamp(1.1875rem, 1.05rem + 0.5vw, 1.4rem);
+      --body-size: clamp(1.0625rem, 1rem + 0.22vw, 1.1875rem);
+      --label-size: clamp(0.75rem, 0.72rem + 0.12vw, 0.8125rem);
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 5.5rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-xl);
+      padding: var(--space-lg) var(--space-lg) var(--space-3xl);
+      max-width: 1120px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Reading column constraint for prose */
+    .prose-col {
+      max-width: 66ch;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4 {
+      font-family: var(--font-headline);
+      color: var(--on-surface);
+      margin: 0;
+    }
+    h1 {
+      font-size: var(--display-size);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.05;
+    }
+    h2 {
+      font-size: var(--headline-size);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.12;
+      margin-bottom: var(--space-sm);
+    }
+    h3 {
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      line-height: 1.25;
+      margin-bottom: var(--space-xs);
+    }
+    p {
+      margin: 0 0 var(--space-md);
+    }
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    .kicker {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--tertiary);
+      display: block;
+      margin-bottom: var(--space-sm);
+    }
+    .deck {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: clamp(1.125rem, 1.05rem + 0.4vw, 1.325rem);
+      line-height: 1.45;
+      color: var(--on-surface-variant);
+      margin-top: var(--space-md);
+      max-width: 60ch;
+    }
+
+    /* Figure-style color-keyed prose highlights */
+    .hl-1 {
+      background: var(--highlight-1);
+      color: var(--tertiary);
+      font-weight: 500;
+      padding: 0 var(--space-xs);
+    }
+    .hl-2 {
+      background: var(--highlight-2);
+      color: var(--secondary);
+      font-weight: 500;
+      padding: 0 var(--space-xs);
+    }
+
+    .mono {
+      font-family: var(--font-label);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Masthead & anchor navigation */
+    .masthead {
+      border-bottom: var(--ink-rule);
+      padding-bottom: var(--space-lg);
+    }
+    .masthead-meta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      border-bottom: var(--hairline);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-lg);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .nav-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-top: var(--space-lg);
+    }
+    .nav-tab {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      background: var(--surface-container);
+      color: var(--on-surface);
+      text-decoration: none;
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      border-radius: var(--rounded-full);
+      border: 1px solid transparent;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .nav-tab:hover {
+      background: var(--surface-container-high);
+      border-color: var(--outline);
+    }
+    .nav-tab:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Section framing */
+    .section-block {
+      padding-top: var(--space-xl);
+      border-top: var(--hairline);
+    }
+    .section-block--first {
+      padding-top: 0;
+      border-top: none;
+    }
+    .section-header {
+      margin-bottom: var(--space-lg);
+    }
+
+    /* Figure-style ink-ruled stat blocks */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+      gap: var(--space-lg);
+      margin-top: var(--space-lg);
+    }
+    .stat {
+      border-top: var(--ink-rule);
+      padding-top: var(--space-sm);
+      border-radius: var(--rounded-lg);
+    }
+    .stat-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--on-surface-variant);
+      display: block;
+    }
+    .stat-value {
+      font-family: var(--font-label);
+      font-size: clamp(1.25rem, 1.05rem + 0.75vw, 1.65rem);
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+      color: var(--on-surface);
+      margin-top: var(--space-xs);
+      display: block;
+      word-break: break-word;
+    }
+    .stat-delta {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin-top: var(--space-xs);
+      display: block;
+    }
+    .stat-delta--story { color: var(--tertiary); }
+    .stat-delta--compare { color: var(--secondary); }
+    .stat-delta--positive { color: var(--positive); }
+    .stat-bar {
+      height: var(--bar-height);
+      background: var(--surface-container-high);
+      margin-top: var(--space-sm);
+    }
+    .stat-bar > span {
+      display: block;
+      height: 100%;
+      background: var(--data-1);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    /* Formula callout strip */
+    .formula-band {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+      gap: var(--space-lg);
+      margin: var(--space-lg) 0;
+    }
+    .term-anatomy {
+      border-top: var(--ink-rule);
+      padding-top: var(--space-md);
+    }
+    .term-symbol {
+      font-family: var(--font-label);
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--tertiary);
+      margin-bottom: var(--space-xs);
+    }
+    .term-symbol--blue { color: var(--secondary); }
+    .term-symbol--ink { color: var(--on-surface); }
+
+    /* Tables (Figure style: no vertical rules, no zebra fills) */
+    .table-wrap {
+      overflow-x: auto;
+      margin: var(--space-lg) 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    th {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--on-surface-variant);
+      border-bottom: var(--ink-rule);
+      padding: var(--space-sm) var(--space-md) var(--space-sm) 0;
+    }
+    td {
+      padding: var(--space-md) var(--space-md) var(--space-md) 0;
+      border-bottom: var(--hairline);
+      vertical-align: top;
+    }
+    td.num, th.num {
+      text-align: right;
+      font-family: var(--font-label);
+      font-variant-numeric: tabular-nums;
+      padding-right: 0;
+    }
+    .table-note {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin-top: var(--space-xs);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      font-family: var(--font-headline);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      border-radius: var(--rounded);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+      border: 1px solid var(--primary);
+    }
+    .btn-primary:hover {
+      background: var(--on-surface-variant);
+      border-color: var(--on-surface-variant);
+    }
+    .btn-secondary {
+      background: var(--background);
+      color: var(--on-surface);
+      border: 1px solid var(--outline);
+    }
+    .btn-secondary:hover {
+      background: var(--surface-container-low);
+      border-color: var(--on-surface);
+    }
+    .btn-chip {
+      background: var(--surface-container);
+      color: var(--on-surface);
+      border: 1px solid transparent;
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded-full);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .btn-chip:hover {
+      background: var(--surface-container-high);
+      border-color: var(--outline);
+    }
+    .btn-chip.is-active {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .btn:focus-visible, .btn-chip:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    /* Interactive Lab layout */
+    .lab-grid {
+      display: grid;
+      grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+      gap: var(--space-xl);
+      align-items: start;
+      margin-top: var(--space-lg);
+    }
+    .lab-controls {
+      background: var(--surface-container-low);
+      padding: var(--space-lg);
+      border-top: var(--ink-rule);
+    }
+    .control-group {
+      margin-bottom: var(--space-lg);
+    }
+    .control-group:last-child {
+      margin-bottom: 0;
+    }
+    .control-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-xs);
+    }
+    label.field-label {
+      display: block;
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--on-surface);
+    }
+    .field-hint {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      display: block;
+      margin-top: var(--space-xs);
+    }
+    .slider-pair {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 84px;
+      gap: var(--space-sm);
+      align-items: end;
+    }
+    input[type="range"] {
+      width: 100%;
+      height: 44px;
+      accent-color: var(--data-1);
+      cursor: pointer;
+      margin: 0;
+    }
+    input[type="number"], input[type="text"], select {
+      width: 100%;
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-sm);
+      background: var(--background);
+      color: var(--on-surface);
+      border: 1px solid var(--outline);
+      border-radius: var(--rounded);
+      font-family: var(--font-label);
+      font-size: 0.9375rem;
+      font-variant-numeric: tabular-nums;
+    }
+    select {
+      padding-right: var(--space-xl);
+    }
+
+    .preset-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+
+    /* Chart furniture */
+    .chart-figure {
+      width: 100%;
+    }
+    .chart-header {
+      margin-bottom: var(--space-sm);
+    }
+    .chart-title {
+      font-family: var(--font-headline);
+      font-weight: 600;
+      font-size: var(--subhead-size);
+      color: var(--on-surface);
+    }
+    .chart-sub {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin-top: var(--space-xs);
+    }
+    .svg-frame {
+      width: 100%;
+      min-height: 360px;
+      background: var(--background);
+    }
+    .svg-frame svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .source {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin-top: var(--space-xs);
+    }
+
+    /* SVG series classes (Figure treatment) */
+    .gridline {
+      stroke: var(--outline-variant);
+      stroke-width: 1;
+      stroke-dasharray: var(--grid-dash);
+    }
+    .baseline {
+      stroke: var(--on-surface);
+      stroke-width: 1.25;
+    }
+    .axis-tick {
+      fill: var(--on-surface-variant);
+      font-family: var(--font-label);
+      font-size: 11px;
+    }
+    .series-context {
+      stroke: var(--data-context);
+      stroke-width: var(--context-stroke);
+      fill: none;
+    }
+    .series-compare {
+      stroke: var(--data-2);
+      stroke-width: var(--compare-stroke);
+      fill: none;
+    }
+    .series-symmetry {
+      stroke: var(--data-2);
+      stroke-width: 1.5;
+      stroke-dasharray: 5 4;
+      fill: none;
+    }
+    .series-story {
+      stroke: var(--data-1);
+      stroke-width: var(--story-stroke);
+      fill: none;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }
+    .series-story-end { fill: var(--data-1); }
+    .dot-compare { fill: var(--data-2); }
+    .dot-ink { fill: var(--on-surface); }
+    .label-story {
+      fill: var(--tertiary);
+      font-family: var(--font-label);
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .label-compare {
+      fill: var(--secondary);
+      font-family: var(--font-label);
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .label-context {
+      fill: var(--on-surface-variant);
+      font-family: var(--font-label);
+      font-size: 11px;
+    }
+
+    .live-equation-banner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md);
+      background: var(--surface-container-low);
+      border-top: var(--ink-rule);
+      margin-bottom: var(--space-md);
+    }
+    .live-equation-math {
+      font-size: 1.25rem;
+      overflow-x: auto;
+      max-width: 100%;
+    }
+    .notice-inline {
+      padding: var(--space-sm) var(--space-md);
+      border-left: 3px solid var(--tertiary);
+      background: var(--warning-bg);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      margin-top: var(--space-sm);
+    }
+
+    /* Discriminant triptych */
+    .triptych-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(270px, 100%), 1fr));
+      gap: var(--space-lg);
+      margin-top: var(--space-lg);
+    }
+    .triptych-item {
+      border-top: var(--ink-rule);
+      padding-top: var(--space-md);
+    }
+    .triptych-svg {
+      min-height: 190px;
+      margin: var(--space-sm) 0;
+    }
+
+    /* Method explorer & geometric completing-the-square */
+    .method-switcher {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin: var(--space-md) 0 var(--space-lg);
+    }
+    .method-workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(260px, 1fr);
+      gap: var(--space-xl);
+      align-items: start;
+      border-top: var(--ink-rule);
+      padding-top: var(--space-lg);
+    }
+    .step-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .step-item {
+      padding: var(--space-md) 0;
+      border-bottom: var(--hairline);
+      opacity: 0.35;
+      transition: opacity var(--dur-short) var(--ease-out);
+    }
+    .step-item.is-visible {
+      opacity: 1;
+    }
+    .step-item.is-current {
+      border-bottom-color: var(--on-surface);
+    }
+    .step-head {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-xs);
+    }
+    .step-num {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      color: var(--tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      flex-shrink: 0;
+    }
+    .step-title {
+      font-family: var(--font-headline);
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+    .step-math {
+      margin: var(--space-xs) 0 0;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container-low);
+      overflow-x: auto;
+    }
+    .step-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+      align-items: center;
+    }
+    .aside-panel {
+      background: var(--surface-container-low);
+      padding: var(--space-lg);
+      border-top: var(--ink-rule);
+    }
+
+    /* Completing the square geometric block */
+    .geo-square-wrap {
+      margin-top: var(--space-xl);
+      padding-top: var(--space-lg);
+      border-top: var(--hairline);
+    }
+    .geo-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+      gap: var(--space-xl);
+      align-items: center;
+      margin-top: var(--space-md);
+    }
+
+    /* Applied real-world scenarios */
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+      gap: var(--space-xl);
+      margin-top: var(--space-lg);
+    }
+    .app-case {
+      border-top: var(--ink-rule);
+      padding-top: var(--space-md);
+    }
+    .app-controls {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-md);
+      margin: var(--space-md) 0;
+      align-items: end;
+    }
+    .app-visual {
+      background: var(--surface-container-low);
+      padding: var(--space-md);
+      margin: var(--space-md) 0;
+      min-height: 170px;
+    }
+    .app-result {
+      font-family: var(--font-label);
+      font-size: 0.875rem;
+      border-top: var(--hairline);
+      padding-top: var(--space-sm);
+    }
+
+    /* Practice zone */
+    .practice-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: end;
+      gap: var(--space-md);
+      border-top: var(--ink-rule);
+      border-bottom: var(--hairline);
+      padding: var(--space-md) 0;
+      margin-bottom: var(--space-lg);
+    }
+    .practice-progress-wrap {
+      min-width: 220px;
+      flex: 1 1 240px;
+      max-width: 360px;
+    }
+    .exercise-list {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-xl);
+    }
+    .exercise-item {
+      border-top: var(--ink-rule);
+      padding-top: var(--space-md);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 380px);
+      gap: var(--space-xl);
+      align-items: start;
+    }
+    .exercise-item.is-solved {
+      border-top-color: var(--positive);
+    }
+    .exercise-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+      margin-bottom: var(--space-sm);
+    }
+    .tag {
+      display: inline-block;
+      padding: 2px var(--space-sm);
+      background: var(--surface-container);
+      color: var(--on-surface-variant);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      border-radius: var(--rounded-full);
+    }
+    .tag--done {
+      background: var(--positive-bg);
+      color: var(--positive);
+    }
+    .exercise-eq {
+      font-size: 1.25rem;
+      margin: var(--space-sm) 0 var(--space-md);
+      overflow-x: auto;
+    }
+    .answer-panel {
+      background: var(--surface-container-low);
+      padding: var(--space-md);
+    }
+    .roots-inputs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-sm);
+      align-items: end;
+      margin-bottom: var(--space-sm);
+    }
+    .mc-options {
+      display: grid;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-sm);
+    }
+    .mc-option {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-sm);
+      background: var(--background);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      cursor: pointer;
+      font-family: var(--font-label);
+      font-size: 0.875rem;
+    }
+    .mc-option input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      accent-color: var(--primary);
+      flex-shrink: 0;
+    }
+    .exercise-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-top: var(--space-sm);
+    }
+    .feedback-box {
+      margin-top: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      border-left: 3px solid var(--outline);
+      background: var(--background);
+    }
+    .feedback-box--ok {
+      border-left-color: var(--positive);
+      background: var(--positive-bg);
+      color: var(--positive);
+    }
+    .feedback-box--err {
+      border-left-color: var(--error);
+      background: var(--error-bg);
+      color: var(--error);
+    }
+    .feedback-box--hint {
+      border-left-color: var(--secondary);
+      background: var(--background);
+      color: var(--secondary);
+    }
+    .solution-drawer {
+      margin-top: var(--space-md);
+      padding: var(--space-md);
+      background: var(--surface-container-low);
+      border-left: 3px solid var(--on-surface);
+    }
+    .solution-drawer p {
+      margin-bottom: var(--space-sm);
+      font-size: 0.96rem;
+    }
+
+    /* Footer sources */
+    .sources-footer {
+      border-top: var(--ink-rule);
+      padding-top: var(--space-lg);
+      margin-top: var(--space-xl);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+
+    /* Responsive container & mobile rules */
+    .card-wrapper { container-type: inline-size; }
+    @container (max-width: 520px) {
+      .app-controls { grid-template-columns: 1fr; }
+      .roots-inputs { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 860px) {
+      .lab-grid,
+      .method-workspace,
+      .geo-grid,
+      .exercise-item {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md) var(--space-md) var(--space-2xl);
+        gap: var(--space-lg);
+      }
+      .svg-frame {
+        min-height: 280px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-grid">
+
+    <!-- MASTHEAD -->
+    <header class="masthead">
+      <div class="masthead-meta">
+        <span>Álgebra · Nivel Bachillerato</span>
+        <span>Guía Interactiva de Estudio</span>
+      </div>
+      <h1>Ecuaciones de segundo grado: anatomía, métodos y parábolas</h1>
+      <p class="deck">
+        Resolver una ecuación cuadrática no consiste en memorizar una fórmula a ciegas: significa descubrir dónde una parábola cruza el eje horizontal, anticipar cuántas soluciones existen mediante su discriminante y elegir la técnica algebraica más directa.
+      </p>
+      <nav class="nav-strip" aria-label="Secciones de la guía">
+        <a class="nav-tab" href="#anatomia">1. Anatomía y tipos</a>
+        <a class="nav-tab" href="#laboratorio">2. Laboratorio gráfico</a>
+        <a class="nav-tab" href="#discriminante">3. El discriminante Δ</a>
+        <a class="nav-tab" href="#metodos">4. Tres métodos</a>
+        <a class="nav-tab" href="#aplicaciones">5. Vida cotidiana</a>
+        <a class="nav-tab" href="#practica">6. Práctica interactiva</a>
+      </nav>
+    </header>
+
+    <!-- SECTION 1: ANATOMY & CLASSIFICATION -->
+    <section id="anatomia" class="section-block section-block--first">
+      <div class="section-header prose-col">
+        <span class="kicker">01 · Estructura Canónica</span>
+        <h2>Tres coeficientes definen toda la curva</h2>
+        <p>
+          Una <strong>ecuación cuadrática</strong> (o de segundo grado) en una variable es cualquier igualdad polinómica reducible a su forma estándar o canónica:
+          $$ax^2 + bx + c = 0 \qquad (a \neq 0)$$
+          El exponente máximo de la incógnita $x$ es $2$, y los coeficientes $a$, $b$ y $c$ son números reales. La condición $a \neq 0$ es indispensable: si $a$ valiera cero, desaparecería el término cuadrático y tendríamos simplemente una ecuación lineal $bx + c = 0$.
+        </p>
+      </div>
+
+      <div class="formula-band">
+        <div class="term-anatomy">
+          <div class="term-symbol">ax²</div>
+          <h3>Término cuadrático</h3>
+          <p class="prose-col">
+            El coeficiente <strong>$a$</strong> fija el sentido de apertura y la amplitud de la parábola. Si $a &gt; 0$, la curva abre hacia arriba y tiene un mínimo; si $a &lt; 0$, abre hacia abajo y tiene un máximo.
+          </p>
+        </div>
+        <div class="term-anatomy">
+          <div class="term-symbol term-symbol--blue">bx</div>
+          <h3>Término lineal</h3>
+          <p class="prose-col">
+            El coeficiente <strong>$b$</strong> desplaza lateralmente el eje de simetría ubicado en $x_v = -\frac{b}{2a}$ y controla la pendiente con la que la curva cruza el eje vertical $Y$.
+          </p>
+        </div>
+        <div class="term-anatomy">
+          <div class="term-symbol term-symbol--ink">c</div>
+          <h3>Término independiente</h3>
+          <p class="prose-col">
+            La constante <strong>$c$</strong> fija la altura exacta en la que la parábola corta al eje $Y$: el punto $(0, c)$. Alterar $c$ traslada toda la parábola verticalmente sin deformarla.
+          </p>
+        </div>
+      </div>
+
+      <div class="prose-col">
+        <h3>Clasificación: ecuaciones completas e incompletas</h3>
+        <p>
+          Antes de lanzarse a calcular, conviene observar qué términos están presentes. Cuando falta el término lineal ($b = 0$) o el independiente ($c = 0$), existen atajos algebraicos mucho más rápidos que la fórmula general.
+        </p>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Tipo de ecuación</th>
+              <th>Forma algebraica</th>
+              <th>Ejemplo</th>
+              <th>Estrategia óptima</th>
+              <th class="num">Raíces del ejemplo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Completa</strong></td>
+              <td class="mono">$ax^2 + bx + c = 0$</td>
+              <td class="mono">$x^2 - 5x + 6 = 0$</td>
+              <td>Factorización de trinomio, completar cuadrado o fórmula general</td>
+              <td class="num">$x_1 = 2,\; x_2 = 3$</td>
+            </tr>
+            <tr>
+              <td><strong>Incompleta pura</strong> ($b = 0$)</td>
+              <td class="mono">$ax^2 + c = 0$</td>
+              <td class="mono">$2x^2 - 32 = 0$</td>
+              <td>Despeje directo $x = \pm\sqrt{-c/a}$ o diferencia de cuadrados</td>
+              <td class="num">$x_1 = 4,\; x_2 = -4$</td>
+            </tr>
+            <tr>
+              <td><strong>Incompleta mixta</strong> ($c = 0$)</td>
+              <td class="mono">$ax^2 + bx = 0$</td>
+              <td class="mono">$4x^2 + 8x = 0$</td>
+              <td>Factor común $x(ax + b) = 0$; una raíz siempre es $x = 0$</td>
+              <td class="num">$x_1 = 0,\; x_2 = -2$</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="table-note">
+          Propiedad de Cardano-Vieta para comprobación rápida: la suma de las raíces siempre es $x_1 + x_2 = -b/a$ y su producto es $x_1 \cdot x_2 = c/a$.
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: INTERACTIVE PARABOLA LAB -->
+    <section id="laboratorio" class="section-block">
+      <div class="section-header prose-col">
+        <span class="kicker">02 · Explorador Gráfico Interactivo</span>
+        <h2>Cómo $a$, $b$ y $c$ transforman la parábola</h2>
+        <p>
+          Modifica los coeficientes y observa cómo responde la <span class="hl-1">parábola y = ax² + bx + c</span> frente a la curva base de referencia en gris ($y = x^2$). El <span class="hl-2">eje de simetría y el vértice V(h, k)</span> se reubican en tiempo real mientras las raíces aparecen donde la curva corta la línea de base $y = 0$.
+        </p>
+      </div>
+
+      <div class="live-equation-banner">
+        <div>
+          <span class="stat-label">Ecuación y función asociada</span>
+          <div id="lab-eq-display" class="live-equation-math">$$x^2 - 2x - 3 = 0$$</div>
+        </div>
+        <div class="preset-row" aria-label="Ejemplos predefinidos">
+          <button type="button" class="btn-chip is-active" onclick="applyLabPreset(1, -2, -3, this)">2 raíces (x² − 2x − 3)</button>
+          <button type="button" class="btn-chip" onclick="applyLabPreset(1, -4, 4, this)">Raíz doble (x² − 4x + 4)</button>
+          <button type="button" class="btn-chip" onclick="applyLabPreset(1, 2, 5, this)">Sin corte real (x² + 2x + 5)</button>
+          <button type="button" class="btn-chip" onclick="applyLabPreset(1, 0, -9, this)">Pura (x² − 9)</button>
+          <button type="button" class="btn-chip" onclick="applyLabPreset(-1, 4, 5, this)">Abre abajo (−x² + 4x + 5)</button>
+        </div>
+      </div>
+
+      <div class="lab-grid">
+        <div class="lab-controls">
+          <div class="control-group">
+            <div class="control-label-row">
+              <label class="field-label" for="input-a">Coeficiente cuadrático (a)</label>
+            </div>
+            <div class="slider-pair">
+              <input type="range" id="slider-a" min="-4" max="4" step="0.5" value="1" oninput="syncAFromSlider(this.value)">
+              <input type="number" id="input-a" min="-4" max="4" step="0.5" value="1" oninput="syncAFromNumber(this.value)">
+            </div>
+            <span class="field-hint">Apertura y concavidad. Prueba a = 0 para ver el caso lineal.</span>
+          </div>
+
+          <div class="control-group">
+            <div class="control-label-row">
+              <label class="field-label" for="input-b">Coeficiente lineal (b)</label>
+            </div>
+            <div class="slider-pair">
+              <input type="range" id="slider-b" min="-8" max="8" step="0.5" value="-2" oninput="syncBFromSlider(this.value)">
+              <input type="number" id="input-b" min="-8" max="8" step="0.5" value="-2" oninput="syncBFromNumber(this.value)">
+            </div>
+            <span class="field-hint">Desplaza el eje de simetría x = −b / (2a).</span>
+          </div>
+
+          <div class="control-group">
+            <div class="control-label-row">
+              <label class="field-label" for="input-c">Término independiente (c)</label>
+            </div>
+            <div class="slider-pair">
+              <input type="range" id="slider-c" min="-9" max="9" step="0.5" value="-3" oninput="syncCFromSlider(this.value)">
+              <input type="number" id="input-c" min="-9" max="9" step="0.5" value="-3" oninput="syncCFromNumber(this.value)">
+            </div>
+            <span class="field-hint">Ordenada al origen: corte con el eje Y en (0, c).</span>
+          </div>
+
+          <div class="control-group">
+            <button type="button" class="btn btn-secondary" style="width: 100%;" onclick="toggleAutoScale()" id="btn-autoscale">
+              Escala fija [−10, 10]: Activa
+            </button>
+            <div id="lab-linear-warning" class="notice-inline" style="display: none;">
+              Con <strong>a = 0</strong> la ecuación deja de ser cuadrática y se convierte en la recta lineal $bx + c = 0$.
+            </div>
+          </div>
+        </div>
+
+        <figure class="chart-figure" style="margin: 0;">
+          <div class="chart-header">
+            <div class="chart-title">Plano cartesiano de $y = ax^2 + bx + c$ y sus intersecciones</div>
+            <div class="chart-sub" id="lab-chart-sub">Dominio x ∈ [−8, 8] · Rango y ∈ [−10, 10] · Línea gris punteada: parábola base y = x²</div>
+          </div>
+          <div id="lab-svg-container" class="svg-frame"></div>
+          <figcaption class="source">Gráfico vectorial generado dinámicamente. Los puntos naranjas señalan las raíces reales (y = 0); los puntos azules señalan el vértice V(h, k) y el corte con el eje Y.</figcaption>
+        </figure>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat">
+          <span class="stat-label">Discriminante Δ = b² − 4ac</span>
+          <span class="stat-value" id="stat-delta">16</span>
+          <span class="stat-delta stat-delta--story" id="stat-delta-desc">Δ &gt; 0 · 2 raíces reales distintas</span>
+          <div class="stat-bar"><span id="stat-delta-bar" style="width: 65%;"></span></div>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Vértice V(h, k) y eje</span>
+          <span class="stat-value" id="stat-vertex">(1, −4)</span>
+          <span class="stat-delta stat-delta--compare" id="stat-axis">Eje x = 1 · Abre hacia arriba (mínimo)</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Raíces / Soluciones</span>
+          <span class="stat-value" id="stat-roots">x₁ = 3, x₂ = −1</span>
+          <span class="stat-delta" id="stat-vieta">Suma −b/a = 2 · Producto c/a = −3</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Clasificación</span>
+          <span class="stat-value" id="stat-type">Completa</span>
+          <span class="stat-delta" id="stat-yint">Corte con eje Y en (0, −3)</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: THE DISCRIMINANT -->
+    <section id="discriminante" class="section-block">
+      <div class="section-header prose-col">
+        <span class="kicker">03 · El Discriminante</span>
+        <h2>Anticipar cuántas soluciones reales existen antes de resolver</h2>
+        <p>
+          Dentro de la fórmula general aparece la expresión <span class="hl-1">Δ = b² − 4ac</span> bajo la raíz cuadrada. Se llama <strong>discriminante</strong> porque distingue de inmediato entre los tres comportamientos posibles de la parábola frente al eje $X$. Si $\Delta$ es además un cuadrado perfecto (como $1, 4, 9, 16, 49$), las raíces serán números racionales exactos.
+        </p>
+      </div>
+
+      <div class="triptych-grid">
+        <article class="triptych-item">
+          <span class="stat-label">Caso 1 · Δ &gt; 0</span>
+          <h3>Dos raíces reales distintas</h3>
+          <div class="mono" style="color: var(--tertiary); font-size: 0.9375rem;">$x^2 - 5x + 6 = 0 \implies \Delta = 1$</div>
+          <div id="triptych-pos" class="triptych-svg"></div>
+          <p style="font-size: 0.96rem;">
+            La raíz $\sqrt{\Delta}$ es real y positiva. Al sumar y restar $\sqrt{\Delta}$, la parábola corta al eje $X$ en dos puntos distintos: $x_1 = 2$ y $x_2 = 3$.
+          </p>
+        </article>
+
+        <article class="triptych-item">
+          <span class="stat-label">Caso 2 · Δ = 0</span>
+          <h3>Una raíz real doble (tangencia)</h3>
+          <div class="mono" style="color: var(--secondary); font-size: 0.9375rem;">$x^2 - 6x + 9 = 0 \implies \Delta = 0$</div>
+          <div id="triptych-zero" class="triptych-svg"></div>
+          <p style="font-size: 0.96rem;">
+            El término $\pm\sqrt{0}$ se anula y ambas raíces colapsan en el eje de simetría: $x_1 = x_2 = -\frac{b}{2a} = 3$. El vértice toca el eje $X$ en un único punto.
+          </p>
+        </article>
+
+        <article class="triptych-item">
+          <span class="stat-label">Caso 3 · Δ &lt; 0</span>
+          <h3>Sin raíces reales (complejas)</h3>
+          <div class="mono" style="color: var(--error); font-size: 0.9375rem;">$x^2 + 2x + 5 = 0 \implies \Delta = -16$</div>
+          <div id="triptych-neg" class="triptych-svg"></div>
+          <p style="font-size: 0.96rem;">
+            La raíz cuadrada de un número negativo no pertenece a los reales ($\mathbb{R}$). La parábola flota por encima (o debajo) del eje $X$ y sus dos soluciones son complejas conjugadas: $x = -1 \pm 2i$.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION 4: THREE SOLUTION METHODS -->
+    <section id="metodos" class="section-block">
+      <div class="section-header prose-col">
+        <span class="kicker">04 · Estrategias de Resolución</span>
+        <h2>Tres caminos hacia las mismas raíces</h2>
+        <p>
+          Toda ecuación cuadrática puede resolverse mediante la fórmula general, pero elegir el método adecuado ahorra pasos y evita errores aritméticos. Explora cada técnica paso a paso o compara cómo los tres métodos resuelven una misma ecuación.
+        </p>
+      </div>
+
+      <div class="method-switcher" role="group" aria-label="Seleccionar método y ejemplo">
+        <button type="button" class="btn-chip is-active" onclick="selectMethod('factorizacion', this)">1. Factorización (trinomio e incompletas)</button>
+        <button type="button" class="btn-chip" onclick="selectMethod('completar', this)">2. Completando el cuadrado</button>
+        <button type="button" class="btn-chip" onclick="selectMethod('formula', this)">3. Fórmula general (universal)</button>
+        <button type="button" class="btn-chip" onclick="selectMethod('comparativa', this)">Comparativa sobre x² − 5x + 6 = 0</button>
+      </div>
+
+      <div class="method-workspace">
+        <div>
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: var(--space-sm);">
+            <h3 id="method-title">Método 1: Factorización directa</h3>
+            <span id="method-eq-tag" class="mono" style="color: var(--tertiary); font-weight: 500;">Ejemplo: x² − 6x − 7 = 0</span>
+          </div>
+          <p id="method-intro" style="color: var(--on-surface-variant); margin-bottom: var(--space-md);"></p>
+
+          <ol id="method-steps-list" class="step-list"></ol>
+
+          <div class="step-controls">
+            <button type="button" class="btn btn-secondary" id="btn-step-prev" onclick="prevMethodStep()">Paso anterior</button>
+            <button type="button" class="btn btn-primary" id="btn-step-next" onclick="nextMethodStep()">Siguiente paso</button>
+            <button type="button" class="btn btn-secondary" onclick="showAllMethodSteps()">Mostrar todos</button>
+            <span id="step-counter" class="mono" style="font-size: var(--label-size); color: var(--on-surface-variant); margin-left: auto;">Paso 1 de 4</span>
+          </div>
+        </div>
+
+        <aside class="aside-panel">
+          <span class="kicker" style="margin-bottom: var(--space-xs);">Criterio de elección</span>
+          <h3 id="aside-rule-title">¿Cuándo conviene factorizar?</h3>
+          <p id="aside-rule-body" style="font-size: 0.96rem;"></p>
+          <div id="aside-secondary-example" style="border-top: var(--hairline); padding-top: var(--space-md); margin-top: var(--space-md); font-size: 0.94rem;"></div>
+        </aside>
+      </div>
+
+      <!-- Geometric proof of Completing the Square -->
+      <div class="geo-square-wrap">
+        <div class="prose-col">
+          <span class="kicker">Visualización Geométrica · Deducción</span>
+          <h3>¿Por qué se llama «completar el cuadrado»?</h3>
+          <p>
+            Al-Juarismi imaginó la expresión $x^2 + bx$ como áreas reales: un cuadrado de lado $x$ unido a un rectángulo de base $b$ y altura $x$. Al partir el rectángulo en dos tiras de ancho <span class="hl-2">b/2</span> y colocarlas en dos lados adyacentes del cuadrado, falta exactamente una esquina cuadrada de área <span class="hl-1">(b/2)²</span> para cerrar un cuadrado perfecto de lado $(x + b/2)$. De esa misma idea geométrica nace la fórmula general.
+          </p>
+        </div>
+
+        <div class="geo-grid">
+          <div id="geo-square-svg" class="svg-frame" style="min-height: 280px;"></div>
+          <div class="lab-controls">
+            <div class="control-group">
+              <label class="field-label" for="geo-b-select">Valor de b en x² + bx</label>
+              <select id="geo-b-select" onchange="updateGeoSquare()">
+                <option value="2">b = 2 (falta 1² = 1)</option>
+                <option value="4" selected>b = 4 (falta 2² = 4)</option>
+                <option value="6">b = 6 (falta 3² = 9)</option>
+                <option value="8">b = 8 (falta 4² = 16)</option>
+              </select>
+            </div>
+            <div class="control-group">
+              <button type="button" class="btn btn-primary" style="width: 100%;" id="btn-geo-toggle" onclick="toggleGeoComplete()">
+                Quitar esquina completada
+              </button>
+            </div>
+            <div id="geo-formula-readout" class="mono" style="font-size: 0.9rem; border-top: var(--hairline); padding-top: var(--space-sm);"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: REAL-WORLD APPLICATIONS -->
+    <section id="aplicaciones" class="section-block">
+      <div class="section-header prose-col">
+        <span class="kicker">05 · Modelado en la Vida Cotidiana</span>
+        <h2>Donde aparecen las ecuaciones de segundo grado</h2>
+        <p>
+          Cada vez que multiplicamos dos longitudes variables, analizamos un objeto sometido a gravedad constante o relacionamos suma y producto de cantidades, surge una ecuación cuadrática. Ajusta los parámetros de estos tres escenarios reales y observa cómo el contexto decide qué raíz tiene sentido físico.
+        </p>
+      </div>
+
+      <div class="app-grid">
+        <!-- Case 1: Geometry -->
+        <article class="app-case card-wrapper">
+          <span class="stat-label">Caso A · Geometría y Diseño</span>
+          <h3>Dimensiones de un jardín rectangular</h3>
+          <p style="font-size: 0.96rem;">
+            El largo mide <strong id="rect-diff-label">7</strong> m más que el ancho $x$, y su área total debe ser <strong id="rect-area-label">78</strong> m². La ecuación es $x(x + d) = A$.
+          </p>
+          <div class="app-controls">
+            <div>
+              <label class="field-label" for="rect-diff">Diferencia d (m)</label>
+              <input type="number" id="rect-diff" min="1" max="20" step="1" value="7" oninput="updateRectApp()">
+            </div>
+            <div>
+              <label class="field-label" for="rect-area">Área objetivo A (m²)</label>
+              <input type="number" id="rect-area" min="10" max="300" step="2" value="78" oninput="updateRectApp()">
+            </div>
+          </div>
+          <div id="rect-visual" class="app-visual"></div>
+          <div id="rect-result" class="app-result"></div>
+        </article>
+
+        <!-- Case 2: Physics -->
+        <article class="app-case card-wrapper">
+          <span class="stat-label">Caso B · Física y Cinemática</span>
+          <h3>Trayectoria de un proyectil</h3>
+          <p style="font-size: 0.96rem;">
+            Un balón se lanza verticalmente desde altura $h_0$ con velocidad $v_0$: $h(t) = -4.9t^2 + v_0 t + h_0$. Igualar $h(t) = 0$ da el tiempo de caída al suelo.
+          </p>
+          <div class="app-controls">
+            <div>
+              <label class="field-label" for="proj-v0">Velocidad v₀ (m/s)</label>
+              <input type="number" id="proj-v0" min="2" max="30" step="1" value="15" oninput="updateProjApp()">
+            </div>
+            <div>
+              <label class="field-label" for="proj-h0">Altura inicial h₀ (m)</label>
+              <input type="number" id="proj-h0" min="0" max="25" step="1" value="2" oninput="updateProjApp()">
+            </div>
+          </div>
+          <div id="proj-visual" class="app-visual"></div>
+          <div id="proj-result" class="app-result"></div>
+        </article>
+
+        <!-- Case 3: Number / Optimization -->
+        <article class="app-case card-wrapper">
+          <span class="stat-label">Caso C · Aritmética y Límites</span>
+          <h3>Suma y producto conocidos</h3>
+          <p style="font-size: 0.96rem;">
+            Hallar dos números cuya suma sea $S$ y su producto $P$ equivale a resolver $x(S - x) = P$, es decir, $x^2 - Sx + P = 0$. El discriminante exige que $P \le S^2 / 4$.
+          </p>
+          <div class="app-controls">
+            <div>
+              <label class="field-label" for="num-sum">Suma S</label>
+              <input type="number" id="num-sum" min="2" max="40" step="1" value="17" oninput="updateNumApp()">
+            </div>
+            <div>
+              <label class="field-label" for="num-prod">Producto P</label>
+              <input type="number" id="num-prod" min="1" max="400" step="1" value="60" oninput="updateNumApp()">
+            </div>
+          </div>
+          <div id="num-visual" class="app-visual"></div>
+          <div id="num-result" class="app-result"></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION 6: INTERACTIVE PRACTICE -->
+    <section id="practica" class="section-block">
+      <div class="section-header prose-col">
+        <span class="kicker">06 · Práctica Interactiva</span>
+        <h2>Pon a prueba tus habilidades</h2>
+        <p>
+          Resuelve los ocho ejercicios graduados. Puedes ingresar las raíces en cualquier orden usando enteros, decimales (por ejemplo <code>1.5</code>) o fracciones (por ejemplo <code>1/3</code>). Si un ejercicio tiene una única raíz doble, escríbela en cualquiera de las casillas o repítela en ambas. Tu progreso se guarda automáticamente.
+        </p>
+      </div>
+
+      <div class="practice-header">
+        <div class="practice-progress-wrap">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <span class="stat-label">Progreso de práctica</span>
+            <span class="mono" id="practice-score-label" style="font-size: 0.9375rem; font-weight: 500;">0 de 8 resueltos</span>
+          </div>
+          <div class="stat-bar" style="margin-top: var(--space-xs);"><span id="practice-progress-bar" style="width: 0%; background: var(--positive);"></span></div>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: var(--space-sm); align-items: end;">
+          <div>
+            <label class="field-label" for="practice-filter">Filtrar por tema</label>
+            <select id="practice-filter" onchange="renderExercises()">
+              <option value="todos">Todos los ejercicios (8)</option>
+              <option value="incompleta">Incompletas (2)</option>
+              <option value="factorizacion">Factorización y completa (2)</option>
+              <option value="discriminante">Discriminante y fórmula (2)</option>
+              <option value="avanzado">Fraccionarias y aplicación (2)</option>
+            </select>
+          </div>
+          <button type="button" class="btn btn-secondary" id="btn-reset-practice" onclick="resetPractice(this)">Reiniciar progreso</button>
+        </div>
+      </div>
+
+      <div id="exercise-list" class="exercise-list"></div>
+    </section>
+
+    <!-- FOOTER SOURCES -->
+    <footer class="sources-footer">
+      <p style="margin-bottom: var(--space-xs);">
+        <strong>Fuentes y referencias pedagógicas consultadas:</strong> Ejercicios y planteamientos adaptados de Neurochispas (20 Ejercicios de Ecuaciones Cuadráticas), Fisimat (Ecuaciones Cuadráticas: Métodos de Solución, Discriminante y Ejercicios Resueltos), Matematix (Ejercicios y Ejemplos Prácticos), Math10 (Fórmula general, discriminante y fórmulas de Vieta), Alianza B@UNAM / UNAM, Lifeder y Disfruta las Matemáticas.
+      </p>
+    </footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/contrib/auto-render.min.js"></script>
+
+  <api-shim></api-shim>
+
+  <script>
+    // =========================================================================
+    // GLOBAL STATE & PERSISTENCE
+    // =========================================================================
+    let appState = {
+      lab: { a: 1, b: -2, c: -3, autoScale: false },
+      methodKey: 'factorizacion',
+      methodStep: 1,
+      geoB: 4,
+      geoCompleted: true,
+      apps: {
+        rectDiff: 7,
+        rectArea: 78,
+        projV0: 15,
+        projH0: 2,
+        numSum: 17,
+        numProd: 60
+      },
+      practiceFilter: 'todos',
+      solvedIds: [],
+      userAnswers: {}
+    };
+
+    function saveState() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+        window.notebookAppApi.setAppState(appState).catch(function () {});
+      }
+    }
+
+    // Read CSS custom properties so SVG / JS never hardcodes hex literals
+    function cssToken(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    // =========================================================================
+    // KATEX SAFE RENDERER
+    // =========================================================================
+    function renderMathIn(el) {
+      if (!el) return;
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(el, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false }
+          ],
+          throwOnError: false
+        });
+      }
+    }
+
+    // =========================================================================
+    // SECTION 2: INTERACTIVE PARABOLA LAB
+    // =========================================================================
+    function formatCoefTerm(coef, varPart, isFirst) {
+      if (Math.abs(coef) < 1e-9) return '';
+      const absVal = Math.abs(coef);
+      const valStr = Number.isInteger(absVal) ? String(absVal) : absVal.toFixed(1).replace(/\.0$/, '');
+      const numStr = (varPart && absVal === 1) ? '' : valStr;
+      if (isFirst) {
+        return (coef < 0 ? '-' : '') + numStr + varPart;
+      }
+      return (coef < 0 ? ' - ' : ' + ') + numStr + varPart;
+    }
+
+    function buildQuadraticLatex(a, b, c) {
+      let expr = '';
+      if (Math.abs(a) >= 1e-9) {
+        expr += formatCoefTerm(a, 'x^2', true);
+      }
+      if (Math.abs(b) >= 1e-9) {
+        expr += formatCoefTerm(b, 'x', expr === '');
+      }
+      if (Math.abs(c) >= 1e-9 || expr === '') {
+        expr += formatCoefTerm(c, '', expr === '');
+      }
+      return expr + ' = 0';
+    }
+
+    function fmtNum(n) {
+      if (Math.abs(n) < 1e-9) return '0';
+      const rounded = Math.round(n * 100) / 100;
+      return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(2).replace(/\.?0+$/, '');
+    }
+
+    function syncAFromSlider(val) {
+      const el = document.getElementById('input-a');
+      if (el) el.value = val;
+      appState.lab.a = parseFloat(val);
+      clearLabPresetActive();
+      updateLab();
+      saveState();
+    }
+    function syncAFromNumber(val) {
+      const num = Math.max(-4, Math.min(4, parseFloat(val) || 0));
+      const el = document.getElementById('slider-a');
+      if (el) el.value = num;
+      appState.lab.a = num;
+      clearLabPresetActive();
+      updateLab();
+      saveState();
+    }
+
+    function syncBFromSlider(val) {
+      const el = document.getElementById('input-b');
+      if (el) el.value = val;
+      appState.lab.b = parseFloat(val);
+      clearLabPresetActive();
+      updateLab();
+      saveState();
+    }
+    function syncBFromNumber(val) {
+      const num = Math.max(-8, Math.min(8, parseFloat(val) || 0));
+      const el = document.getElementById('slider-b');
+      if (el) el.value = num;
+      appState.lab.b = num;
+      clearLabPresetActive();
+      updateLab();
+      saveState();
+    }
+
+    function syncCFromSlider(val) {
+      const el = document.getElementById('input-c');
+      if (el) el.value = val;
+      appState.lab.c = parseFloat(val);
+      clearLabPresetActive();
+      updateLab();
+      saveState();
+    }
+    function syncCFromNumber(val) {
+      const num = Math.max(-9, Math.min(9, parseFloat(val) || 0));
+      const el = document.getElementById('slider-c');
+      if (el) el.value = num;
+      appState.lab.c = num;
+      clearLabPresetActive();
+      updateLab();
+      saveState();
+    }
+
+    function clearLabPresetActive() {
+      const btns = document.querySelectorAll('.preset-row .btn-chip');
+      btns.forEach(function (b) { b.classList.remove('is-active'); });
+    }
+
+    function applyLabPreset(a, b, c, btnEl) {
+      appState.lab.a = a;
+      appState.lab.b = b;
+      appState.lab.c = c;
+      const sa = document.getElementById('slider-a');
+      const ia = document.getElementById('input-a');
+      const sb = document.getElementById('slider-b');
+      const ib = document.getElementById('input-b');
+      const sc = document.getElementById('slider-c');
+      const ic = document.getElementById('input-c');
+      if (sa) sa.value = a;
+      if (ia) ia.value = a;
+      if (sb) sb.value = b;
+      if (ib) ib.value = b;
+      if (sc) sc.value = c;
+      if (ic) ic.value = c;
+      clearLabPresetActive();
+      if (btnEl) btnEl.classList.add('is-active');
+      updateLab();
+      saveState();
+    }
+
+    function toggleAutoScale() {
+      appState.lab.autoScale = !appState.lab.autoScale;
+      const btn = document.getElementById('btn-autoscale');
+      if (btn) {
+        btn.textContent = appState.lab.autoScale
+          ? `Escala adaptada al vértice: Activa`
+          : `Escala fija [−10, 10]: Activa`;
+      }
+      updateLab();
+      saveState();
+    }
+
+    function updateLab() {
+      const a = appState.lab.a;
+      const b = appState.lab.b;
+      const c = appState.lab.c;
+
+      const eqEl = document.getElementById('lab-eq-display');
+      if (eqEl) {
+        eqEl.textContent = `$$${buildQuadraticLatex(a, b, c)}$$`;
+        renderMathIn(eqEl);
+      }
+
+      const warnEl = document.getElementById('lab-linear-warning');
+      const isLinear = Math.abs(a) < 1e-9;
+      if (warnEl) {
+        warnEl.style.display = isLinear ? 'block' : 'none';
+        if (isLinear) renderMathIn(warnEl);
+      }
+
+      const statDelta = document.getElementById('stat-delta');
+      const statDeltaDesc = document.getElementById('stat-delta-desc');
+      const statDeltaBar = document.getElementById('stat-delta-bar');
+      const statVertex = document.getElementById('stat-vertex');
+      const statAxis = document.getElementById('stat-axis');
+      const statRoots = document.getElementById('stat-roots');
+      const statVieta = document.getElementById('stat-vieta');
+      const statType = document.getElementById('stat-type');
+      const statYint = document.getElementById('stat-yint');
+
+      let h = 0;
+      let k = c;
+      let delta = 0;
+      let roots = [];
+
+      if (!isLinear) {
+        delta = b * b - 4 * a * c;
+        h = -b / (2 * a);
+        k = a * h * h + b * h + c;
+
+        if (statDelta) statDelta.textContent = fmtNum(delta);
+        if (statDeltaDesc) {
+          statDeltaDesc.className = 'stat-delta';
+          if (delta > 1e-9) {
+            statDeltaDesc.textContent = `Δ > 0 · 2 raíces reales distintas`;
+            statDeltaDesc.classList.add('stat-delta--story');
+          } else if (Math.abs(delta) <= 1e-9) {
+            statDeltaDesc.textContent = `Δ = 0 · 1 raíz real doble (tangente)`;
+            statDeltaDesc.classList.add('stat-delta--compare');
+          } else {
+            statDeltaDesc.textContent = `Δ < 0 · Sin corte real (raíces complejas)`;
+            statDeltaDesc.style.color = cssToken('--error');
+          }
+        }
+        if (statDeltaBar) {
+          const pct = Math.max(4, Math.min(100, ((delta + 64) / 160) * 100));
+          statDeltaBar.style.width = `${pct}%`;
+          statDeltaBar.style.background = delta > 0 ? cssToken('--data-1') : (Math.abs(delta) <= 1e-9 ? cssToken('--data-2') : cssToken('--error'));
+        }
+
+        if (statVertex) statVertex.textContent = `(${fmtNum(h)}, ${fmtNum(k)})`;
+        if (statAxis) statAxis.textContent = `Eje x = ${fmtNum(h)} · ${a > 0 ? 'Abre hacia arriba (mínimo)' : 'Abre hacia abajo (máximo)'}`;
+
+        if (delta > 1e-9) {
+          const r1 = (-b + Math.sqrt(delta)) / (2 * a);
+          const r2 = (-b - Math.sqrt(delta)) / (2 * a);
+          roots = [r1, r2];
+          if (statRoots) statRoots.textContent = `x₁ = ${fmtNum(r1)}, x₂ = ${fmtNum(r2)}`;
+        } else if (Math.abs(delta) <= 1e-9) {
+          roots = [h];
+          if (statRoots) statRoots.textContent = `x = ${fmtNum(h)} (doble)`;
+        } else {
+          const alpha = -b / (2 * a);
+          const beta = Math.sqrt(-delta) / Math.abs(2 * a);
+          if (statRoots) statRoots.textContent = `${fmtNum(alpha)} ± ${fmtNum(beta)}i`;
+        }
+
+        if (statVieta) statVieta.textContent = `Suma −b/a = ${fmtNum(-b / a)} · Producto c/a = ${fmtNum(c / a)}`;
+
+        let tipoStr = 'Completa';
+        if (Math.abs(b) < 1e-9 && Math.abs(c) < 1e-9) tipoStr = 'Monómica (b=0, c=0)';
+        else if (Math.abs(b) < 1e-9) tipoStr = 'Incompleta pura';
+        else if (Math.abs(c) < 1e-9) tipoStr = 'Incompleta mixta';
+        if (statType) statType.textContent = tipoStr;
+      } else {
+        if (statDelta) statDelta.textContent = `N/A`;
+        if (statDeltaDesc) {
+          statDeltaDesc.className = 'stat-delta';
+          statDeltaDesc.textContent = `No aplica cuando a = 0`;
+        }
+        if (statDeltaBar) statDeltaBar.style.width = `0%`;
+        if (statVertex) statVertex.textContent = `Sin vértice`;
+        if (statAxis) statAxis.textContent = `Pendiente m = ${fmtNum(b)}`;
+        if (Math.abs(b) >= 1e-9) {
+          const rx = -c / b;
+          roots = [rx];
+          if (statRoots) statRoots.textContent = `x = ${fmtNum(rx)}`;
+        } else {
+          if (statRoots) statRoots.textContent = Math.abs(c) < 1e-9 ? `Infinitas (0 = 0)` : `Sin solución`;
+        }
+        if (statVieta) statVieta.textContent = `Ecuación de 1.º grado`;
+        if (statType) statType.textContent = `Lineal (a = 0)`;
+      }
+
+      if (statYint) statYint.textContent = `Corte con eje Y en (0, ${fmtNum(c)})`;
+
+      drawLabSvg(a, b, c, h, k, roots, isLinear);
+    }
+
+    function drawLabSvg(a, b, c, h, k, roots, isLinear) {
+      const container = document.getElementById('lab-svg-container');
+      if (!container) return;
+
+      const W = 740;
+      const H = 400;
+      const padL = 44;
+      const padR = 24;
+      const padT = 22;
+      const padB = 34;
+
+      const xMin = -8;
+      const xMax = 8;
+      let yMin = -10;
+      let yMax = 10;
+
+      if (appState.lab.autoScale && !isLinear) {
+        const yVals = [0, c, k, -2, 2];
+        const minV = Math.min.apply(null, yVals);
+        const maxV = Math.max.apply(null, yVals);
+        yMin = Math.min(-6, Math.floor(minV - 3));
+        yMax = Math.max(6, Math.ceil(maxV + 3));
+      }
+
+      const subEl = document.getElementById('lab-chart-sub');
+      if (subEl) {
+        subEl.textContent = `Dominio x ∈ [${xMin}, ${xMax}] · Rango y ∈ [${yMin}, ${yMax}] · Curva gris: referencia y = x²`;
+      }
+
+      function mapX(x) {
+        return padL + ((x - xMin) / (xMax - xMin)) * (W - padL - padR);
+      }
+      function mapY(y) {
+        return H - padB - ((y - yMin) / (yMax - yMin)) * (H - padT - padB);
+      }
+
+      let svgParts = [];
+      svgParts.push(`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Gráfica interactiva de la función cuadrática">`);
+      svgParts.push(`<defs><clipPath id="lab-clip"><rect x="${padL}" y="${padT}" width="${W - padL - padR}" height="${H - padT - padB}" /></clipPath></defs>`);
+
+      // Vertical gridlines
+      for (let gx = -6; gx <= 6; gx += 2) {
+        const px = mapX(gx);
+        svgParts.push(`<line x1="${px.toFixed(1)}" y1="${padT}" x2="${px.toFixed(1)}" y2="${H - padB}" class="gridline" />`);
+        if (gx !== 0) {
+          svgParts.push(`<text x="${px.toFixed(1)}" y="${H - padB + 16}" text-anchor="middle" class="axis-tick">${gx}</text>`);
+        }
+      }
+
+      // Horizontal gridlines
+      const yStep = (yMax - yMin) > 24 ? 5 : 2;
+      const startY = Math.ceil(yMin / yStep) * yStep;
+      for (let gy = startY; gy <= yMax; gy += yStep) {
+        const py = mapY(gy);
+        if (gy === 0) continue;
+        svgParts.push(`<line x1="${padL}" y1="${py.toFixed(1)}" x2="${W - padR}" y2="${py.toFixed(1)}" class="gridline" />`);
+        svgParts.push(`<text x="${padL - 8}" y="${(py + 4).toFixed(1)}" text-anchor="end" class="axis-tick">${gy}</text>`);
+      }
+
+      // Axes baselines
+      const yZero = mapY(0);
+      const xZero = mapX(0);
+      svgParts.push(`<line x1="${padL}" y1="${yZero.toFixed(1)}" x2="${W - padR}" y2="${yZero.toFixed(1)}" class="baseline" />`);
+      svgParts.push(`<line x1="${xZero.toFixed(1)}" y1="${padT}" x2="${xZero.toFixed(1)}" y2="${H - padB}" class="baseline" />`);
+      svgParts.push(`<text x="${padL - 8}" y="${(yZero + 4).toFixed(1)}" text-anchor="end" class="axis-tick">0</text>`);
+      svgParts.push(`<text x="${W - padR - 4}" y="${(yZero - 6).toFixed(1)}" text-anchor="end" class="axis-tick">Eje X</text>`);
+      svgParts.push(`<text x="${(xZero + 6).toFixed(1)}" y="${padT + 12}" class="axis-tick">Eje Y</text>`);
+
+      // Clipped curves
+      svgParts.push(`<g clip-path="url(#lab-clip)">`);
+
+      // Context curve y = x^2
+      let refPts = [];
+      for (let i = 0; i <= 120; i++) {
+        const x = xMin + (i / 120) * (xMax - xMin);
+        const y = x * x;
+        refPts.push(`${mapX(x).toFixed(1)},${mapY(y).toFixed(1)}`);
+      }
+      svgParts.push(`<polyline points="${refPts.join(' ')}" class="series-context" />`);
+
+      // Symmetry axis
+      if (!isLinear && h >= xMin && h <= xMax) {
+        const sx = mapX(h);
+        svgParts.push(`<line x1="${sx.toFixed(1)}" y1="${padT}" x2="${sx.toFixed(1)}" y2="${H - padB}" class="series-symmetry" />`);
+      }
+
+      // Main story curve
+      let mainPts = [];
+      for (let i = 0; i <= 160; i++) {
+        const x = xMin + (i / 160) * (xMax - xMin);
+        const y = a * x * x + b * x + c;
+        mainPts.push(`${mapX(x).toFixed(1)},${mapY(y).toFixed(1)}`);
+      }
+      svgParts.push(`<polyline points="${mainPts.join(' ')}" class="${isLinear ? 'series-compare' : 'series-story'}" />`);
+      svgParts.push(`</g>`);
+
+      // Direct label for reference y = x^2
+      if (yMax >= 9) {
+        svgParts.push(`<text x="${mapX(3.1).toFixed(1)}" y="${mapY(9).toFixed(1)}" class="label-context">y = x² (ref.)</text>`);
+      }
+
+      // Y-intercept point (0, c)
+      if (c >= yMin && c <= yMax) {
+        const cy = mapY(c);
+        svgParts.push(`<circle cx="${xZero.toFixed(1)}" cy="${cy.toFixed(1)}" r="4.5" fill="${cssToken('--background')}" stroke="${cssToken('--on-surface')}" stroke-width="2" />`);
+        svgParts.push(`<text x="${(xZero + 9).toFixed(1)}" y="${(cy - 6).toFixed(1)}" class="axis-tick">(0, ${fmtNum(c)})</text>`);
+      }
+
+      // Vertex marker
+      if (!isLinear) {
+        if (h >= xMin && h <= xMax && k >= yMin && k <= yMax) {
+          const vx = mapX(h);
+          const vy = mapY(k);
+          svgParts.push(`<circle cx="${vx.toFixed(1)}" cy="${vy.toFixed(1)}" r="5" class="dot-compare" />`);
+          const labelYOffset = a > 0 ? 18 : -10;
+          const clampedLY = Math.max(padT + 14, Math.min(H - padB - 6, vy + labelYOffset));
+          svgParts.push(`<text x="${vx.toFixed(1)}" y="${clampedLY.toFixed(1)}" text-anchor="middle" class="label-compare">V(${fmtNum(h)}, ${fmtNum(k)})</text>`);
+        } else {
+          svgParts.push(`<text x="${W - padR}" y="${padT + 14}" text-anchor="end" class="label-compare">Vértice en (${fmtNum(h)}, ${fmtNum(k)}) fuera de vista</text>`);
+        }
+      }
+
+      // Roots markers on baseline y = 0
+      roots.forEach(function (r, idx) {
+        if (r >= xMin && r <= xMax) {
+          const rx = mapX(r);
+          svgParts.push(`<circle cx="${rx.toFixed(1)}" cy="${yZero.toFixed(1)}" r="5.5" class="series-story-end" />`);
+          const labelText = roots.length === 1 ? `x = ${fmtNum(r)}` : `x${idx === 0 ? '₁' : '₂'} = ${fmtNum(r)}`;
+          const dy = (idx === 0) ? -11 : 17;
+          svgParts.push(`<text x="${rx.toFixed(1)}" y="${(yZero + dy).toFixed(1)}" text-anchor="middle" class="label-story">${labelText}</text>`);
+        }
+      });
+
+      svgParts.push(`</svg>`);
+      container.innerHTML = svgParts.join('');
+    }
+
+    // =========================================================================
+    // SECTION 3: DISCRIMINANT TRIPTYCH
+    // =========================================================================
+    function drawMiniParabola(containerId, a, b, c, accentClass, annotations) {
+      const el = document.getElementById(containerId);
+      if (!el) return;
+      const W = 280;
+      const H = 175;
+      const pad = 20;
+      const xMin = -1;
+      const xMax = 6;
+      const yMin = -2;
+      const yMax = 8;
+
+      function mx(x) { return pad + ((x - xMin) / (xMax - xMin)) * (W - 2 * pad); }
+      function my(y) { return H - pad - ((y - yMin) / (yMax - yMin)) * (H - 2 * pad); }
+
+      const y0 = my(0);
+      const x0 = mx(0);
+      let pts = [];
+      for (let i = 0; i <= 80; i++) {
+        const x = xMin + (i / 80) * (xMax - xMin);
+        const y = a * x * x + b * x + c;
+        pts.push(`${mx(x).toFixed(1)},${my(y).toFixed(1)}`);
+      }
+
+      let out = [];
+      out.push(`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Comparación de discriminante">`);
+      out.push(`<defs><clipPath id="clip-${containerId}"><rect x="${pad}" y="${pad}" width="${W - 2 * pad}" height="${H - 2 * pad}" /></clipPath></defs>`);
+      out.push(`<line x1="${pad}" y1="${y0.toFixed(1)}" x2="${W - pad}" y2="${y0.toFixed(1)}" class="baseline" />`);
+      out.push(`<line x1="${x0.toFixed(1)}" y1="${pad}" x2="${x0.toFixed(1)}" y2="${H - pad}" class="gridline" />`);
+      out.push(`<g clip-path="url(#clip-${containerId})"><polyline points="${pts.join(' ')}" class="${accentClass}" /></g>`);
+      annotations.forEach(function (pt) {
+        const px = mx(pt.x);
+        const py = my(pt.y);
+        out.push(`<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="4.5" fill="${pt.color}" />`);
+        out.push(`<text x="${(px + (pt.dx || 0)).toFixed(1)}" y="${(py + (pt.dy || -10)).toFixed(1)}" text-anchor="${pt.anchor || 'middle'}" class="axis-tick" style="fill:${pt.color};font-weight:500;">${pt.label}</text>`);
+      });
+      out.push(`</svg>`);
+      el.innerHTML = out.join('');
+    }
+
+    function renderTriptych() {
+      drawMiniParabola('triptych-pos', 1, -5, 6, 'series-story', [
+        { x: 2, y: 0, label: 'x₁=2', dx: -8, dy: -10, color: cssToken('--tertiary') },
+        { x: 3, y: 0, label: 'x₂=3', dx: 12, dy: -10, color: cssToken('--tertiary') }
+      ]);
+      drawMiniParabola('triptych-zero', 1, -6, 9, 'series-compare', [
+        { x: 3, y: 0, label: 'V(3,0)', dx: 0, dy: 16, color: cssToken('--secondary') }
+      ]);
+      // Shift x^2 + 2x + 5 visually to (x-2.5)^2 + 2 so it fits cleanly in [-1, 6], OR widen domain in this mini chart
+      const negEl = document.getElementById('triptych-neg');
+      if (negEl) {
+        const W = 280, H = 175, pad = 20;
+        const xMin = -5, xMax = 3, yMin = -2, yMax = 10;
+        const mx = function (x) { return pad + ((x - xMin) / (xMax - xMin)) * (W - 2 * pad); };
+        const my = function (y) { return H - pad - ((y - yMin) / (yMax - yMin)) * (H - 2 * pad); };
+        let pts = [];
+        for (let i = 0; i <= 80; i++) {
+          const x = xMin + (i / 80) * (xMax - xMin);
+          const y = x * x + 2 * x + 5;
+          pts.push(`${mx(x).toFixed(1)},${my(y).toFixed(1)}`);
+        }
+        const errCol = cssToken('--error');
+        negEl.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Parábola sin cortes reales">
+          <defs><clipPath id="clip-triptych-neg"><rect x="${pad}" y="${pad}" width="${W - 2 * pad}" height="${H - 2 * pad}" /></clipPath></defs>
+          <line x1="${pad}" y1="${my(0).toFixed(1)}" x2="${W - pad}" y2="${my(0).toFixed(1)}" class="baseline" />
+          <line x1="${mx(0).toFixed(1)}" y1="${pad}" x2="${mx(0).toFixed(1)}" y2="${H - pad}" class="gridline" />
+          <g clip-path="url(#clip-triptych-neg)"><polyline points="${pts.join(' ')}" fill="none" stroke="${errCol}" stroke-width="2.5" /></g>
+          <circle cx="${mx(-1).toFixed(1)}" cy="${my(4).toFixed(1)}" r="4.5" fill="${errCol}" />
+          <text x="${mx(-1).toFixed(1)}" y="${(my(4) + 16).toFixed(1)}" text-anchor="middle" class="axis-tick" style="fill:${errCol};font-weight:500;">V(−1, 4) sin corte</text>
+        </svg>`;
+      }
+    }
+
+    // =========================================================================
+    // SECTION 4: THREE SOLUTION METHODS STEP-BY-STEP
+    // =========================================================================
+    const METHODS_DATA = {
+      factorizacion: {
+        title: `Método 1: Factorización directa`,
+        eqTag: `Ejemplo: x² − 6x − 7 = 0`,
+        intro: `Consiste en descomponer el polinomio cuadrático en un producto de dos binomios lineales igualados a cero y aplicar la propiedad del producto cero: si A·B = 0, entonces A = 0 o B = 0.`,
+        asideTitle: `¿Cuándo conviene factorizar?`,
+        asideBody: `Es el camino más veloz para ecuaciones incompletas mixtas ($ax^2 + bx = 0$, sacando factor común $x$) y para trinomios con coeficientes enteros pequeños donde se identifican rápido dos números que sumen $b$ y multipliquen $c$.`,
+        asideExtra: `<strong>Atajo para incompletas puras ($ax^2 + c = 0$):</strong><br>Por ejemplo, $2x^2 - 32 = 0 \\implies x^2 = 16 \\implies x = \\pm 4$ (o por diferencia de cuadrados).`,
+        steps: [
+          {
+            title: `Verificar la forma estándar a = 1`,
+            desc: `La ecuación ya está igualada a cero y ordenada: $a = 1$, $b = -6$, $c = -7$.`,
+            math: `$$x^2 - 6x - 7 = 0$$`
+          },
+          {
+            title: `Buscar dos números p y q`,
+            desc: `Necesitamos dos enteros que multiplicados den $c = -7$ y sumados den $b = -6$. Esos números son $-7$ y $+1$.`,
+            math: `$$(-7) \\cdot (1) = -7 \\qquad \\text{y} \\qquad (-7) + (1) = -6$$`
+          },
+          {
+            title: `Escribir como producto de binomios`,
+            desc: `Reemplazamos el trinomio por el producto equivalente $(x - 7)(x + 1) = 0$.`,
+            math: `$$(x - 7)(x + 1) = 0$$`
+          },
+          {
+            title: `Igualar cada factor a cero y despejar`,
+            desc: `De $x - 7 = 0$ sale $x_1 = 7$; de $x + 1 = 0$ sale $x_2 = -1$.`,
+            math: `$$x_1 = 7 \\qquad \\text{o} \\qquad x_2 = -1$$`
+          }
+        ]
+      },
+      completar: {
+        title: `Método 2: Completando el cuadrado`,
+        eqTag: `Ejemplo: x² + 4x − 6 = 0`,
+        intro: `Transforma el lado izquierdo en un trinomio cuadrado perfecto $(x + p)^2 = q$ para despejar $x$ extrayendo raíz cuadrada. Además, revela directamente el vértice de la parábola.`,
+        asideTitle: `¿Cuándo conviene completar el cuadrado?`,
+        asideBody: `Es ideal cuando la factorización con enteros falla, cuando $a = 1$ y $b$ es par, o cuando necesitas pasar la parábola a forma canónica $y = a(x - h)^2 + k$ para leer su vértice sin usar fórmulas.`,
+        asideExtra: `<strong>Si $a \\neq 1$:</strong><br>Divide toda la ecuación entre $a$ antes de empezar. Por ejemplo, $2x^2 + 8x - 10 = 0 \\implies x^2 + 4x - 5 = 0$.`,
+        steps: [
+          {
+            title: `Aislar los términos con x`,
+            desc: `Pasamos el término independiente $-6$ al lado derecho para dejar libre la pareja $x^2 + 4x$.`,
+            math: `$$x^2 + 4x = 6$$`
+          },
+          {
+            title: `Calcular el término faltante (b/2)²`,
+            desc: `Tomamos $b = 4$, lo dividimos entre $2$ y lo elevamos al cuadrado: $(4/2)^2 = 2^2 = 4$.`,
+            math: `$$\\left(\\frac{b}{2}\\right)^2 = \\left(\\frac{4}{2}\\right)^2 = 4$$`
+          },
+          {
+            title: `Sumar 4 en ambos miembros`,
+            desc: `Al sumar $4$ a ambos lados conservamos la igualdad y formamos un trinomio cuadrado perfecto a la izquierda.`,
+            math: `$$x^2 + 4x + 4 = 6 + 4 \\implies (x + 2)^2 = 10$$`
+          },
+          {
+            title: `Extraer raíz cuadrada y despejar`,
+            desc: `Aplicamos $\\pm\\sqrt{\\cdot}$ en ambos lados y restamos $2$.`,
+            math: `$$x + 2 = \\pm\\sqrt{10} \\implies x = -2 \\pm \\sqrt{10}$$`
+          }
+        ]
+      },
+      formula: {
+        title: `Método 3: Fórmula general cuadrática`,
+        eqTag: `Ejemplo: 2x² + 5x − 3 = 0`,
+        intro: `Es el método universal: funciona para cualquier ecuación cuadrática completa o incompleta, tenga raíces enteras, fraccionarias, irracionales o complejas.`,
+        asideTitle: `Cuidado con los signos`,
+        asideBody: `El error más frecuente es olvidar el signo negativo de un coeficiente al sustituir en $-b$ o en $b^2 - 4ac$. Coloca siempre paréntesis alrededor de cada coeficiente sustituido.`,
+        asideExtra: `<strong>La fórmula general:</strong><br>$$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$<br>El término $-b/(2a)$ es el eje de simetría y $\\frac{\\sqrt{\\Delta}}{2a}$ es la semidistancia lateral a cada raíz.`,
+        steps: [
+          {
+            title: `Identificar coeficientes con su signo`,
+            desc: `En $2x^2 + 5x - 3 = 0$, leemos con cuidado cada parámetro: $a = 2$, $b = 5$, $c = -3$.`,
+            math: `$$a = 2, \\quad b = 5, \\quad c = -3$$`
+          },
+          {
+            title: `Evaluar primero el discriminante Δ`,
+            desc: `Calculamos $\\Delta = b^2 - 4ac$. Como es positivo y cuadrado perfecto ($49$), habrá dos raíces racionales.`,
+            math: `$$\\Delta = (5)^2 - 4(2)(-3) = 25 + 24 = 49$$`
+          },
+          {
+            title: `Sustituir en la fórmula general`,
+            desc: `Reemplazamos $-b = -5$, $\\sqrt{\\Delta} = \\sqrt{49} = 7$ y $2a = 4$.`,
+            math: `$$x = \\frac{-5 \\pm \\sqrt{49}}{2(2)} = \\frac{-5 \\pm 7}{4}$$`
+          },
+          {
+            title: `Separar los signos + y −`,
+            desc: `Obtenemos las dos raíces simplificando cada fracción resultante.`,
+            math: `$$x_1 = \\frac{-5 + 7}{4} = \\frac{1}{2}, \\qquad x_2 = \\frac{-5 - 7}{4} = -3$$`
+          }
+        ]
+      },
+      comparativa: {
+        title: `Comparativa: tres métodos sobre una misma ecuación`,
+        eqTag: `Ecuación: x² − 5x + 6 = 0`,
+        intro: `Observa cómo los tres procedimientos parten de la misma expresión y convergen exactamente en las mismas raíces: x₁ = 2 y x₂ = 3.`,
+        asideTitle: `Verificación por Cardano-Vieta`,
+        asideBody: `Para $x^2 - 5x + 6 = 0$, tenemos $a = 1, b = -5, c = 6$. Comprobamos:<br>• Suma: $2 + 3 = 5 = -(-5)/1$<br>• Producto: $2 \\cdot 3 = 6 = 6/1$.`,
+        asideExtra: `<strong>Conclusión práctica:</strong><br>Para esta ecuación, factorizar toma 2 líneas; la fórmula general da seguridad mecánica cuando los números no son tan evidentes.`,
+        steps: [
+          {
+            title: `Vía 1 · Por factorización`,
+            desc: `Dos números que sumen $-5$ y multipliquen $+6$ son $-2$ y $-3$.`,
+            math: `$$(x - 2)(x - 3) = 0 \\implies x_1 = 2,\\; x_2 = 3$$`
+          },
+          {
+            title: `Vía 2 · Completando el cuadrado`,
+            desc: `Aislamos $6$, sumamos $(-5/2)^2 = 25/4$ en ambos lados y factorizamos el cuadrado perfecto.`,
+            math: `$$\\left(x - \\frac{5}{2}\\right)^2 = -6 + \\frac{25}{4} = \\frac{1}{4} \\implies x = \\frac{5}{2} \\pm \\frac{1}{2}$$`
+          },
+          {
+            title: `Vía 3 · Por fórmula general`,
+            desc: `Con $a=1, b=-5, c=6$, calculamos $\\Delta = (-5)^2 - 4(1)(6) = 1$.`,
+            math: `$$x = \\frac{5 \\pm \\sqrt{1}}{2} = \\frac{5 \\pm 1}{2} \\implies x_1 = 3,\\; x_2 = 2$$`
+          }
+        ]
+      }
+    };
+
+    function selectMethod(key, btnEl) {
+      appState.methodKey = key;
+      appState.methodStep = 1;
+      const btns = document.querySelectorAll('.method-switcher .btn-chip');
+      btns.forEach(function (b) { b.classList.remove('is-active'); });
+      if (btnEl) btnEl.classList.add('is-active');
+      renderMethodWorkspace();
+      saveState();
+    }
+
+    function prevMethodStep() {
+      if (appState.methodStep > 1) {
+        appState.methodStep--;
+        renderMethodWorkspace();
+        saveState();
+      }
+    }
+
+    function nextMethodStep() {
+      const data = METHODS_DATA[appState.methodKey];
+      if (data && appState.methodStep < data.steps.length) {
+        appState.methodStep++;
+        renderMethodWorkspace();
+        saveState();
+      }
+    }
+
+    function showAllMethodSteps() {
+      const data = METHODS_DATA[appState.methodKey];
+      if (data) {
+        appState.methodStep = data.steps.length;
+        renderMethodWorkspace();
+        saveState();
+      }
+    }
+
+    function renderMethodWorkspace() {
+      const data = METHODS_DATA[appState.methodKey];
+      if (!data) return;
+
+      const titleEl = document.getElementById('method-title');
+      const eqEl = document.getElementById('method-eq-tag');
+      const introEl = document.getElementById('method-intro');
+      const listEl = document.getElementById('method-steps-list');
+      const counterEl = document.getElementById('step-counter');
+      const prevBtn = document.getElementById('btn-step-prev');
+      const nextBtn = document.getElementById('btn-step-next');
+      const asideTitle = document.getElementById('aside-rule-title');
+      const asideBody = document.getElementById('aside-rule-body');
+      const asideExtra = document.getElementById('aside-secondary-example');
+
+      if (titleEl) titleEl.textContent = data.title;
+      if (eqEl) eqEl.textContent = data.eqTag;
+      if (introEl) introEl.textContent = data.intro;
+      if (asideTitle) asideTitle.textContent = data.asideTitle;
+      if (asideBody) asideBody.innerHTML = data.asideBody;
+      if (asideExtra) asideExtra.innerHTML = data.asideExtra;
+
+      if (listEl) {
+        listEl.innerHTML = data.steps.map(function (st, i) {
+          const idx = i + 1;
+          const visible = idx <= appState.methodStep;
+          const current = idx === appState.methodStep;
+          return `<li class="step-item ${visible ? 'is-visible' : ''} ${current ? 'is-current' : ''}">
+            <div class="step-head">
+              <span class="step-num">Paso ${idx}</span>
+              <span class="step-title">${st.title}</span>
+            </div>
+            <p style="margin-bottom: 0.35rem; font-size: 0.96rem;">${visible ? st.desc : 'Avanza al siguiente paso para revelar este desarrollo.'}</p>
+            ${visible ? `<div class="step-math">${st.math}</div>` : ''}
+          </li>`;
+        }).join('');
+        renderMathIn(listEl);
+      }
+
+      if (asideBody) renderMathIn(asideBody);
+      if (asideExtra) renderMathIn(asideExtra);
+
+      if (counterEl) counterEl.textContent = `Paso ${appState.methodStep} de ${data.steps.length}`;
+      if (prevBtn) prevBtn.disabled = appState.methodStep <= 1;
+      if (nextBtn) nextBtn.disabled = appState.methodStep >= data.steps.length;
+    }
+
+    // Geometric completing-the-square SVG
+    function updateGeoSquare() {
+      const sel = document.getElementById('geo-b-select');
+      if (sel) appState.geoB = parseInt(sel.value, 10) || 4;
+      renderGeoSquare();
+      saveState();
+    }
+
+    function toggleGeoComplete() {
+      appState.geoCompleted = !appState.geoCompleted;
+      renderGeoSquare();
+      saveState();
+    }
+
+    function renderGeoSquare() {
+      const container = document.getElementById('geo-square-svg');
+      const readout = document.getElementById('geo-formula-readout');
+      const btn = document.getElementById('btn-geo-toggle');
+      if (!container) return;
+
+      const b = appState.geoB;
+      const half = b / 2;
+      const sqMissing = half * half;
+
+      if (btn) {
+        btn.textContent = appState.geoCompleted ? `Quitar esquina completada` : `Completar la esquina (${half}² = ${sqMissing})`;
+      }
+      if (readout) {
+        readout.innerHTML = appState.geoCompleted
+          ? `x² + ${b}x + <strong>${sqMissing}</strong> = (x + ${half})²`
+          : `x² + ${b}x = x² + ${half}x + ${half}x (falta ${sqMissing})`;
+      }
+
+      const xSide = 120;
+      const hSide = 28 + half * 16;
+      const ox = 60;
+      const oy = 35;
+
+      const colInk = cssToken('--on-surface');
+      const colGray = cssToken('--surface-container');
+      const colBlueTint = `color-mix(in srgb, ${cssToken('--data-2')} 18%, ${cssToken('--background')})`;
+      const colBlue = cssToken('--secondary');
+      const colOrangeTint = `color-mix(in srgb, ${cssToken('--data-1')} 22%, ${cssToken('--background')})`;
+      const colOrange = cssToken('--tertiary');
+
+      const missingRect = appState.geoCompleted
+        ? `<rect x="${ox + xSide}" y="${oy + xSide}" width="${hSide}" height="${hSide}" fill="${colOrangeTint}" stroke="${colOrange}" stroke-width="2" />
+           <text x="${ox + xSide + hSide / 2}" y="${oy + xSide + hSide / 2 + 5}" text-anchor="middle" class="label-story">${sqMissing}</text>`
+        : `<rect x="${ox + xSide}" y="${oy + xSide}" width="${hSide}" height="${hSide}" fill="none" stroke="${colOrange}" stroke-width="1.5" stroke-dasharray="4 4" />
+           <text x="${ox + xSide + hSide / 2}" y="${oy + xSide + hSide / 2 + 5}" text-anchor="middle" class="label-story">?</text>`;
+
+      container.innerHTML = `<svg viewBox="0 0 380 265" role="img" aria-label="Diagrama geométrico de completar el cuadrado">
+        <rect x="${ox}" y="${oy}" width="${xSide}" height="${xSide}" fill="${colGray}" stroke="${colInk}" stroke-width="1.5" />
+        <text x="${ox + xSide / 2}" y="${oy + xSide / 2 + 5}" text-anchor="middle" class="mono" style="font-size:15px;fill:${colInk};font-weight:500;">x²</text>
+
+        <rect x="${ox + xSide}" y="${oy}" width="${hSide}" height="${xSide}" fill="${colBlueTint}" stroke="${colBlue}" stroke-width="1.5" />
+        <text x="${ox + xSide + hSide / 2}" y="${oy + xSide / 2 + 5}" text-anchor="middle" class="label-compare">${half}x</text>
+
+        <rect x="${ox}" y="${oy + xSide}" width="${xSide}" height="${hSide}" fill="${colBlueTint}" stroke="${colBlue}" stroke-width="1.5" />
+        <text x="${ox + xSide / 2}" y="${oy + xSide + hSide / 2 + 5}" text-anchor="middle" class="label-compare">${half}x</text>
+
+        ${missingRect}
+
+        <text x="${ox + xSide / 2}" y="${oy - 10}" text-anchor="middle" class="axis-tick">x</text>
+        <text x="${ox + xSide + hSide / 2}" y="${oy - 10}" text-anchor="middle" class="label-compare">${half}</text>
+        <text x="${ox - 12}" y="${oy + xSide / 2 + 4}" text-anchor="end" class="axis-tick">x</text>
+        <text x="${ox - 12}" y="${oy + xSide + hSide / 2 + 4}" text-anchor="end" class="label-compare">${half}</text>
+      </svg>`;
+    }
+
+    // =========================================================================
+    // SECTION 5: REAL-WORLD APPLIED CASES
+    // =========================================================================
+    function updateRectApp() {
+      const diffEl = document.getElementById('rect-diff');
+      const areaEl = document.getElementById('rect-area');
+      const d = Math.max(1, Math.min(30, parseFloat(diffEl ? diffEl.value : 7) || 7));
+      const A = Math.max(5, Math.min(500, parseFloat(areaEl ? areaEl.value : 78) || 78));
+      appState.apps.rectDiff = d;
+      appState.apps.rectArea = A;
+
+      const dl = document.getElementById('rect-diff-label');
+      const al = document.getElementById('rect-area-label');
+      if (dl) dl.textContent = fmtNum(d);
+      if (al) al.textContent = fmtNum(A);
+
+      // x^2 + d x - A = 0
+      const delta = d * d + 4 * A;
+      const xPos = (-d + Math.sqrt(delta)) / 2;
+      const xNeg = (-d - Math.sqrt(delta)) / 2;
+      const largo = xPos + d;
+
+      const vis = document.getElementById('rect-visual');
+      if (vis) {
+        const ratio = Math.min(2.4, largo / Math.max(1, xPos));
+        const rw = Math.min(220, Math.round(90 * ratio));
+        const rh = 90;
+        const rx = (280 - rw) / 2;
+        const ry = 30;
+        vis.innerHTML = `<svg viewBox="0 0 280 150" role="img" aria-label="Esquema del rectángulo">
+          <rect x="${rx}" y="${ry}" width="${rw}" height="${rh}" fill="${cssToken('--background')}" stroke="${cssToken('--data-1')}" stroke-width="2.5" />
+          <text x="140" y="${ry - 8}" text-anchor="middle" class="label-story">Largo = x + ${fmtNum(d)} = ${fmtNum(largo)} m</text>
+          <text x="${rx - 8}" y="${ry + rh / 2 + 4}" text-anchor="end" class="label-compare">x = ${fmtNum(xPos)} m</text>
+          <text x="140" y="${ry + rh / 2 + 5}" text-anchor="middle" class="mono" style="font-size:13px;fill:${cssToken('--on-surface')};">Área = ${fmtNum(A)} m²</text>
+        </svg>`;
+      }
+
+      const res = document.getElementById('rect-result');
+      if (res) {
+        res.innerHTML = `Ecuación: <strong>x² + ${fmtNum(d)}x − ${fmtNum(A)} = 0</strong><br>
+          Raíces: x₁ = <strong style="color:var(--positive);">${fmtNum(xPos)} m</strong> · x₂ = ${fmtNum(xNeg)} m (descartada por negativa).<br>
+          Dimensiones reales: <strong>${fmtNum(xPos)} m × ${fmtNum(largo)} m</strong>.`;
+      }
+      saveState();
+    }
+
+    function updateProjApp() {
+      const v0El = document.getElementById('proj-v0');
+      const h0El = document.getElementById('proj-h0');
+      const v0 = Math.max(1, Math.min(40, parseFloat(v0El ? v0El.value : 15) || 15));
+      const h0 = Math.max(0, Math.min(40, parseFloat(h0El ? h0El.value : 2) || 2));
+      appState.apps.projV0 = v0;
+      appState.apps.projH0 = h0;
+
+      // -4.9 t^2 + v0 t + h0 = 0
+      const a = -4.9;
+      const b = v0;
+      const c = h0;
+      const delta = b * b - 4 * a * c;
+      const tMaxHeight = -b / (2 * a);
+      const maxH = a * tMaxHeight * tMaxHeight + b * tMaxHeight + c;
+      const tImpact = (-b - Math.sqrt(delta)) / (2 * a); // since a < 0, -b - sqrt(delta) divided by negative 2a is positive
+
+      const vis = document.getElementById('proj-visual');
+      if (vis) {
+        const W = 280, H = 150, padL = 32, padR = 16, padT = 20, padB = 24;
+        const tSpan = Math.max(2, tImpact * 1.1);
+        const hSpan = Math.max(5, maxH * 1.2);
+        const mx = function (t) { return padL + (t / tSpan) * (W - padL - padR); };
+        const my = function (y) { return H - padB - (y / hSpan) * (H - padT - padB); };
+
+        let pts = [];
+        for (let i = 0; i <= 60; i++) {
+          const t = (i / 60) * tImpact;
+          const y = a * t * t + b * t + c;
+          pts.push(`${mx(t).toFixed(1)},${my(Math.max(0, y)).toFixed(1)}`);
+        }
+        vis.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Trayectoria parabólica altura vs tiempo">
+          <line x1="${padL}" y1="${my(0).toFixed(1)}" x2="${W - padR}" y2="${my(0).toFixed(1)}" class="baseline" />
+          <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${my(0).toFixed(1)}" class="gridline" />
+          <polyline points="${pts.join(' ')}" class="series-story" />
+          <circle cx="${mx(tMaxHeight).toFixed(1)}" cy="${my(maxH).toFixed(1)}" r="4" class="dot-compare" />
+          <text x="${mx(tMaxHeight).toFixed(1)}" y="${(my(maxH) - 7).toFixed(1)}" text-anchor="middle" class="label-compare">Máx ${fmtNum(maxH)} m</text>
+          <circle cx="${mx(tImpact).toFixed(1)}" cy="${my(0).toFixed(1)}" r="4.5" class="series-story-end" />
+          <text x="${mx(tImpact).toFixed(1)}" y="${(my(0) + 14).toFixed(1)}" text-anchor="middle" class="label-story">t=${fmtNum(tImpact)} s</text>
+        </svg>`;
+      }
+
+      const res = document.getElementById('proj-result');
+      if (res) {
+        res.innerHTML = `Altura máxima: <strong>${fmtNum(maxH)} m</strong> en t = ${fmtNum(tMaxHeight)} s.<br>
+          Impacto en el suelo (h = 0): <strong style="color:var(--tertiary);">t = ${fmtNum(tImpact)} s</strong> (la raíz negativa se descarta por ser tiempo previo al lanzamiento).`;
+      }
+      saveState();
+    }
+
+    function updateNumApp() {
+      const sEl = document.getElementById('num-sum');
+      const pEl = document.getElementById('num-prod');
+      const S = parseFloat(sEl ? sEl.value : 17) || 17;
+      const P = parseFloat(pEl ? pEl.value : 60) || 60;
+      appState.apps.numSum = S;
+      appState.apps.numProd = P;
+
+      // x^2 - Sx + P = 0
+      const delta = S * S - 4 * P;
+      const maxP = (S * S) / 4;
+
+      const vis = document.getElementById('num-visual');
+      if (vis) {
+        const W = 280, H = 150, pad = 26;
+        const xMin = -2, xMax = Math.max(S + 2, 10);
+        // Show f(x) = x(S-x) inverted parabola vs horizontal line y = P
+        const yMax = Math.max(maxP, P) * 1.25;
+        const mx = function (x) { return pad + ((x - xMin) / (xMax - xMin)) * (W - 2 * pad); };
+        const my = function (y) { return H - pad - (y / Math.max(10, yMax)) * (H - 2 * pad); };
+        let pts = [];
+        for (let i = 0; i <= 70; i++) {
+          const x = (i / 70) * S;
+          const y = x * (S - x);
+          pts.push(`${mx(x).toFixed(1)},${my(y).toFixed(1)}`);
+        }
+        const py = my(P);
+        let dots = '';
+        if (delta >= 0) {
+          const r1 = (S - Math.sqrt(delta)) / 2;
+          const r2 = (S + Math.sqrt(delta)) / 2;
+          dots = `<circle cx="${mx(r1).toFixed(1)}" cy="${py.toFixed(1)}" r="4" class="series-story-end" />
+                  <circle cx="${mx(r2).toFixed(1)}" cy="${py.toFixed(1)}" r="4" class="series-story-end" />`;
+        }
+        vis.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Curva de producto x(S-x) frente al objetivo P">
+          <line x1="${pad}" y1="${my(0).toFixed(1)}" x2="${W - pad}" y2="${my(0).toFixed(1)}" class="baseline" />
+          <polyline points="${pts.join(' ')}" class="series-compare" />
+          <line x1="${pad}" y1="${py.toFixed(1)}" x2="${W - pad}" y2="${py.toFixed(1)}" stroke="${cssToken('--data-1')}" stroke-width="2" stroke-dasharray="4 3" />
+          <text x="${W - pad}" y="${(py - 5).toFixed(1)}" text-anchor="end" class="label-story">P = ${fmtNum(P)}</text>
+          <text x="${mx(S / 2).toFixed(1)}" y="${(my(maxP) - 6).toFixed(1)}" text-anchor="middle" class="label-compare">Tope S²/4 = ${fmtNum(maxP)}</text>
+          ${dots}
+        </svg>`;
+      }
+
+      const res = document.getElementById('num-result');
+      if (res) {
+        if (delta > 0) {
+          const r1 = (S - Math.sqrt(delta)) / 2;
+          const r2 = (S + Math.sqrt(delta)) / 2;
+          res.innerHTML = `Ecuación: <strong>x² − ${fmtNum(S)}x + ${fmtNum(P)} = 0</strong> (Δ = ${fmtNum(delta)}).<br>
+            Los números son <strong style="color:var(--positive);">${fmtNum(r1)} y ${fmtNum(r2)}</strong>.`;
+        } else if (Math.abs(delta) <= 1e-9) {
+          const r = S / 2;
+          res.innerHTML = `Δ = 0 · Producto máximo alcanzado.<br>Ambos números son iguales: <strong>${fmtNum(r)} y ${fmtNum(r)}</strong>.`;
+        } else {
+          res.innerHTML = `<span style="color:var(--error);">Δ = ${fmtNum(delta)} &lt; 0 · Imposible en los reales:</span> el producto máximo con suma ${fmtNum(S)} es ${fmtNum(maxP)}.`;
+        }
+      }
+      saveState();
+    }
+
+    // =========================================================================
+    // SECTION 6: INTERACTIVE PRACTICE EXERCISES
+    // =========================================================================
+    const EXERCISES = [
+      {
+        id: 'ej1',
+        category: 'incompleta',
+        level: 'Básico · Incompleta pura',
+        prompt: `Encuentra las dos soluciones reales de la ecuación:`,
+        latex: `$$x^2 - 25 = 0$$`,
+        type: 'roots',
+        expected: [5, -5],
+        hint: `Falta el término lineal $bx$ ($b = 0$). Despeja $x^2$ sumando $25$ a ambos lados y extrae la raíz cuadrada sin olvidar el signo $\\pm$.`,
+        solutionHtml: `<p><strong>Despeje directo:</strong></p>
+          <p>$$x^2 - 25 = 0 \\implies x^2 = 25 \\implies x = \\pm\\sqrt{25} = \\pm 5$$</p>
+          <p>Las soluciones son $x_1 = 5$ y $x_2 = -5$.</p>`
+      },
+      {
+        id: 'ej2',
+        category: 'incompleta',
+        level: 'Básico · Incompleta mixta',
+        prompt: `Halla las raíces de la siguiente ecuación sin término independiente:`,
+        latex: `$$4x^2 + 8x = 0$$`,
+        type: 'roots',
+        expected: [0, -2],
+        hint: `Extrae el factor común $4x$ (o $x$) e iguala cada factor a cero.`,
+        solutionHtml: `<p><strong>Factor común:</strong></p>
+          <p>$$4x^2 + 8x = 0 \\implies 4x(x + 2) = 0$$</p>
+          <p>Igualamos cada factor: $4x = 0 \\implies x_1 = 0$, y $x + 2 = 0 \\implies x_2 = -2$.</p>`
+      },
+      {
+        id: 'ej3',
+        category: 'factorizacion',
+        level: 'Intermedio · Factorización',
+        prompt: `Resuelve el siguiente trinomio cuadrático:`,
+        latex: `$$x^2 + 5x + 6 = 0$$`,
+        type: 'roots',
+        expected: [-2, -3],
+        hint: `Busca dos números que multiplicados den $+6$ y sumados den $+5$.`,
+        solutionHtml: `<p><strong>Factorización $(x+p)(x+q) = 0$:</strong></p>
+          <p>Los números son $2$ y $3$, ya que $2 \\cdot 3 = 6$ y $2 + 3 = 5$:</p>
+          <p>$$(x + 2)(x + 3) = 0 \\implies x_1 = -2,\\; x_2 = -3$$</p>`
+      },
+      {
+        id: 'ej4',
+        category: 'discriminante',
+        level: 'Intermedio · Discriminante',
+        prompt: `Calcula el discriminante $\\Delta = b^2 - 4ac$ e indica qué tipo de soluciones tiene:`,
+        latex: `$$x^2 + 4x + 8 = 0$$`,
+        type: 'mc',
+        options: [
+          { value: 'a', label: `Δ = −16; no tiene soluciones reales (2 complejas conjugadas)` },
+          { value: 'b', label: `Δ = 16; tiene 2 soluciones reales distintas` },
+          { value: 'c', label: `Δ = 0; tiene 1 solución real doble` },
+          { value: 'd', label: `Δ = 48; tiene 2 soluciones irracionales` }
+        ],
+        expectedChoice: 'a',
+        hint: `Identifica $a = 1, b = 4, c = 8$ y calcula $\\Delta = 4^2 - 4(1)(8)$.`,
+        solutionHtml: `<p><strong>Análisis del discriminante:</strong></p>
+          <p>$$\\Delta = (4)^2 - 4(1)(8) = 16 - 32 = -16 < 0$$</p>
+          <p>Como $\\Delta < 0$, la parábola no corta el eje $X$: no existen raíces reales.</p>`
+      },
+      {
+        id: 'ej5',
+        category: 'discriminante',
+        level: 'Intermedio · Raíz doble',
+        prompt: `Resuelve usando la fórmula general (puedes escribir fracción como 3/2 o decimal 1.5):`,
+        latex: `$$4x^2 - 12x + 9 = 0$$`,
+        type: 'single',
+        expected: [1.5],
+        hint: `Calcula $\\Delta = (-12)^2 - 4(4)(9)$. Verás que el discriminante vale $0$, por lo que hay una sola raíz doble.`,
+        solutionHtml: `<p><strong>Fórmula general con $\\Delta = 0$:</strong></p>
+          <p>$$\\Delta = 144 - 144 = 0 \\implies x = \\frac{-(-12) \\pm \\sqrt{0}}{2(4)} = \\frac{12}{8} = \\frac{3}{2} = 1.5$$</p>`
+      },
+      {
+        id: 'ej6',
+        category: 'factorizacion',
+        level: 'Intermedio · Completar el cuadrado',
+        prompt: `Encuentra ambas soluciones reales de:`,
+        latex: `$$2x^2 + 8x - 10 = 0$$`,
+        type: 'roots',
+        expected: [1, -5],
+        hint: `Divide primero toda la ecuación entre $2$ para obtener $x^2 + 4x - 5 = 0$, luego completa el cuadrado con $(4/2)^2 = 4$.`,
+        solutionHtml: `<p><strong>Completando el cuadrado:</strong></p>
+          <p>Dividimos entre $2$: $x^2 + 4x - 5 = 0 \\implies x^2 + 4x = 5$.</p>
+          <p>Sumamos $4$ a ambos lados: $(x + 2)^2 = 9 \\implies x + 2 = \\pm 3$.</p>
+          <p>Por tanto $x_1 = 1$ y $x_2 = -5$.</p>`
+      },
+      {
+        id: 'ej7',
+        category: 'avanzado',
+        level: 'Reto · Ecuación fraccionaria',
+        prompt: `Reduce a forma estándar y resuelve (puedes usar fracciones como 1/3):`,
+        latex: `$$\\frac{4}{x - 1} + \\frac{3}{x} = 3$$`,
+        type: 'roots',
+        expected: [1 / 3, 3],
+        hint: `Multiplica toda la ecuación por $x(x - 1)$ para eliminar los denominadores y reordena a la forma $ax^2 + bx + c = 0$.`,
+        solutionHtml: `<p><strong>Transformación a cuadrática:</strong></p>
+          <p>Multiplicando por $x(x-1)$ (con $x \\neq 0, 1$): $4x + 3(x - 1) = 3x(x - 1)$.</p>
+          <p>$$7x - 3 = 3x^2 - 3x \\implies 3x^2 - 10x + 3 = 0$$</p>
+          <p>Factorizando: $(3x - 1)(x - 3) = 0 \\implies x_1 = \\frac{1}{3},\\; x_2 = 3$.</p>`
+      },
+      {
+        id: 'ej8',
+        category: 'avanzado',
+        level: 'Reto · Problema aplicado',
+        prompt: `El área de un rectángulo es $78\\text{ u}^2$ y su lado largo mide $7$ unidades más que el ancho $x$. ¿Cuáles son las dos longitudes (ancho y largo)?`,
+        latex: `$$x(x + 7) = 78$$`,
+        type: 'roots',
+        expected: [6, 13],
+        hint: `Expande $x^2 + 7x - 78 = 0$, resuelve para el ancho $x > 0$ y luego suma $7$ para obtener el largo.`,
+        solutionHtml: `<p><strong>Planteamiento y descarte físico:</strong></p>
+          <p>$$x^2 + 7x - 78 = 0 \\implies (x + 13)(x - 6) = 0$$</p>
+          <p>Las raíces algebraicas son $x = -13$ y $x = 6$. Como una longitud no puede ser negativa, el ancho es $6$ y el largo es $6 + 7 = 13$.</p>`
+      }
+    ];
+
+    function parseMathNumber(str) {
+      if (typeof str !== 'string') return NaN;
+      const clean = str.trim().replace(',', '.');
+      if (!clean) return NaN;
+      if (/^[+-]?\d+(\.\d+)?$/.test(clean)) {
+        return parseFloat(clean);
+      }
+      const fracMatch = clean.match(/^([+-]?\d+(?:\.\d+)?)\s*\/\s*([+-]?\d+(?:\.\d+)?)$/);
+      if (fracMatch) {
+        const num = parseFloat(fracMatch[1]);
+        const den = parseFloat(fracMatch[2]);
+        if (Math.abs(den) < 1e-12) return NaN;
+        return num / den;
+      }
+      return NaN;
+    }
+
+    function approxEqual(a, b) {
+      return Math.abs(a - b) < 0.025;
+    }
+
+    function renderExercises() {
+      const filterEl = document.getElementById('practice-filter');
+      const filter = filterEl ? filterEl.value : appState.practiceFilter;
+      appState.practiceFilter = filter;
+
+      const listEl = document.getElementById('exercise-list');
+      if (!listEl) return;
+
+      const filtered = EXERCISES.filter(function (ex) {
+        return filter === 'todos' || ex.category === filter;
+      });
+
+      listEl.innerHTML = filtered.map(function (ex, idx) {
+        const isSolved = appState.solvedIds.indexOf(ex.id) !== -1;
+        const saved = appState.userAnswers[ex.id] || {};
+        let inputHtml = '';
+
+        if (ex.type === 'roots') {
+          inputHtml = `<div class="roots-inputs">
+            <div>
+              <label class="field-label" for="${ex.id}-r1">${ex.id === 'ej8' ? 'Ancho' : 'Solución x₁'}</label>
+              <input type="text" id="${ex.id}-r1" value="${saved.r1 || ''}" placeholder="Ej: 5 o 1/3">
+            </div>
+            <div>
+              <label class="field-label" for="${ex.id}-r2">${ex.id === 'ej8' ? 'Largo' : 'Solución x₂'}</label>
+              <input type="text" id="${ex.id}-r2" value="${saved.r2 || ''}" placeholder="Ej: -5 o 3">
+            </div>
+          </div>`;
+        } else if (ex.type === 'single') {
+          inputHtml = `<div style="margin-bottom: var(--space-sm);">
+            <label class="field-label" for="${ex.id}-r1">Raíz única / doble x</label>
+            <input type="text" id="${ex.id}-r1" value="${saved.r1 || ''}" placeholder="Ej: 3/2 o 1.5">
+          </div>`;
+        } else if (ex.type === 'mc') {
+          inputHtml = `<div class="mc-options" role="radiogroup" aria-label="Opciones para ${ex.id}">
+            ${ex.options.map(function (opt) {
+              const checked = saved.choice === opt.value ? 'checked' : '';
+              return `<label class="mc-option">
+                <input type="radio" name="${ex.id}-mc" value="${opt.value}" ${checked}>
+                <span>${opt.label}</span>
+              </label>`;
+            }).join('')}
+          </div>`;
+        }
+
+        const fb = saved.feedback ? `<div class="feedback-box ${saved.feedbackOk ? 'feedback-box--ok' : 'feedback-box--err'}" id="${ex.id}-fb">${saved.feedback}</div>` : `<div id="${ex.id}-fb"></div>`;
+        const hintHtml = saved.showHint ? `<div class="feedback-box feedback-box--hint" id="${ex.id}-hint">${ex.hint}</div>` : `<div id="${ex.id}-hint"></div>`;
+        const solHtml = saved.showSol ? `<div class="solution-drawer" id="${ex.id}-sol">${ex.solutionHtml}</div>` : `<div id="${ex.id}-sol"></div>`;
+
+        return `<article class="exercise-item ${isSolved ? 'is-solved' : ''}" id="card-${ex.id}">
+          <div>
+            <div class="exercise-meta">
+              <span class="tag">Ejercicio ${EXERCISES.indexOf(ex) + 1}</span>
+              <span class="tag">${ex.level}</span>
+              ${isSolved ? `<span class="tag tag--done">Resuelto</span>` : ''}
+            </div>
+            <p>${ex.prompt}</p>
+            <div class="exercise-eq">${ex.latex}</div>
+            ${hintHtml}
+            ${solHtml}
+          </div>
+          <div class="answer-panel card-wrapper">
+            ${inputHtml}
+            <div class="exercise-actions">
+              <button type="button" class="btn btn-primary" onclick="checkExercise('${ex.id}')">Comprobar</button>
+              <button type="button" class="btn btn-secondary" onclick="toggleHint('${ex.id}')">Pista</button>
+              <button type="button" class="btn btn-secondary" onclick="toggleSolution('${ex.id}')">Ver pasos</button>
+            </div>
+            ${fb}
+          </div>
+        </article>`;
+      }).join('');
+
+      updatePracticeHeader();
+      renderMathIn(listEl);
+    }
+
+    function updatePracticeHeader() {
+      const total = EXERCISES.length;
+      const done = appState.solvedIds.length;
+      const lbl = document.getElementById('practice-score-label');
+      const bar = document.getElementById('practice-progress-bar');
+      if (lbl) lbl.textContent = `${done} de ${total} resueltos`;
+      if (bar) bar.style.width = `${(done / total) * 100}%`;
+    }
+
+    function checkExercise(id) {
+      const ex = EXERCISES.find(function (item) { return item.id === id; });
+      if (!ex) return;
+      if (!appState.userAnswers[id]) appState.userAnswers[id] = {};
+      const entry = appState.userAnswers[id];
+
+      let ok = false;
+      let msg = '';
+
+      if (ex.type === 'roots') {
+        const i1 = document.getElementById(`${id}-r1`);
+        const i2 = document.getElementById(`${id}-r2`);
+        const raw1 = i1 ? i1.value : '';
+        const raw2 = i2 ? i2.value : '';
+        entry.r1 = raw1;
+        entry.r2 = raw2;
+        const v1 = parseMathNumber(raw1);
+        const v2 = parseMathNumber(raw2);
+
+        if (isNaN(v1) || isNaN(v2)) {
+          ok = false;
+          msg = `Falta algún valor numérico válido. Escribe enteros, decimales (ej. 1.5) o fracciones (ej. 1/3) en ambas casillas.`;
+        } else {
+          const e1 = ex.expected[0];
+          const e2 = ex.expected[1];
+          const matchDirect = approxEqual(v1, e1) && approxEqual(v2, e2);
+          const matchSwapped = approxEqual(v1, e2) && approxEqual(v2, e1);
+          if (matchDirect || matchSwapped) {
+            ok = true;
+            msg = `¡Correcto! Ambas soluciones satisfacen la ecuación.`;
+          } else if (approxEqual(v1, e1) || approxEqual(v1, e2) || approxEqual(v2, e1) || approxEqual(v2, e2)) {
+            ok = false;
+            msg = `Una de tus respuestas es correcta, pero revisa la otra (verifica signos o despeje).`;
+          } else {
+            ok = false;
+            msg = `Las soluciones no coinciden. Pide una pista o revisa los signos al factorizar o aplicar la fórmula.`;
+          }
+        }
+      } else if (ex.type === 'single') {
+        const i1 = document.getElementById(`${id}-r1`);
+        const raw1 = i1 ? i1.value : '';
+        entry.r1 = raw1;
+        const v1 = parseMathNumber(raw1);
+        if (isNaN(v1)) {
+          ok = false;
+          msg = `Escribe un número válido (como 3/2 o 1.5).`;
+        } else if (approxEqual(v1, ex.expected[0])) {
+          ok = true;
+          msg = `¡Correcto! La raíz doble es 3/2 = 1.5.`;
+        } else {
+          ok = false;
+          msg = `Valor incorrecto. Revisa el signo de −b y la división entre 2a = 8.`;
+        }
+      } else if (ex.type === 'mc') {
+        const selected = document.querySelector(`input[name="${id}-mc"]:checked`);
+        if (!selected) {
+          ok = false;
+          msg = `Selecciona una de las opciones antes de comprobar.`;
+        } else {
+          entry.choice = selected.value;
+          if (selected.value === ex.expectedChoice) {
+            ok = true;
+            msg = `¡Exacto! Con Δ = −16 < 0 no hay cortes reales en el eje X.`;
+          } else {
+            ok = false;
+            msg = `No es correcto. Recuerda calcular b² − 4ac con a = 1, b = 4 y c = 8.`;
+          }
+        }
+      }
+
+      entry.feedback = msg;
+      entry.feedbackOk = ok;
+
+      if (ok && appState.solvedIds.indexOf(id) === -1) {
+        appState.solvedIds.push(id);
+      }
+
+      saveState();
+      renderExercises();
+    }
+
+    function toggleHint(id) {
+      if (!appState.userAnswers[id]) appState.userAnswers[id] = {};
+      appState.userAnswers[id].showHint = !appState.userAnswers[id].showHint;
+      saveState();
+      renderExercises();
+    }
+
+    function toggleSolution(id) {
+      if (!appState.userAnswers[id]) appState.userAnswers[id] = {};
+      appState.userAnswers[id].showSol = !appState.userAnswers[id].showSol;
+      saveState();
+      renderExercises();
+    }
+
+    function resetPractice(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== 'true') {
+        btn.dataset.armed = 'true';
+        btn.textContent = `Pulsa de nuevo para reiniciar`;
+        return;
+      }
+      btn.dataset.armed = 'false';
+      btn.textContent = `Reiniciar progreso`;
+      appState.solvedIds = [];
+      appState.userAnswers = {};
+      saveState();
+      renderExercises();
+    }
+
+    // =========================================================================
+    // INITIALIZATION
+    // =========================================================================
+    function restoreInputsFromState() {
+      const sa = document.getElementById('slider-a');
+      const ia = document.getElementById('input-a');
+      const sb = document.getElementById('slider-b');
+      const ib = document.getElementById('input-b');
+      const sc = document.getElementById('slider-c');
+      const ic = document.getElementById('input-c');
+      if (sa) sa.value = appState.lab.a;
+      if (ia) ia.value = appState.lab.a;
+      if (sb) sb.value = appState.lab.b;
+      if (ib) ib.value = appState.lab.b;
+      if (sc) sc.value = appState.lab.c;
+      if (ic) ic.value = appState.lab.c;
+
+      const btnScale = document.getElementById('btn-autoscale');
+      if (btnScale) {
+        btnScale.textContent = appState.lab.autoScale
+          ? `Escala adaptada al vértice: Activa`
+          : `Escala fija [−10, 10]: Activa`;
+      }
+
+      const geoSel = document.getElementById('geo-b-select');
+      if (geoSel) geoSel.value = String(appState.geoB);
+
+      const rd = document.getElementById('rect-diff');
+      const ra = document.getElementById('rect-area');
+      const pv = document.getElementById('proj-v0');
+      const ph = document.getElementById('proj-h0');
+      const ns = document.getElementById('num-sum');
+      const np = document.getElementById('num-prod');
+      if (rd) rd.value = appState.apps.rectDiff;
+      if (ra) ra.value = appState.apps.rectArea;
+      if (pv) pv.value = appState.apps.projV0;
+      if (ph) ph.value = appState.apps.projH0;
+      if (ns) ns.value = appState.apps.numSum;
+      if (np) np.value = appState.apps.numProd;
+
+      const pf = document.getElementById('practice-filter');
+      if (pf) pf.value = appState.practiceFilter;
+
+      // Sync active method chip
+      const methodOrder = ['factorizacion', 'completar', 'formula', 'comparativa'];
+      const methodBtns = document.querySelectorAll('.method-switcher .btn-chip');
+      methodBtns.forEach(function (b, idx) {
+        b.classList.toggle('is-active', methodOrder[idx] === appState.methodKey);
+      });
+    }
+
+    async function initApp() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === 'object') {
+            if (saved.lab) appState.lab = Object.assign(appState.lab, saved.lab);
+            if (saved.methodKey) appState.methodKey = saved.methodKey;
+            if (saved.methodStep) appState.methodStep = saved.methodStep;
+            if (saved.geoB) appState.geoB = saved.geoB;
+            if (typeof saved.geoCompleted === 'boolean') appState.geoCompleted = saved.geoCompleted;
+            if (saved.apps) appState.apps = Object.assign(appState.apps, saved.apps);
+            if (saved.practiceFilter) appState.practiceFilter = saved.practiceFilter;
+            if (Array.isArray(saved.solvedIds)) appState.solvedIds = saved.solvedIds;
+            if (saved.userAnswers) appState.userAnswers = saved.userAnswers;
+          }
+        }
+      } catch (e) {
+        // Fallback silently to default state
+      }
+
+      restoreInputsFromState();
+      updateLab();
+      renderTriptych();
+      renderMethodWorkspace();
+      renderGeoSquare();
+      updateRectApp();
+      updateProjApp();
+      updateNumApp();
+      renderExercises();
+      renderMathIn(document.body);
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
+  </script>
+</body>
+</html>

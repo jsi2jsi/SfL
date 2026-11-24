@@ -1,0 +1,2319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="handbook">
+  <title>Sistemas de Ecuaciones Lineales- Interactivo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/contrib/auto-render.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* 1. Handbook style tokens */
+      --background: #ffffff;
+      --surface-container-low: #f3f2f1;
+      --surface-container: #e8e7e5;
+      --surface-container-high: #dbdad9;
+
+      --on-surface: #0b0c0c;
+      --on-surface-variant: #505a5f;
+
+      --outline: #0b0c0c;
+      --outline-variant: #b1b4b6;
+
+      --primary: #162e51;
+      --on-primary: #ffffff;
+      --primary-container: #d2e2f1;
+      --on-primary-container: #0c2d4a;
+      --secondary: #4c2c92;
+      --tertiary: #1a569e;
+      --error: #d4351c;
+      --on-error: #ffffff;
+
+      --data-1: #1a569e;
+      --data-2: #c75a0a;
+      --data-3: #28a197;
+      --data-4: #4c2c92;
+      --data-context: #b1b4b6;
+
+      --font-headline: 'Public Sans', sans-serif;
+      --font-body: 'Public Sans', sans-serif;
+      --font-label: 'Public Sans', sans-serif;
+
+      --rounded: 0;
+      --rounded-lg: 0;
+      --rounded-full: 0;
+
+      --top-index-rule: 6px solid var(--primary);
+      --inset-rule: 5px solid var(--tertiary);
+      --button-ground: 0 2px 0 #091526;
+      --button-ground-secondary: 0 2px 0 #858686;
+      --focus-yellow: #ffdd00;
+      --focus-ring: 3px solid var(--focus-yellow);
+      --focus-bar: inset 0 0 0 2px var(--on-surface);
+      --focus-underline: 0 -2px var(--focus-yellow), 0 4px var(--on-surface);
+
+      /* 3. Shared semantic, typography, spacing & motion tokens */
+      --positive: #00703c;
+      --positive-container: #e6f2ec;
+      --warning: #9a5b00;
+      --warning-container: #fef3e2;
+      --error-container: #fceae7;
+      --data-2-container: #fdf0e6;
+      --focus: var(--focus-yellow);
+
+      --display-size: clamp(2.125rem, 1.4rem + 2.6vw, 3.25rem);
+      --headline-size: clamp(1.5rem, 1.15rem + 1.4vw, 2.125rem);
+      --subhead-size: clamp(1.1875rem, 1.05rem + 0.5vw, 1.4375rem);
+      --body-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --label-size: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);
+
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1140px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Top index header (Handbook Treatment 1) */
+    .index-header {
+      border-top: var(--top-index-rule);
+      border-bottom: 1px solid var(--on-surface);
+      padding: var(--space-sm) 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--on-surface);
+    }
+    .index-header-meta {
+      color: var(--on-surface-variant);
+      font-weight: 700;
+    }
+
+    /* Layout: asymmetric 2/3 reading + 1/3 side progress/index on desktop */
+    .guide-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr);
+      gap: var(--space-2xl);
+      align-items: start;
+    }
+    .main-column {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2xl);
+    }
+    .side-column {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+      border-left: 1px solid var(--outline-variant);
+      padding-left: var(--space-lg);
+    }
+
+    /* Typography */
+    h1, h2, h3, h4 {
+      font-family: var(--font-headline);
+      color: var(--on-surface);
+      margin: 0;
+      line-height: 1.12;
+      letter-spacing: -0.015em;
+    }
+    h1 {
+      font-size: var(--display-size);
+      font-weight: 800;
+      margin-bottom: var(--space-md);
+    }
+    h2 {
+      font-size: var(--headline-size);
+      font-weight: 800;
+      margin-bottom: var(--space-sm);
+    }
+    h3 {
+      font-size: var(--subhead-size);
+      font-weight: 700;
+      margin-bottom: var(--space-xs);
+    }
+    p {
+      margin: 0 0 var(--space-md) 0;
+      max-width: 68ch;
+    }
+    p:last-child { margin-bottom: 0; }
+    .lede {
+      font-size: clamp(1.15rem, 1.05rem + 0.4vw, 1.35rem);
+      color: var(--on-surface);
+      max-width: 64ch;
+      line-height: 1.5;
+    }
+    .caption-text {
+      font-size: 0.95rem;
+      color: var(--on-surface-variant);
+      line-height: 1.45;
+    }
+    .status-tag {
+      display: inline-block;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded);
+    }
+    .status-tag--positive {
+      background: var(--positive-container);
+      color: var(--positive);
+    }
+    .status-tag--warning {
+      background: var(--warning-container);
+      color: var(--warning);
+    }
+    .status-tag--error {
+      background: var(--background);
+      color: var(--error);
+      border: 1px solid var(--error);
+    }
+    .status-tag--orange {
+      background: var(--data-2-container);
+      color: var(--data-2);
+    }
+
+    /* Step badges & section headers */
+    .section-block {
+      padding-top: var(--space-lg);
+      border-top: 2px solid var(--on-surface);
+    }
+    .section-heading-row {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      background: var(--primary);
+      color: var(--on-primary);
+      font-weight: 800;
+      font-size: 0.95rem;
+      font-variant-numeric: tabular-nums;
+      margin-top: 2px;
+    }
+    .step-badge--sm {
+      width: 26px;
+      height: 26px;
+      font-size: 0.8125rem;
+      margin-top: 0;
+    }
+
+    /* Inset blue rule (Handbook Treatment 2) */
+    .inset {
+      border-left: var(--inset-rule);
+      background: var(--surface-container-low);
+      padding: var(--space-md) var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+    .inset--plain {
+      background: var(--background);
+    }
+    .inset--positive {
+      border-left-color: var(--positive);
+      background: var(--positive-container);
+    }
+    .inset--error {
+      border-left-color: var(--error);
+      background: var(--background);
+    }
+    .inset--warning {
+      border-left-color: var(--warning);
+      background: var(--warning-container);
+    }
+    .inset-title {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: var(--space-xs);
+      color: var(--on-surface);
+    }
+
+    /* Key figure strip */
+    .key-figures-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+      gap: var(--space-md);
+      margin: var(--space-lg) 0;
+    }
+    .key-figure {
+      border-left: var(--inset-rule);
+      background: var(--surface-container-low);
+      padding: var(--space-md);
+    }
+    .key-figure-label {
+      font-size: 0.85rem;
+      color: var(--on-surface-variant);
+      margin-bottom: var(--space-xs);
+      font-weight: 700;
+    }
+    .key-figure-value {
+      font-size: var(--headline-size);
+      font-weight: 800;
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: var(--space-xs);
+    }
+
+    /* Grounded action buttons (Handbook Treatment 3) */
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: 1rem;
+      line-height: 1.2;
+      background: var(--primary);
+      color: var(--on-primary);
+      border: 0;
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+      min-height: 44px;
+      cursor: pointer;
+      box-shadow: var(--button-ground);
+      transition: background-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+      text-decoration: none;
+    }
+    .button:hover:not(:disabled) {
+      background: var(--on-primary-container);
+    }
+    .button:active:not(:disabled) {
+      transform: translateY(2px);
+      box-shadow: none;
+    }
+    .button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .button--secondary {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      box-shadow: var(--button-ground-secondary);
+      border: 1px solid var(--outline-variant);
+    }
+    .button--secondary:hover:not(:disabled) {
+      background: var(--surface-container);
+    }
+    .button--secondary.is-active {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border-color: var(--tertiary);
+      box-shadow: none;
+      font-weight: 700;
+    }
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+
+    /* Links & Yellow focus (Handbook Treatment 4) */
+    a.guide-link {
+      color: var(--tertiary);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-thickness: 1px;
+      font-weight: 600;
+    }
+    a.guide-link:hover {
+      text-decoration-thickness: 3px;
+    }
+    a.guide-link:visited {
+      color: var(--secondary);
+    }
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+      outline: var(--focus-ring);
+      outline-offset: 0;
+      box-shadow: var(--focus-bar);
+    }
+    a:focus-visible {
+      outline: none;
+      background: var(--focus-yellow);
+      color: var(--on-surface);
+      text-decoration: none;
+      box-shadow: var(--focus-underline);
+    }
+
+    /* Inputs */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .field-label {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--on-surface);
+    }
+    .field-hint {
+      font-size: 0.85rem;
+      color: var(--on-surface-variant);
+    }
+    .text-input, .number-input {
+      font-family: inherit;
+      font-size: 1rem;
+      font-variant-numeric: tabular-nums;
+      background: var(--background);
+      color: var(--on-surface);
+      border: 2px solid var(--outline);
+      border-radius: var(--rounded);
+      padding: var(--space-xs) var(--space-sm);
+      min-height: 44px;
+      width: 100%;
+    }
+    .range-input {
+      width: 100%;
+      accent-color: var(--primary);
+      min-height: 36px;
+      cursor: pointer;
+    }
+    .input-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      align-items: end;
+    }
+
+    /* Section 1: Anatomy Inspector */
+    .anatomy-panel {
+      border-top: 1px solid var(--outline-variant);
+      border-bottom: 1px solid var(--outline-variant);
+      padding: var(--space-lg) 0;
+      margin: var(--space-md) 0;
+    }
+    .anatomy-equations {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: var(--space-lg);
+      margin-bottom: var(--space-md);
+    }
+    .equation-card {
+      background: var(--surface-container-low);
+      padding: var(--space-md);
+      border-left: 4px solid var(--primary);
+    }
+    .equation-card-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--on-surface-variant);
+      margin-bottom: var(--space-xs);
+    }
+    .equation-display {
+      font-size: 1.25rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.8;
+    }
+    .comp-token {
+      display: inline-block;
+      padding: 0 var(--space-xs);
+      border-bottom: 2px solid transparent;
+      font-weight: 800;
+    }
+    .comp-token--coef {
+      color: var(--data-1);
+      border-bottom-color: var(--data-1);
+      background: var(--primary-container);
+    }
+    .comp-token--var {
+      color: var(--data-2);
+      border-bottom-color: var(--data-2);
+      background: var(--data-2-container);
+    }
+    .comp-token--indep {
+      color: var(--data-4);
+      border-bottom-color: var(--data-4);
+      background: var(--surface-container);
+    }
+
+    /* Classifier quiz table */
+    .ruled-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--space-md) 0;
+      font-variant-numeric: tabular-nums;
+    }
+    .ruled-table th {
+      text-align: left;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: var(--space-sm) var(--space-sm) var(--space-sm) 0;
+      border-bottom: 2px solid var(--on-surface);
+      color: var(--on-surface);
+    }
+    .ruled-table td {
+      padding: var(--space-sm) var(--space-sm) var(--space-sm) 0;
+      border-bottom: 1px solid var(--outline-variant);
+      vertical-align: middle;
+    }
+    .ruled-table td.num-col, .ruled-table th.num-col {
+      text-align: right;
+    }
+
+    /* Section 2: Graph Explorer */
+    .explorer-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+      margin: var(--space-md) 0;
+    }
+    .svg-plot-wrap {
+      background: var(--background);
+      border-top: 1px solid var(--on-surface);
+      border-bottom: 1px solid var(--on-surface);
+      padding: var(--space-sm) 0;
+      min-height: 360px;
+    }
+    .cartesian-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      font-family: var(--font-body);
+    }
+    .controls-stack {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      background: var(--surface-container-low);
+      padding: var(--space-md);
+      border-left: 5px solid var(--primary);
+    }
+    .eq-control-block {
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .eq-control-block:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+    .eq-control-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-sm);
+    }
+    .line-swatch {
+      display: inline-block;
+      width: 18px;
+      height: 4px;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    .line-swatch--1 { background: var(--data-1); }
+    .line-swatch--2 { background: var(--data-2); }
+    .coeff-row {
+      display: grid;
+      grid-template-columns: 36px minmax(0, 1fr) 68px;
+      gap: var(--space-sm);
+      align-items: center;
+      margin-bottom: var(--space-xs);
+    }
+    .coeff-row label {
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .coeff-row .number-input {
+      min-height: 36px;
+      padding: var(--space-xs) var(--space-sm);
+      font-size: 0.95rem;
+    }
+
+    /* Section 3: Methods Workbench */
+    .method-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: var(--space-md);
+      margin: var(--space-md) 0 var(--space-lg);
+    }
+    .method-card {
+      border-left: 4px solid var(--outline-variant);
+      background: var(--surface-container-low);
+      padding: var(--space-md);
+    }
+    .method-card h3 {
+      font-size: 1.05rem;
+      margin-bottom: var(--space-xs);
+    }
+    .stepper-panel {
+      border-top: 2px solid var(--primary);
+      background: var(--background);
+      padding-top: var(--space-md);
+    }
+    .stepper-steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      margin: var(--space-md) 0;
+    }
+    .stepper-step-item {
+      display: grid;
+      grid-template-columns: 32px minmax(0, 1fr);
+      gap: var(--space-md);
+      padding: var(--space-md);
+      background: var(--surface-container-low);
+      border-left: 5px solid var(--outline-variant);
+      transition: border-color var(--dur-short) var(--ease-out);
+    }
+    .stepper-step-item.is-current {
+      border-left-color: var(--tertiary);
+      background: var(--primary-container);
+    }
+    .stepper-step-item.is-done {
+      border-left-color: var(--positive);
+    }
+    .math-block {
+      background: var(--background);
+      border-left: 3px solid var(--outline-variant);
+      padding: var(--space-sm) var(--space-md);
+      margin-top: var(--space-xs);
+      overflow-x: auto;
+    }
+
+    /* Section 4: Applications */
+    .app-scenario-card {
+      border-top: 1px solid var(--outline-variant);
+      padding: var(--space-lg) 0;
+    }
+    .app-scenario-card:last-child {
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .translation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+      gap: var(--space-md);
+      margin: var(--space-md) 0;
+    }
+
+    /* Section 5: Exercises */
+    .exercise-card {
+      border-top: 2px solid var(--on-surface);
+      padding: var(--space-lg) 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .exercise-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .exercise-inputs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+      gap: var(--space-md);
+      max-width: 480px;
+      align-items: end;
+    }
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container-low);
+      border: 2px solid var(--outline-variant);
+      cursor: pointer;
+      min-height: 44px;
+    }
+    .radio-option input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+    }
+    .feedback-box {
+      padding: var(--space-md);
+      border-left: 5px solid var(--outline-variant);
+      background: var(--surface-container-low);
+    }
+    .feedback-box--ok {
+      border-left-color: var(--positive);
+      background: var(--positive-container);
+    }
+    .feedback-box--err {
+      border-left-color: var(--error);
+      background: var(--background);
+      color: var(--error);
+    }
+
+    /* Side rail index & progress */
+    .side-card {
+      background: var(--surface-container-low);
+      padding: var(--space-md);
+      border-left: 5px solid var(--primary);
+    }
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      background: var(--surface-container-high);
+      margin: var(--space-sm) 0;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width var(--dur-short) var(--ease-out);
+    }
+    .toc-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .toc-list li {
+      border-bottom: 1px solid var(--outline-variant);
+      padding: var(--space-xs) 0;
+    }
+    .toc-list li:last-child { border-bottom: 0; }
+
+    /* Mobile & container responsiveness */
+    .svg-container-q { container-type: inline-size; }
+    @media (max-width: 920px) {
+      .guide-shell {
+        grid-template-columns: 1fr;
+      }
+      .side-column {
+        border-left: 0;
+        border-top: 2px solid var(--outline-variant);
+        padding-left: 0;
+        padding-top: var(--space-lg);
+        order: -1;
+      }
+      .explorer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-lg);
+      }
+      .section-heading-row {
+        gap: var(--space-sm);
+      }
+      .coeff-row {
+        grid-template-columns: 32px minmax(0, 1fr) 60px;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-grid">
+    <header>
+      <div class="index-header">
+        <span>Sistema de ecuaciones lineales · Bachillerato</span>
+        <span class="index-header-meta">Álgebra lineal elemental (2×2)</span>
+      </div>
+    </header>
+
+    <div class="guide-shell">
+      <main class="main-column">
+        <!-- Opening Hero -->
+        <section aria-labelledby="main-title">
+          <span class="status-tag">Unidad fundamental</span>
+          <h1 id="main-title">Sistemas de ecuaciones lineales</h1>
+          <p class="lede">
+            Un sistema de ecuaciones lineales reúne dos o más condiciones que deben cumplirse <strong>al mismo tiempo</strong>. Resolverlo significa encontrar el punto exacto —o el conjunto de puntos— donde todas las rectas coinciden en el plano cartesiano.
+          </p>
+
+          <div class="key-figures-grid">
+            <div class="key-figure">
+              <div class="key-figure-label">Regla de linealidad</div>
+              <div class="key-figure-value">Grado 1</div>
+              <div class="caption-text">Incógnitas sin exponentes mayores ni productos entre sí.</div>
+            </div>
+            <div class="key-figure">
+              <div class="key-figure-label">Casos posibles</div>
+              <div class="key-figure-value">3 tipos</div>
+              <div class="caption-text">Solución única, infinitas soluciones o ninguna solución.</div>
+            </div>
+            <div class="key-figure">
+              <div class="key-figure-label">Métodos clave</div>
+              <div class="key-figure-value">4 rutas</div>
+              <div class="caption-text">Sustitución, igualación, reducción y método gráfico.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 1: Definition & Components -->
+        <section id="sec-definicion" class="section-block" aria-labelledby="h-sec-1">
+          <div class="section-heading-row">
+            <span class="step-badge" aria-hidden="true">1</span>
+            <div>
+              <h2 id="h-sec-1">Definición y anatomía de un sistema lineal</h2>
+              <p class="caption-text">Qué hace lineal a una ecuación y qué papel juega cada elemento dentro del sistema.</p>
+            </div>
+          </div>
+
+          <p>
+            Una <strong>ecuación lineal</strong> es una igualdad algebraica de primer grado en la que las incógnitas únicamente aparecen multiplicadas por números constantes y sumadas o restadas entre sí. En dos variables adopta la forma estándar \(ax + by = c\), cuya gráfica en el plano \(\mathbb{R}^2\) es siempre una línea recta.
+          </p>
+          <p>
+            Un <strong>sistema de ecuaciones lineales</strong> de \(2 \times 2\) es un conjunto de dos ecuaciones lineales con las mismas dos incógnitas. La condición central es la <strong>simultaneidad</strong>: buscamos un par ordenado \((x, y)\) que vuelva verdaderas ambas igualdades a la vez.
+          </p>
+
+          <div class="inset">
+            <div class="inset-title">Idea clave: ¿qué significa «resolver» el sistema?</div>
+            <p>
+              Si el par \((x, y)\) cumple la primera ecuación pero falla en la segunda, <strong>no es solución del sistema</strong>. Por ejemplo, en \(\begin{cases} x + y = 5 \\ 2x - y = 4 \end{cases}\), el par \((3, 2)\) verifica \(3 + 2 = 5\) y \(2(3) - 2 = 4\) simultáneamente; por tanto, \((3, 2)\) es la solución.
+            </p>
+          </div>
+
+          <!-- Interactive Component Inspector -->
+          <div class="anatomy-panel">
+            <h3>Inspector interactivo de componentes</h3>
+            <p class="caption-text">Selecciona cada componente para resaltar dónde aparece y entender su función matemática.</p>
+
+            <div class="button-row" role="group" aria-label="Seleccionar componente del sistema">
+              <button type="button" class="button button--secondary is-active" id="comp-btn-all" onclick="selectComponent('all')">Vista completa</button>
+              <button type="button" class="button button--secondary" id="comp-btn-coef" onclick="selectComponent('coef')">Coeficientes</button>
+              <button type="button" class="button button--secondary" id="comp-btn-var" onclick="selectComponent('var')">Variables (incógnitas)</button>
+              <button type="button" class="button button--secondary" id="comp-btn-indep" onclick="selectComponent('indep')">Términos independientes</button>
+            </div>
+
+            <div class="anatomy-equations">
+              <div class="equation-card">
+                <div class="equation-card-label">Forma general (2 × 2)</div>
+                <div class="equation-display" id="anatomy-general">
+                  <div>
+                    <span class="comp-token comp-token--coef" data-comp="coef">a<sub>11</sub></span><span class="comp-token comp-token--var" data-comp="var">x</span> + <span class="comp-token comp-token--coef" data-comp="coef">a<sub>12</sub></span><span class="comp-token comp-token--var" data-comp="var">y</span> = <span class="comp-token comp-token--indep" data-comp="indep">b<sub>1</sub></span>
+                  </div>
+                  <div>
+                    <span class="comp-token comp-token--coef" data-comp="coef">a<sub>21</sub></span><span class="comp-token comp-token--var" data-comp="var">x</span> + <span class="comp-token comp-token--coef" data-comp="coef">a<sub>22</sub></span><span class="comp-token comp-token--var" data-comp="var">y</span> = <span class="comp-token comp-token--indep" data-comp="indep">b<sub>2</sub></span>
+                  </div>
+                </div>
+              </div>
+              <div class="equation-card">
+                <div class="equation-card-label">Ejemplo concreto · Solución (3, 2)</div>
+                <div class="equation-display" id="anatomy-example">
+                  <div>
+                    <span class="comp-token comp-token--coef" data-comp="coef">1</span><span class="comp-token comp-token--var" data-comp="var">x</span> + <span class="comp-token comp-token--coef" data-comp="coef">1</span><span class="comp-token comp-token--var" data-comp="var">y</span> = <span class="comp-token comp-token--indep" data-comp="indep">5</span>
+                  </div>
+                  <div>
+                    <span class="comp-token comp-token--coef" data-comp="coef">2</span><span class="comp-token comp-token--var" data-comp="var">x</span> − <span class="comp-token comp-token--coef" data-comp="coef">1</span><span class="comp-token comp-token--var" data-comp="var">y</span> = <span class="comp-token comp-token--indep" data-comp="indep">4</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="inset inset--plain" id="anatomy-explanation" aria-live="polite">
+              <div class="inset-title">Todos los componentes trabajando juntos</div>
+              <p>Cada ecuación lineal relaciona las mismas variables mediante coeficientes constantes y un término independiente al lado derecho. Cuando una variable no muestra número delante (como en \(x + y = 5\)), su coeficiente implícito es \(1\) (o \(-1\) si lleva signo menos).</p>
+            </div>
+          </div>
+
+          <!-- Linear vs Non-linear interactive filter -->
+          <h3>Comprueba si reconoces una ecuación lineal</h3>
+          <p class="caption-text">Decide si cada expresión cumple la regla de primer grado antes de continuar.</p>
+          <table class="ruled-table">
+            <thead>
+              <tr>
+                <th>Expresión</th>
+                <th>Tu clasificación</th>
+                <th>Diagnóstico</th>
+              </tr>
+            </thead>
+            <tbody id="linearity-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </section>
+
+        <!-- SECTION 2: Classification & Geometry -->
+        <section id="sec-clasificacion" class="section-block" aria-labelledby="h-sec-2">
+          <div class="section-heading-row">
+            <span class="step-badge" aria-hidden="true">2</span>
+            <div>
+              <h2 id="h-sec-2">Clasificación e interpretación geométrica</h2>
+              <p class="caption-text">Todo sistema lineal pertenece a una de tres categorías según cómo se cruzan sus rectas.</p>
+            </div>
+          </div>
+
+          <p>
+            Cada ecuación lineal con dos variables representa una línea recta en el plano cartesiano \(\mathbb{R}^2\). Por ello, resolver un sistema de \(2 \times 2\) equivale geométricamente a buscar los puntos que pertenecen a ambas rectas al mismo tiempo. Solo existen tres escenarios posibles:
+          </p>
+
+          <table class="ruled-table">
+            <thead>
+              <tr>
+                <th>Tipo de sistema</th>
+                <th>Soluciones</th>
+                <th>Resultado algebraico</th>
+                <th>Gráfica en el plano</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Compatible Determinado (SCD)</strong></td>
+                <td>Única \((x, y)\)</td>
+                <td>Valores definidos para \(x\) e \(y\)</td>
+                <td>Rectas secantes que se cortan en un punto</td>
+              </tr>
+              <tr>
+                <td><strong>Compatible Indeterminado (SCI)</strong></td>
+                <td>Infinitas</td>
+                <td>Identidad \(0 = 0\) (ecuaciones equivalentes)</td>
+                <td>Rectas coincidentes (misma línea superpuesta)</td>
+              </tr>
+              <tr>
+                <td><strong>Incompatible (SI)</strong></td>
+                <td>Ninguna (\(\varnothing\))</td>
+                <td>Contradicción \(0 = k\) con \(k \neq 0\)</td>
+                <td>Rectas paralelas distintas (nunca se cruzan)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Interactive Graph Explorer -->
+          <h3>Laboratorio gráfico: modifica las rectas en vivo</h3>
+          <p class="caption-text">Carga uno de los tres casos clásicos o mueve los coeficientes para observar cómo cambia la intersección.</p>
+
+          <div class="button-row" role="group" aria-label="Cargar ejemplo predefinido de clasificación">
+            <button type="button" class="button button--secondary is-active" id="preset-btn-scd" onclick="loadGraphPreset('scd')">Caso 1: Solución única (SCD)</button>
+            <button type="button" class="button button--secondary" id="preset-btn-sci" onclick="loadGraphPreset('sci')">Caso 2: Infinitas (SCI)</button>
+            <button type="button" class="button button--secondary" id="preset-btn-si" onclick="loadGraphPreset('si')">Caso 3: Paralelas (SI)</button>
+          </div>
+
+          <div class="explorer-grid">
+            <div>
+              <div class="svg-plot-wrap svg-container-q">
+                <svg id="graph-explorer-svg" class="cartesian-svg" viewBox="0 0 560 400" role="img" aria-label="Plano cartesiano con dos rectas del sistema de ecuaciones">
+                  <!-- Rendered dynamically by JS -->
+                </svg>
+              </div>
+              <div class="inset" id="graph-diagnosis" aria-live="polite">
+                <!-- Dynamic diagnosis -->
+              </div>
+            </div>
+
+            <div class="controls-stack">
+              <div class="eq-control-block">
+                <div class="eq-control-header">
+                  <strong><span class="line-swatch line-swatch--1" aria-hidden="true"></span>Ecuación 1: <span id="eq1-text">2x + 1y = 5</span></strong>
+                </div>
+                <div class="coeff-row">
+                  <label for="sl-a1">a₁</label>
+                  <input type="range" id="sl-a1" class="range-input" min="-5" max="5" step="1" value="2" oninput="syncCoeffFromSlider('a1', this.value)">
+                  <input type="number" id="num-a1" class="number-input" min="-10" max="10" step="1" value="2" aria-label="Coeficiente a1 de x" oninput="syncCoeffFromNumber('a1', this.value)">
+                </div>
+                <div class="coeff-row">
+                  <label for="sl-b1">b₁</label>
+                  <input type="range" id="sl-b1" class="range-input" min="-5" max="5" step="1" value="1" oninput="syncCoeffFromSlider('b1', this.value)">
+                  <input type="number" id="num-b1" class="number-input" min="-10" max="10" step="1" value="1" aria-label="Coeficiente b1 de y" oninput="syncCoeffFromNumber('b1', this.value)">
+                </div>
+                <div class="coeff-row">
+                  <label for="sl-c1">c₁</label>
+                  <input type="range" id="sl-c1" class="range-input" min="-8" max="10" step="1" value="5" oninput="syncCoeffFromSlider('c1', this.value)">
+                  <input type="number" id="num-c1" class="number-input" min="-20" max="20" step="1" value="5" aria-label="Término independiente c1" oninput="syncCoeffFromNumber('c1', this.value)">
+                </div>
+              </div>
+
+              <div class="eq-control-block">
+                <div class="eq-control-header">
+                  <strong><span class="line-swatch line-swatch--2" aria-hidden="true"></span>Ecuación 2: <span id="eq2-text">1x − 1y = 1</span></strong>
+                </div>
+                <div class="coeff-row">
+                  <label for="sl-a2">a₂</label>
+                  <input type="range" id="sl-a2" class="range-input" min="-5" max="5" step="1" value="1" oninput="syncCoeffFromSlider('a2', this.value)">
+                  <input type="number" id="num-a2" class="number-input" min="-10" max="10" step="1" value="1" aria-label="Coeficiente a2 de x" oninput="syncCoeffFromNumber('a2', this.value)">
+                </div>
+                <div class="coeff-row">
+                  <label for="sl-b2">b₂</label>
+                  <input type="range" id="sl-b2" class="range-input" min="-5" max="5" step="1" value="-1" oninput="syncCoeffFromSlider('b2', this.value)">
+                  <input type="number" id="num-b2" class="number-input" min="-10" max="10" step="1" value="-1" aria-label="Coeficiente b2 de y" oninput="syncCoeffFromNumber('b2', this.value)">
+                </div>
+                <div class="coeff-row">
+                  <label for="sl-c2">c₂</label>
+                  <input type="range" id="sl-c2" class="range-input" min="-8" max="10" step="1" value="1" oninput="syncCoeffFromSlider('c2', this.value)">
+                  <input type="number" id="num-c2" class="number-input" min="-20" max="20" step="1" value="1" aria-label="Término independiente c2" oninput="syncCoeffFromNumber('c2', this.value)">
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 3: Resolution Methods -->
+        <section id="sec-metodos" class="section-block" aria-labelledby="h-sec-3">
+          <div class="section-heading-row">
+            <span class="step-badge" aria-hidden="true">3</span>
+            <div>
+              <h2 id="h-sec-3">Métodos de resolución paso a paso</h2>
+              <p class="caption-text">Tres caminos algebraicos y un método visual para llegar exactamente al mismo resultado.</p>
+            </div>
+          </div>
+
+          <p>
+            No existe un único método obligatorio: los tres métodos algebraicos conducen siempre a la misma solución. Elegir el más adecuado te ahorra operaciones con fracciones y reduce errores de cálculo.
+          </p>
+
+          <div class="method-summary-grid">
+            <div class="method-card">
+              <h3>1. Sustitución</h3>
+              <p class="caption-text">Despejas una variable en una ecuación y la reemplazas en la otra. <strong>Ideal cuando alguna incógnita tiene coeficiente 1 o −1.</strong></p>
+            </div>
+            <div class="method-card">
+              <h3>2. Igualación</h3>
+              <p class="caption-text">Despejas la misma variable en ambas ecuaciones e igualas las expresiones. <strong>Práctico cuando ambas ecuaciones tienen la variable fácil de aislar.</strong></p>
+            </div>
+            <div class="method-card">
+              <h3>3. Reducción (eliminación)</h3>
+              <p class="caption-text">Multiplicas las ecuaciones para obtener coeficientes opuestos y sumas para cancelar una variable. <strong>El más rápido cuando hay coeficientes distintos de 1.</strong></p>
+            </div>
+            <div class="method-card">
+              <h3>4. Método gráfico</h3>
+              <p class="caption-text">Despejas \(y\), armas tablas de valores y trazas ambas rectas en el plano cartesiano. <strong>Excelente para visualizar e interpretar el sistema.</strong></p>
+            </div>
+          </div>
+
+          <!-- Interactive Step-by-Step Workbench -->
+          <div class="stepper-panel">
+            <h3>Taller guiado: recorre cada método paso a paso</h3>
+            <p class="caption-text">Compara cómo los tres métodos algebraicos resuelven el sistema \(\begin{cases} 2x + y = 4 \\ 3x - y = 5 \end{cases}\) hasta \(\left(\frac{9}{5}, \frac{2}{5}\right)\), y observa el trazado visual del método gráfico con \(\begin{cases} 2x + y = 5 \\ x - y = 1 \end{cases}\).</p>
+
+            <div class="button-row" role="group" aria-label="Elegir método de resolución">
+              <button type="button" class="button button--secondary is-active" id="method-tab-sustitucion" onclick="selectMethod('sustitucion')">Sustitución</button>
+              <button type="button" class="button button--secondary" id="method-tab-igualacion" onclick="selectMethod('igualacion')">Igualación</button>
+              <button type="button" class="button button--secondary" id="method-tab-reduccion" onclick="selectMethod('reduccion')">Reducción</button>
+              <button type="button" class="button button--secondary" id="method-tab-grafico" onclick="selectMethod('grafico')">Método gráfico</button>
+            </div>
+
+            <div id="method-workbench" style="margin-top: var(--space-md);">
+              <!-- Populated dynamically by JS -->
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 4: Everyday Applications -->
+        <section id="sec-aplicaciones" class="section-block" aria-labelledby="h-sec-4">
+          <div class="section-heading-row">
+            <span class="step-badge" aria-hidden="true">4</span>
+            <div>
+              <h2 id="h-sec-4">Aplicaciones en situaciones cotidianas</h2>
+              <p class="caption-text">Cómo traducir problemas reales en lenguaje verbal a un sistema de ecuaciones lineales.</p>
+            </div>
+          </div>
+
+          <p>
+            En economía, compras diarias e ingeniería urbana, rara vez nos entregan las ecuaciones ya escritas. El verdadero poder del álgebra lineal empieza cuando identificamos qué representan \(x\) e \(y\) y convertimos cada restricción del enunciado en una ecuación.
+          </p>
+
+          <!-- Application 1: Flour shopping (Enciclopedia.NET) -->
+          <article class="app-scenario-card">
+            <span class="status-tag">Aplicación 1 · Finanzas y compras</span>
+            <h3 style="margin-top: var(--space-sm);">Cálculo de precios por kilogramo con diferencia porcentual</h3>
+            <p>
+              Una panadería compra \(100\text{ kg}\) de harina común y \(50\text{ kg}\) de harina refinada por un monto total de \(\$8250\). Sabe que el kilogramo de harina refinada es un \(30\%\) más caro que el de harina común. ¿Cuál es el precio por kilo de cada tipo?
+            </p>
+            <div class="translation-grid">
+              <div class="inset">
+                <div class="inset-title">1. Definir variables</div>
+                <p>\(x\) = precio por kg de harina común.<br>\(y\) = precio por kg de harina refinada.</p>
+              </div>
+              <div class="inset">
+                <div class="inset-title">2. Plantear el sistema</div>
+                <p>\(\begin{cases} 100x + 50y = 8250 \\ y = 1.3x \end{cases}\)</p>
+              </div>
+              <div class="inset inset--positive">
+                <div class="inset-title">3. Resolver por sustitución</div>
+                <p>\(100x + 50(1.3x) = 8250 \Rightarrow 165x = 8250 \Rightarrow x = 50\). Luego \(y = 1.3(50) = 65\). <strong>Común: \(\$50/\text{kg}\); refinada: \(\$65/\text{kg}\).</strong></p>
+              </div>
+            </div>
+
+            <!-- Interactive simulator for Application 1 -->
+            <div class="inset inset--plain">
+              <div class="inset-title">Simulador de presupuesto: ajusta el gasto total o el recargo</div>
+              <div class="input-row" style="margin-top: var(--space-sm);">
+                <div class="field-group" style="flex: 1 1 200px;">
+                  <label class="field-label" for="sl-app-budget">Monto total de compra ($)</label>
+                  <input type="range" id="sl-app-budget" class="range-input" min="3300" max="16500" step="165" value="8250" oninput="updateFlourApp()">
+                </div>
+                <div class="field-group" style="flex: 1 1 200px;">
+                  <label class="field-label" for="sl-app-markup">Recargo harina refinada (%)</label>
+                  <input type="range" id="sl-app-markup" class="range-input" min="10" max="60" step="5" value="30" oninput="updateFlourApp()">
+                </div>
+              </div>
+              <div id="flour-app-output" style="margin-top: var(--space-sm);" aria-live="polite"></div>
+            </div>
+          </article>
+
+          <!-- Application 2: Supply and Demand -->
+          <article class="app-scenario-card">
+            <span class="status-tag status-tag--orange">Aplicación 2 · Economía</span>
+            <h3 style="margin-top: var(--space-sm);">Punto de equilibrio entre oferta y demanda</h3>
+            <p>
+              En la cooperativa escolar, la cantidad demandada \(y\) de lonches a un precio \(x\) sigue la recta \(y = 120 - 2x\) (si sube el precio, compran menos), mientras que la cantidad ofertada sigue \(y = 3x - 30\) (si sube el precio, conviene producir más). El equilibrio ocurre cuando ambas cantidades coinciden:
+            </p>
+            <div class="translation-grid">
+              <div class="inset">
+                <div class="inset-title">Sistema de mercado</div>
+                <p>\(\begin{cases} 2x + y = 120 \quad \text{(Demanda)} \\ -3x + y = -30 \quad \text{(Oferta)} \end{cases}\)</p>
+              </div>
+              <div class="inset inset--positive">
+                <div class="inset-title">Igualación y equilibrio</div>
+                <p>\(120 - 2x = 3x - 30 \Rightarrow 150 = 5x \Rightarrow x = 30\), \(y = 60\). A un precio de <strong>\(\$30\)</strong> se venden exactamente <strong>\(60\) unidades</strong> sin excedentes ni escasez.</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- Application 3: Traffic flow -->
+          <article class="app-scenario-card">
+            <span class="status-tag status-tag--positive">Aplicación 3 · Ingeniería urbana</span>
+            <h3 style="margin-top: var(--space-sm);">Balance de flujo vehicular en intersecciones</h3>
+            <p>
+              Los ingenieros de tránsito modelan el flujo por hora en redes de calles aplicando una regla simple: en cada crucero, <strong>la suma de autos que entran debe igualar la suma de autos que salen</strong>. Si en dos cruceros consecutivos desconocemos los tramos internos \(x\) e \(y\) (autos/hora), pero medimos entradas de \(420\) y \(180\) y salidas conocidas, obtenemos ecuaciones lineales como \(x + y = 420\) y \(x - y = 180\). Al sumarlas por reducción: \(2x = 600 \Rightarrow x = 300\text{ autos/h}\) y \(y = 120\text{ autos/h}\).
+            </p>
+          </article>
+        </section>
+
+        <!-- SECTION 5: Practice Exercises -->
+        <section id="sec-ejercicios" class="section-block" aria-labelledby="h-sec-5">
+          <div class="section-heading-row">
+            <span class="step-badge" aria-hidden="true">5</span>
+            <div>
+              <h2 id="h-sec-5">Ejercicios interactivos de práctica</h2>
+              <p class="caption-text">Resuelve los 6 ejercicios graduados, comprueba tu respuesta al instante y consulta la solución paso a paso cuando la necesites.</p>
+            </div>
+          </div>
+
+          <div class="inset">
+            <div class="inset-title">Formato para ingresar respuestas</div>
+            <p>Puedes escribir números enteros (por ejemplo <code>3</code> o <code>-1</code>), decimales (<code>2.8</code>) o fracciones simples usando diagonal (<code>14/5</code>). Tu progreso se guarda automáticamente en esta sesión.</p>
+          </div>
+
+          <div id="exercises-container">
+            <!-- Populated dynamically by JS -->
+          </div>
+        </section>
+
+        <!-- Sources footer -->
+        <footer style="border-top: 2px solid var(--on-surface); padding-top: var(--space-lg); margin-top: var(--space-xl);">
+          <p class="caption-text">
+            <strong>Fuentes de referencia:</strong> Contenido adaptado y estructurado a partir de <em>Álgebra Lineal Interactiva</em> (Dan Margalit y Joseph Rabinoff, LibreTexts Español), Enciclopedia.NET (Regina Meyer), Universidad Nacional del Litoral (Módulo 5: Sistemas de ecuaciones), Universidad de Cantabria (OCW Tema 2), Matesfácil (J. Llopis), Matematix, Matematízame, LógicaMat, Flamath y EjerciciosEcuaciones.
+          </p>
+        </footer>
+      </main>
+
+      <!-- Side Column: Navigation & Progress -->
+      <aside class="side-column" aria-label="Índice y progreso de estudio">
+        <div class="side-card">
+          <span class="status-tag">Tu progreso</span>
+          <div class="key-figure-value" id="progress-counter" style="margin-top: var(--space-sm);">0 / 6</div>
+          <div class="caption-text" id="progress-label">Ejercicios resueltos correctamente</div>
+          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0" id="progress-bar-wrap">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+          <div class="button-row" style="margin-top: var(--space-md);">
+            <button type="button" class="button button--secondary" id="btn-reset-progress" onclick="handleResetProgress(this)">Reiniciar progreso</button>
+          </div>
+          <div id="reset-msg" class="caption-text" style="margin-top: var(--space-xs);" aria-live="polite"></div>
+        </div>
+
+        <div>
+          <h3 style="font-size: 1rem; margin-bottom: var(--space-sm);">Ruta de la guía</h3>
+          <ol class="toc-list">
+            <li><a class="guide-link" href="#sec-definicion">1. Definición y componentes</a></li>
+            <li><a class="guide-link" href="#sec-clasificacion">2. Clasificación y geometría</a></li>
+            <li><a class="guide-link" href="#sec-metodos">3. Métodos paso a paso</a></li>
+            <li><a class="guide-link" href="#sec-aplicaciones">4. Aplicaciones cotidianas</a></li>
+            <li><a class="guide-link" href="#sec-ejercicios">5. Ejercicios interactivos</a></li>
+          </ol>
+        </div>
+
+        <div class="inset">
+          <div class="inset-title">Consejo rápido de examen</div>
+          <p class="caption-text" style="color: var(--on-surface);">
+            Antes de entregar un problema, sustituye siempre tu par \((x, y)\) en <strong>las dos ecuaciones originales</strong>. Si falla aunque sea en una, revisa los signos al despejar o multiplicar.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <api-shim></api-shim>
+  <script>
+    // =========================================================================
+    // DATA DEFINITIONS (backtick template literals for safe string escaping)
+    // =========================================================================
+    const COMPONENT_INFO = {
+      all: {
+        title: `Todos los componentes trabajando juntos`,
+        body: `Cada ecuación lineal relaciona las mismas variables mediante coeficientes constantes y un término independiente al lado derecho. Cuando una variable no muestra número delante (como en \\(x + y = 5\\)), su coeficiente implícito es \\(1\\) (o \\(-1\\) si lleva signo menos).`
+      },
+      coef: {
+        title: `Coeficientes (a₁₁, a₁₂, a₂₁, a₂₂)`,
+        body: `Son los números reales fijos que multiplican a cada incógnita. En el ejemplo, los coeficientes de la primera ecuación son \\(1\\) y \\(1\\); en la segunda son \\(2\\) y \\(-1\\). Determinan la inclinación (pendiente) de cada recta.`
+      },
+      var: {
+        title: `Variables o incógnitas (x, y)`,
+        body: `Son las cantidades desconocidas que queremos hallar y que aparecen elevadas exactamente a la potencia \\(1\\). Ambas ecuaciones comparten las mismas incógnitas: el valor de \\(x\\) y de \\(y\\) debe ser idéntico en las dos filas.`
+      },
+      indep: {
+        title: `Términos independientes (b₁, b₂)`,
+        body: `Son las constantes numéricas situadas al lado derecho de la igualdad, sin ninguna variable acompañándolas (en el ejemplo, \\(5\\) y \\(4\\)). Si todos los términos independientes valen \\(0\\), el sistema se llama homogéneo.`
+      }
+    };
+
+    const LINEARITY_ITEMS = [
+      {
+        id: `lin-1`,
+        expr: `\\(3x - 2y = 7\\)`,
+        isLinear: true,
+        reason: `Es lineal: ambas incógnitas tienen exponente 1 y solo se multiplican por constantes.`
+      },
+      {
+        id: `lin-2`,
+        expr: `\\(2x^2 + 3y = 4\\)`,
+        isLinear: false,
+        reason: `No es lineal: la variable x está elevada al cuadrado (grado 2).`
+      },
+      {
+        id: `lin-3`,
+        expr: `\\(3x + yz = 3\\)`,
+        isLinear: false,
+        reason: `No es lineal: aparece el producto de dos incógnitas (y por z).`
+      },
+      {
+        id: `lin-4`,
+        expr: `\\(\\frac{1}{2}x + \\frac{1}{3}y = 5\\)`,
+        isLinear: true,
+        reason: `Es lineal: las fracciones multiplican a x e y como coeficientes constantes; el grado sigue siendo 1.`
+      },
+      {
+        id: `lin-5`,
+        expr: `\\(y = \\frac{3x}{x - 1}\\)`,
+        isLinear: false,
+        reason: `No es lineal: la incógnita x aparece en el denominador.`
+      },
+      {
+        id: `lin-6`,
+        expr: `\\(\\sin(x) - \\cos(y) = 2\\)`,
+        isLinear: false,
+        reason: `No es lineal: involucra funciones trigonométricas sobre las variables.`
+      }
+    ];
+
+    const METHODS_DATA = {
+      sustitucion: {
+        title: `Método de sustitución`,
+        systemLatex: `\\begin{cases} 2x + y = 4 \\\\ 3x - y = 5 \\end{cases}`,
+        tip: `Truco: elige despejar una incógnita que tenga coeficiente 1 o -1 para evitar fracciones desde el primer paso. Aquí la y de la primera ecuación tiene coeficiente +1.`,
+        steps: [
+          {
+            label: `Despejar una incógnita en una ecuación`,
+            text: `Elegimos la primera ecuación \\(2x + y = 4\\) y aislamos \\(y\\) restando \\(2x\\) en ambos lados:`,
+            math: `y = 4 - 2x`
+          },
+          {
+            label: `Sustituir la expresión en la otra ecuación`,
+            text: `En la segunda ecuación \\(3x - y = 5\\), reemplazamos \\(y\\) por \\((4 - 2x)\\) usando paréntesis:`,
+            math: `3x - (4 - 2x) = 5`
+          },
+          {
+            label: `Resolver la ecuación de una sola variable`,
+            text: `Eliminamos el paréntesis cuidando el signo negativo, agrupamos términos semejantes y despejamos \\(x\\):`,
+            math: `3x - 4 + 2x = 5 \\;\\Longrightarrow\\; 5x = 9 \\;\\Longrightarrow\\; x = \\frac{9}{5}`
+          },
+          {
+            label: `Sustituir hacia atrás para hallar la otra variable`,
+            text: `Introducimos \\(x = \\frac{9}{5}\\) en la expresión despejada del Paso 1:`,
+            math: `y = 4 - 2\\left(\\frac{9}{5}\\right) = \\frac{20}{5} - \\frac{18}{5} = \\frac{2}{5}`
+          },
+          {
+            label: `Comprobar la solución simultánea`,
+            text: `Verificamos en ambas ecuaciones originales que \\((x, y) = \\left(\\frac{9}{5}, \\frac{2}{5}\\right)\\) cumple las igualdades:`,
+            math: `2\\left(\\frac{9}{5}\\right) + \\frac{2}{5} = \\frac{20}{5} = 4 \\quad \\text{y} \\quad 3\\left(\\frac{9}{5}\\right) - \\frac{2}{5} = \\frac{25}{5} = 5`
+          }
+        ]
+      },
+      igualacion: {
+        title: `Método de igualación`,
+        systemLatex: `\\begin{cases} 2x + y = 4 \\\\ 3x - y = 5 \\end{cases}`,
+        tip: `Clave: debes despejar exactamente la misma incógnita en las dos ecuaciones antes de igualar.`,
+        steps: [
+          {
+            label: `Despejar la misma incógnita en ambas ecuaciones`,
+            text: `Aislamos \\(y\\) en la primera ecuación y también en la segunda:`,
+            math: `\\text{Ec. 1: } y = 4 - 2x \\qquad \\text{Ec. 2: } y = 3x - 5`
+          },
+          {
+            label: `Igualar las dos expresiones obtenidas`,
+            text: `Como \\(y = y\\) por simultaneidad, igualamos ambos miembros derechos:`,
+            math: `4 - 2x = 3x - 5`
+          },
+          {
+            label: `Resolver la ecuación resultante`,
+            text: `Agrupamos constantes a un lado y términos con \\(x\\) al otro:`,
+            math: `4 + 5 = 3x + 2x \\;\\Longrightarrow\\; 9 = 5x \\;\\Longrightarrow\\; x = \\frac{9}{5}`
+          },
+          {
+            label: `Calcular la segunda incógnita`,
+            text: `Reemplazamos \\(x = \\frac{9}{5}\\) en cualquiera de las dos ecuaciones despejadas:`,
+            math: `y = 4 - 2\\left(\\frac{9}{5}\\right) = \\frac{2}{5}`
+          },
+          {
+            label: `Escribir y comprobar la solución`,
+            text: `Comprobando en la segunda ecuación: \\(y = 3\\left(\\frac{9}{5}\\right) - 5 = \\frac{27}{5} - \\frac{25}{5} = \\frac{2}{5}\\). La solución única es:`,
+            math: `(x, y) = \\left(\\frac{9}{5},\\; \\frac{2}{5}\\right)`
+          }
+        ]
+      },
+      reduccion: {
+        title: `Método de reducción (eliminación)`,
+        systemLatex: `\\begin{cases} 2x + y = 4 \\\\ 3x - y = 5 \\end{cases}`,
+        tip: `Si los coeficientes de la variable a eliminar no son opuestos, multiplica una o ambas ecuaciones por números enteros convenientes hasta igualarlos con signo contrario.`,
+        steps: [
+          {
+            label: `Preparar coeficientes opuestos para una variable`,
+            text: `Observamos la incógnita \\(y\\): sus coeficientes ya son \\(+1\\) y \\(-1\\) (mismo valor, signo contrario), por lo que no hace falta multiplicar.`,
+            math: `\\begin{cases} 2x + 1y = 4 \\\\ 3x - 1y = 5 \\end{cases}`
+          },
+          {
+            label: `Sumar miembro a miembro ambas ecuaciones`,
+            text: `Al sumar verticalmente, \\(+y\\) y \\(-y\\) se cancelan de inmediato:`,
+            math: `(2x + y) + (3x - y) = 4 + 5 \\;\\Longrightarrow\\; 5x = 9`
+          },
+          {
+            label: `Despejar la incógnita restante`,
+            text: `Dividimos ambos lados entre 5:`,
+            math: `x = \\frac{9}{5}`
+          },
+          {
+            label: `Sustituir en una de las ecuaciones originales`,
+            text: `Reemplazamos \\(x = \\frac{9}{5}\\) en la primera ecuación \\(2x + y = 4\\):`,
+            math: `2\\left(\\frac{9}{5}\\right) + y = 4 \\;\\Longrightarrow\\; \\frac{18}{5} + y = 4 \\;\\Longrightarrow\\; y = \\frac{2}{5}`
+          },
+          {
+            label: `Verificar y concluir`,
+            text: `Sustituyendo ambos valores en \\(3x - y = 5\\) se cumple \\(\\frac{27}{5} - \\frac{2}{5} = 5\\). Solución única:`,
+            math: `(x, y) = \\left(\\frac{9}{5},\\; \\frac{2}{5}\\right)`
+          }
+        ]
+      },
+      grafico: {
+        title: `Método gráfico`,
+        systemLatex: `\\begin{cases} 2x + y = 5 \\\\ x - y = 1 \\end{cases}`,
+        tip: `Aunque el método gráfico es ideal para visualizar, puede resultar impreciso cuando la solución tiene fracciones; conviene confirmarla algebraicamente.`,
+        steps: [
+          {
+            label: `Despejar y en ambas ecuaciones`,
+            text: `Expresamos cada recta en forma pendiente-ordenada \\(y = mx + b\\):`,
+            math: `\\text{Recta 1: } y = 5 - 2x \\qquad \\text{Recta 2: } y = x - 1`
+          },
+          {
+            label: `Construir una tabla de valores por recta`,
+            text: `Evaluamos en valores sencillos como \\(x = 0, 1, 2, 3\\). Recta 1: \\((0, 5), (1, 3), (2, 1), (3, -1)\\). Recta 2: \\((0, -1), (1, 0), (2, 1), (3, 2)\\).`,
+            math: `\\text{Observa el punto compartido en ambas tablas: } (2, 1)`
+          },
+          {
+            label: `Trazar las rectas en el plano cartesiano`,
+            text: `Ubicamos los puntos de cada tabla y trazamos las rectas continuas en el plano (mira el gráfico adjunto).`,
+            math: `\\text{Recta 1 (azul)} \\quad \\text{y} \\quad \\text{Recta 2 (naranja)}`
+          },
+          {
+            label: `Identificar el punto de intersección`,
+            text: `Ambas rectas se cruzan exactamente en el punto \\((2, 1)\\). Comprobación: \\(2(2) + 1 = 5\\) y \\(2 - 1 = 1\\).`,
+            math: `\\text{Solución única: } x = 2,\\; y = 1`
+          }
+        ]
+      }
+    };
+
+    const EXERCISES = [
+      {
+        id: `ex1`,
+        type: `xy`,
+        level: `Nivel básico · Método sugerido: sustitución`,
+        prompt: `Encuentra la solución del siguiente sistema de ecuaciones:`,
+        latex: `\\begin{cases} x + y = 6 \\\\ 2x + y = 8 \\end{cases}`,
+        a1: 1, b1: 1, c1: 6,
+        a2: 2, b2: 1, c2: 8,
+        ansX: 2, ansY: 4,
+        hint: `Despeja y en la primera ecuación: y = 6 - x. Después sustituye esa expresión en 2x + y = 8.`,
+        solutionSteps: [
+          `Despejamos \\(y\\) de la primera ecuación: \\(y = 6 - x\\).`,
+          `Sustituimos en la segunda ecuación: \\(2x + (6 - x) = 8\\).`,
+          `Simplificamos: \\(x + 6 = 8 \\Rightarrow x = 2\\).`,
+          `Calculamos \\(y = 6 - 2 = 4\\). Solución: \\((2, 4)\\).`
+        ]
+      },
+      {
+        id: `ex2`,
+        type: `xy`,
+        level: `Nivel básico · Método sugerido: reducción`,
+        prompt: `Resuelve el sistema aprovechando los coeficientes opuestos de y:`,
+        latex: `\\begin{cases} 2x + y = 8 \\\\ 3x - y = 7 \\end{cases}`,
+        a1: 2, b1: 1, c1: 8,
+        a2: 3, b2: -1, c2: 7,
+        ansX: 3, ansY: 2,
+        hint: `Suma directamente ambas ecuaciones: (+y) + (-y) se cancelan y obtendrás 5x = 15.`,
+        solutionSteps: [
+          `Sumamos miembro a miembro: \\((2x + y) + (3x - y) = 8 + 7\\).`,
+          `Resulta \\(5x = 15 \\Rightarrow x = 3\\).`,
+          `Sustituimos \\(x = 3\\) en la primera ecuación: \\(2(3) + y = 8 \\Rightarrow 6 + y = 8 \\Rightarrow y = 2\\).`,
+          `Solución comprobada: \\((3, 2)\\).`
+        ]
+      },
+      {
+        id: `ex3`,
+        type: `xy`,
+        level: `Nivel intermedio · Método sugerido: igualación`,
+        prompt: `Halla el par ordenado (x, y) que satisface simultáneamente:`,
+        latex: `\\begin{cases} 2x + 3y = 7 \\\\ x - y = 1 \\end{cases}`,
+        a1: 2, b1: 3, c1: 7,
+        a2: 1, b2: -1, c2: 1,
+        ansX: 2, ansY: 1,
+        hint: `Puedes despejar x en ambas ecuaciones: x = (7 - 3y)/2 y x = y + 1, e igualarlas (o sustituir x = y + 1).`,
+        solutionSteps: [
+          `Despejamos \\(x\\) en la segunda ecuación: \\(x = y + 1\\) y en la primera: \\(x = \\frac{7 - 3y}{2}\\).`,
+          `Igualamos: \\(\\frac{7 - 3y}{2} = y + 1 \\Rightarrow 7 - 3y = 2y + 2\\).`,
+          `Agrupamos: \\(5 = 5y \\Rightarrow y = 1\\).`,
+          `Calculamos \\(x = 1 + 1 = 2\\). Solución: \\((2, 1)\\).`
+        ]
+      },
+      {
+        id: `ex4`,
+        type: `xy`,
+        level: `Nivel intermedio · Coeficientes mayores que 1`,
+        prompt: `Resuelve este sistema (puedes usar reducción multiplicando ecuaciones o sustitución):`,
+        latex: `\\begin{cases} 4x - 3y = 1 \\\\ 5x + 2y = 7 \\end{cases}`,
+        a1: 4, b1: -3, c1: 1,
+        a2: 5, b2: 2, c2: 7,
+        ansX: 1, ansY: 1,
+        hint: `Para eliminar y por reducción, multiplica la primera ecuación por 2 y la segunda por 3.`,
+        solutionSteps: [
+          `Multiplicamos la Ec. 1 por 2 (\\(8x - 6y = 2\\)) y la Ec. 2 por 3 (\\(15x + 6y = 21\\)).`,
+          `Sumamos ambas ecuaciones: \\(23x = 23 \\Rightarrow x = 1\\).`,
+          `Sustituimos \\(x = 1\\) en \\(5x + 2y = 7\\): \\(5(1) + 2y = 7 \\Rightarrow 2y = 2 \\Rightarrow y = 1\\).`,
+          `Solución: \\((1, 1)\\).`
+        ]
+      },
+      {
+        id: `ex5`,
+        type: `xy`,
+        level: `Nivel reto · Resultado fraccionario`,
+        prompt: `Calcula la solución exacta (puedes escribir fracciones como a/b o decimales):`,
+        latex: `\\begin{cases} 3x - 2y = 4 \\\\ x + y = 5 \\end{cases}`,
+        a1: 3, b1: -2, c1: 4,
+        a2: 1, b2: 1, c2: 5,
+        ansX: 14 / 5, ansY: 11 / 5,
+        hint: `Despeja x = 5 - y en la segunda ecuación y sustituye en 3x - 2y = 4.`,
+        solutionSteps: [
+          `Despejamos \\(x = 5 - y\\) en la segunda ecuación.`,
+          `Sustituimos en la primera: \\(3(5 - y) - 2y = 4 \\Rightarrow 15 - 3y - 2y = 4\\).`,
+          `Resolvemos: \\(15 - 5y = 4 \\Rightarrow -5y = -11 \\Rightarrow y = \\frac{11}{5} = 2.2\\).`,
+          `Hallamos \\(x = 5 - \\frac{11}{5} = \\frac{25}{5} - \\frac{11}{5} = \\frac{14}{5} = 2.8\\).`
+        ]
+      },
+      {
+        id: `ex6`,
+        type: `choice`,
+        level: `Clasificación y problema aplicado`,
+        prompt: `Observa el sistema \\(\\begin{cases} 3x + 2y = 6 \\\\ 3x + 2y = 9 \\end{cases}\\). ¿Cómo se clasifica y qué ocurre al graficarlo?`,
+        latex: ``,
+        options: [
+          { value: `scd`, label: `Compatible determinado: se cortan en un punto único.` },
+          { value: `sci`, label: `Compatible indeterminado: son rectas coincidentes con infinitas soluciones.` },
+          { value: `si`, label: `Incompatible: son rectas paralelas sin puntos en común (0 = 3).` }
+        ],
+        correctChoice: `si`,
+        hint: `Resta la primera ecuación de la segunda: (3x + 2y) - (3x + 2y) = 9 - 6. ¿Qué igualdad obtienes?`,
+        solutionSteps: [
+          `Al restar la primera ecuación de la segunda obtenemos \\(0 = 3\\), una contradicción imposible.`,
+          `Las dos rectas tienen la misma pendiente (\\(m = -\\frac{3}{2}\\)) pero distinta ordenada al origen (3 y 4.5).`,
+          `Por tanto, son rectas paralelas que nunca se intersecan: el sistema es <strong>incompatible</strong>.`
+        ]
+      }
+    ];
+
+    // =========================================================================
+    // PERSISTENT APPLICATION STATE
+    // =========================================================================
+    const appState = {
+      selectedComponent: `all`,
+      linearityAnswers: {},
+      graphCoeffs: { a1: 2, b1: 1, c1: 5, a2: 1, b2: -1, c2: 1 },
+      activeMethod: `sustitucion`,
+      methodStepIndex: 0,
+      appBudget: 8250,
+      appMarkup: 30,
+      exerciseDrafts: {},
+      exerciseSolved: {},
+      exerciseHintsShown: {},
+      exerciseSolutionsShown: {}
+    };
+
+    async function persistState() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+        try {
+          await window.notebookAppApi.setAppState(appState);
+        } catch (err) {
+          // Silently ignore persistence errors in standalone preview
+        }
+      }
+    }
+
+    // =========================================================================
+    // MATH & FORMATTING HELPERS
+    // =========================================================================
+    function renderMath(container) {
+      if (typeof renderMathInElement === `function` && container) {
+        renderMathInElement(container, {
+          delimiters: [
+            { left: `\\(`, right: `\\)`, display: false }
+          ],
+          throwOnError: false
+        });
+      }
+    }
+
+    function parseNumericInput(raw) {
+      if (typeof raw !== `string`) return NaN;
+      const cleaned = raw.trim().replace(`,`, `.`).replace(/\s+/g, ``);
+      if (!cleaned) return NaN;
+      if (cleaned.includes(`/`)) {
+        const parts = cleaned.split(`/`);
+        if (parts.length !== 2) return NaN;
+        const num = Number(parts[0]);
+        const den = Number(parts[1]);
+        if (!Number.isFinite(num) || !Number.isFinite(den) || den === 0) return NaN;
+        return num / den;
+      }
+      const val = Number(cleaned);
+      return Number.isFinite(val) ? val : NaN;
+    }
+
+    function formatNum(n) {
+      if (Math.abs(n) < 1e-9) return `0`;
+      const rounded = Math.round(n * 100) / 100;
+      return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(2).replace(/\.?0+$/, ``);
+    }
+
+    function formatEquationText(a, b, c) {
+      const termX = `${a}x`;
+      const signB = b >= 0 ? `+` : `−`;
+      const absB = Math.abs(b);
+      return `${termX} ${signB} ${absB}y = ${c}`;
+    }
+
+    // =========================================================================
+    // SECTION 1: ANATOMY INSPECTOR & LINEARITY QUIZ
+    // =========================================================================
+    function selectComponent(comp) {
+      appState.selectedComponent = comp;
+      const buttons = [`all`, `coef`, `var`, `indep`];
+      buttons.forEach(function(key) {
+        const btn = document.getElementById(`comp-btn-${key}`);
+        if (btn) {
+          btn.classList.toggle(`is-active`, key === comp);
+        }
+      });
+
+      const tokens = document.querySelectorAll(`.comp-token`);
+      tokens.forEach(function(el) {
+        const t = el.getAttribute(`data-comp`);
+        if (comp === `all`) {
+          el.style.opacity = `1`;
+          el.style.outline = `none`;
+        } else if (t === comp) {
+          el.style.opacity = `1`;
+          el.style.outline = `2px solid var(--on-surface)`;
+        } else {
+          el.style.opacity = `0.32`;
+          el.style.outline = `none`;
+        }
+      });
+
+      const box = document.getElementById(`anatomy-explanation`);
+      const info = COMPONENT_INFO[comp] || COMPONENT_INFO.all;
+      if (box) {
+        box.innerHTML = `<div class="inset-title">${info.title}</div><p>${info.body}</p>`;
+        renderMath(box);
+      }
+      persistState();
+    }
+
+    function renderLinearityQuiz() {
+      const tbody = document.getElementById(`linearity-tbody`);
+      if (!tbody) return;
+      let html = ``;
+      LINEARITY_ITEMS.forEach(function(item) {
+        const chosen = appState.linearityAnswers[item.id];
+        const isCorrect = chosen !== undefined && chosen === item.isLinear;
+        let diagHtml = `<span class="caption-text">Elige una opción</span>`;
+        if (chosen !== undefined) {
+          const badgeClass = isCorrect ? `status-tag status-tag--positive` : `status-tag status-tag--error`;
+          const badgeText = isCorrect ? `Correcto` : `Revisa la regla`;
+          diagHtml = `<div><span class="${badgeClass}">${badgeText}</span><div class="caption-text" style="margin-top: var(--space-xs); color: var(--on-surface);">${item.reason}</div></div>`;
+        }
+        html += `
+          <tr>
+            <td><strong>${item.expr}</strong></td>
+            <td>
+              <div class="button-row">
+                <button type="button" class="button button--secondary ${chosen === true ? `is-active` : ``}" style="min-height: 44px; padding: var(--space-xs) var(--space-sm); font-size: 0.875rem;" onclick="answerLinearity('${item.id}', true)">Lineal</button>
+                <button type="button" class="button button--secondary ${chosen === false ? `is-active` : ``}" style="min-height: 44px; padding: var(--space-xs) var(--space-sm); font-size: 0.875rem;" onclick="answerLinearity('${item.id}', false)">No lineal</button>
+              </div>
+            </td>
+            <td>${diagHtml}</td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = html;
+      renderMath(tbody);
+    }
+
+    function answerLinearity(id, val) {
+      appState.linearityAnswers[id] = val;
+      renderLinearityQuiz();
+      persistState();
+    }
+
+    // =========================================================================
+    // SECTION 2: GRAPH EXPLORER (SVG CARTESIAN PLANE)
+    // =========================================================================
+    function syncCoeffFromSlider(key, val) {
+      const numVal = Number(val);
+      if (!Number.isFinite(numVal)) return;
+      appState.graphCoeffs[key] = numVal;
+      const numInput = document.getElementById(`num-${key}`);
+      if (numInput) numInput.value = val;
+      updateGraphExplorer();
+      persistState();
+    }
+
+    function syncCoeffFromNumber(key, val) {
+      const numVal = Number(val);
+      if (!Number.isFinite(numVal)) return;
+      appState.graphCoeffs[key] = numVal;
+      const slider = document.getElementById(`sl-${key}`);
+      if (slider) {
+        const min = Number(slider.min);
+        const max = Number(slider.max);
+        slider.value = String(Math.max(min, Math.min(max, numVal)));
+      }
+      updateGraphExplorer();
+      persistState();
+    }
+
+    function loadGraphPreset(preset) {
+      const presets = {
+        scd: { a1: 2, b1: 1, c1: 5, a2: 1, b2: -1, c2: 1 },
+        sci: { a1: 1, b1: 2, c1: 4, a2: 2, b2: 4, c2: 8 },
+        si: { a1: 1, b1: 1, c1: 3, a2: 1, b2: 1, c2: 5 }
+      };
+      const p = presets[preset];
+      if (!p) return;
+      [`scd`, `sci`, `si`].forEach(function(k) {
+        const btn = document.getElementById(`preset-btn-${k}`);
+        if (btn) btn.classList.toggle(`is-active`, k === preset);
+      });
+      appState.graphCoeffs = Object.assign({}, p);
+      Object.keys(p).forEach(function(k) {
+        const sl = document.getElementById(`sl-${k}`);
+        const num = document.getElementById(`num-${k}`);
+        if (sl) sl.value = String(p[k]);
+        if (num) num.value = String(p[k]);
+      });
+      updateGraphExplorer();
+      persistState();
+    }
+
+    function computeLineSegment(a, b, c, xMin, xMax, yMin, yMax) {
+      if (Math.abs(a) < 1e-9 && Math.abs(b) < 1e-9) return null;
+      const pts = [];
+      if (Math.abs(b) > 1e-9) {
+        const yAtXMin = (c - a * xMin) / b;
+        if (yAtXMin >= yMin - 0.1 && yAtXMin <= yMax + 0.1) pts.push({ x: xMin, y: yAtXMin });
+        const yAtXMax = (c - a * xMax) / b;
+        if (yAtXMax >= yMin - 0.1 && yAtXMax <= yMax + 0.1) pts.push({ x: xMax, y: yAtXMax });
+      }
+      if (Math.abs(a) > 1e-9) {
+        const xAtYMin = (c - b * yMin) / a;
+        if (xAtYMin > xMin && xAtYMin < xMax) pts.push({ x: xAtYMin, y: yMin });
+        const xAtYMax = (c - b * yMax) / a;
+        if (xAtYMax > xMin && xAtYMax < xMax) pts.push({ x: xAtYMax, y: yMax });
+      }
+      if (pts.length < 2) {
+        if (Math.abs(b) > 1e-9) {
+          return [{ x: xMin, y: (c - a * xMin) / b }, { x: xMax, y: (c - a * xMax) / b }];
+        }
+        const xConst = c / a;
+        return [{ x: xConst, y: yMin }, { x: xConst, y: yMax }];
+      }
+      return [pts[0], pts[pts.length - 1]];
+    }
+
+    function renderCartesianSVG(svgEl, cfg) {
+      if (!svgEl) return;
+      const W = 560;
+      const H = 400;
+      const padL = 44;
+      const padR = 24;
+      const padT = 24;
+      const padB = 36;
+      const plotW = W - padL - padR;
+      const plotH = H - padT - padB;
+      const xMin = -6;
+      const xMax = 6;
+      const yMin = -5;
+      const yMax = 5;
+
+      function mapX(x) { return padL + ((x - xMin) / (xMax - xMin)) * plotW; }
+      function mapY(y) { return padT + ((yMax - y) / (yMax - yMin)) * plotH; }
+
+      let parts = [];
+      parts.push(`<defs><clipPath id="clip-${cfg.clipId}"><rect x="${padL}" y="${padT}" width="${plotW}" height="${plotH}"/></clipPath></defs>`);
+
+      // Gridlines
+      for (let gx = xMin; gx <= xMax; gx += 1) {
+        const px = mapX(gx);
+        const isZero = gx === 0;
+        parts.push(`<line x1="${px}" y1="${padT}" x2="${px}" y2="${padT + plotH}" stroke="${isZero ? `var(--on-surface)` : `var(--outline-variant)`}" stroke-width="${isZero ? 1.5 : 1}"/>`);
+        if (gx % 2 === 0) {
+          parts.push(`<text x="${px}" y="${padT + plotH + 18}" text-anchor="middle" font-size="12" fill="var(--on-surface-variant)">${gx}</text>`);
+        }
+      }
+      for (let gy = yMin; gy <= yMax; gy += 1) {
+        const py = mapY(gy);
+        const isZero = gy === 0;
+        parts.push(`<line x1="${padL}" y1="${py}" x2="${padL + plotW}" y2="${py}" stroke="${isZero ? `var(--on-surface)` : `var(--outline-variant)`}" stroke-width="${isZero ? 1.5 : 1}"/>`);
+        if (gy % 2 === 0 || gy === 0) {
+          parts.push(`<text x="${padL - 8}" y="${py + 4}" text-anchor="end" font-size="12" fill="var(--on-surface-variant)">${gy}</text>`);
+        }
+      }
+
+      // Axis labels
+      parts.push(`<text x="${padL + plotW - 4}" y="${mapY(0) - 8}" text-anchor="end" font-size="12" font-weight="700" fill="var(--on-surface)">x</text>`);
+      parts.push(`<text x="${mapX(0) + 10}" y="${padT + 14}" text-anchor="start" font-size="12" font-weight="700" fill="var(--on-surface)">y</text>`);
+
+      // Clipped lines
+      let clipped = [];
+      const seg1 = computeLineSegment(cfg.a1, cfg.b1, cfg.c1, xMin, xMax, yMin, yMax);
+      const seg2 = computeLineSegment(cfg.a2, cfg.b2, cfg.c2, xMin, xMax, yMin, yMax);
+
+      if (seg1) {
+        clipped.push(`<line x1="${mapX(seg1[0].x)}" y1="${mapY(seg1[0].y)}" x2="${mapX(seg1[1].x)}" y2="${mapY(seg1[1].y)}" stroke="var(--data-1)" stroke-width="${cfg.coincident ? 6 : 3}" stroke-opacity="${cfg.coincident ? 0.55 : 1}"/>`);
+      }
+      if (seg2) {
+        clipped.push(`<line x1="${mapX(seg2[0].x)}" y1="${mapY(seg2[0].y)}" x2="${mapX(seg2[1].x)}" y2="${mapY(seg2[1].y)}" stroke="var(--data-2)" stroke-width="2.5" stroke-dasharray="${cfg.coincident ? `8 6` : `none`}"/>`);
+      }
+
+      // Optional plotted table points (for graphic method)
+      if (Array.isArray(cfg.points1)) {
+        cfg.points1.forEach(function(pt) {
+          clipped.push(`<circle cx="${mapX(pt.x)}" cy="${mapY(pt.y)}" r="4.5" fill="var(--data-1)" stroke="var(--background)" stroke-width="1.5"/>`);
+        });
+      }
+      if (Array.isArray(cfg.points2)) {
+        cfg.points2.forEach(function(pt) {
+          clipped.push(`<circle cx="${mapX(pt.x)}" cy="${mapY(pt.y)}" r="4.5" fill="var(--data-2)" stroke="var(--background)" stroke-width="1.5"/>`);
+        });
+      }
+
+      // Intersection point
+      if (cfg.intersection) {
+        const ix = mapX(cfg.intersection.x);
+        const iy = mapY(cfg.intersection.y);
+        clipped.push(`<circle cx="${ix}" cy="${iy}" r="6.5" fill="var(--primary)" stroke="var(--background)" stroke-width="2"/>`);
+      }
+
+      parts.push(`<g clip-path="url(#clip-${cfg.clipId})">${clipped.join(``)}</g>`);
+
+      // Direct annotation badge for intersection if inside plot
+      if (cfg.intersection) {
+        const ix = mapX(cfg.intersection.x);
+        const iy = mapY(cfg.intersection.y);
+        if (ix >= padL && ix <= padL + plotW && iy >= padT && iy <= padT + plotH) {
+          const labelX = ix > padL + plotW - 110 ? ix - 10 : ix + 10;
+          const anchor = ix > padL + plotW - 110 ? `end` : `start`;
+          const labelY = iy < padT + 30 ? iy + 22 : iy - 12;
+          const coordLabel = `(${formatNum(cfg.intersection.x)}, ${formatNum(cfg.intersection.y)})`;
+          parts.push(`<rect x="${anchor === `start` ? labelX - 4 : labelX - 78}" y="${labelY - 14}" width="82" height="20" fill="var(--background)" stroke="var(--primary)" stroke-width="1.5"/>`);
+          parts.push(`<text x="${anchor === `start` ? labelX + 2 : labelX - 6}" y="${labelY}" text-anchor="${anchor}" font-size="12" font-weight="800" fill="var(--primary)">${coordLabel}</text>`);
+        }
+      }
+
+      // Direct line labels on chart (no boxed legend)
+      parts.push(`<rect x="${padL + 6}" y="${padT + 6}" width="184" height="44" fill="var(--background)" fill-opacity="0.9"/>`);
+      parts.push(`<line x1="${padL + 12}" y1="${padT + 20}" x2="${padL + 32}" y2="${padT + 20}" stroke="var(--data-1)" stroke-width="3"/>`);
+      parts.push(`<text x="${padL + 38}" y="${padT + 24}" font-size="12" font-weight="700" fill="var(--data-1)">R1: ${formatEquationText(cfg.a1, cfg.b1, cfg.c1)}</text>`);
+      parts.push(`<line x1="${padL + 12}" y1="${padT + 39}" x2="${padL + 32}" y2="${padT + 39}" stroke="var(--data-2)" stroke-width="2.5"/>`);
+      parts.push(`<text x="${padL + 38}" y="${padT + 43}" font-size="12" font-weight="700" fill="var(--data-2)">R2: ${formatEquationText(cfg.a2, cfg.b2, cfg.c2)}</text>`);
+
+      svgEl.innerHTML = parts.join(``);
+    }
+
+    function updateGraphExplorer() {
+      const c = appState.graphCoeffs;
+      const eq1El = document.getElementById(`eq1-text`);
+      const eq2El = document.getElementById(`eq2-text`);
+      if (eq1El) eq1El.textContent = formatEquationText(c.a1, c.b1, c.c1);
+      if (eq2El) eq2El.textContent = formatEquationText(c.a2, c.b2, c.c2);
+
+      const D = c.a1 * c.b2 - c.a2 * c.b1;
+      const Dx = c.c1 * c.b2 - c.c2 * c.b1;
+      const Dy = c.a1 * c.c2 - c.a2 * c.c1;
+
+      const deg1 = Math.abs(c.a1) < 1e-9 && Math.abs(c.b1) < 1e-9;
+      const deg2 = Math.abs(c.a2) < 1e-9 && Math.abs(c.b2) < 1e-9;
+
+      let intersection = null;
+      let coincident = false;
+      let diagHtml = ``;
+
+      if (deg1 || deg2) {
+        const impossible = (deg1 && Math.abs(c.c1) > 1e-9) || (deg2 && Math.abs(c.c2) > 1e-9);
+        if (impossible) {
+          diagHtml = `<span class="status-tag status-tag--error">Sistema Incompatible (SI)</span><p style="margin-top: var(--space-xs);">Una ecuación se redujo a una igualdad imposible (0 = constante distinta de 0). No existe solución.</p>`;
+        } else {
+          diagHtml = `<span class="status-tag status-tag--warning">Ecuación degenerada (0 = 0)</span><p style="margin-top: var(--space-xs);">Al anularse ambos coeficientes de una fila, esa fila no restringe las variables.</p>`;
+        }
+      } else if (Math.abs(D) > 1e-9) {
+        const x = Dx / D;
+        const y = Dy / D;
+        intersection = { x: x, y: y };
+        const outOfView = Math.abs(x) > 6 || Math.abs(y) > 5;
+        diagHtml = `
+          <span class="status-tag status-tag--positive">Sistema Compatible Determinado (SCD)</span>
+          <p style="margin-top: var(--space-xs);">
+            Las rectas tienen pendientes distintas y se cortan en una <strong>solución única</strong>: <strong>(x, y) = (${formatNum(x)}, ${formatNum(y)})</strong>.
+            ${outOfView ? ` El punto queda fuera de la ventana visible [-6, 6] × [-5, 5], pero existe algebraicamente.` : ``}
+          </p>
+        `;
+      } else if (Math.abs(Dx) <= 1e-9 && Math.abs(Dy) <= 1e-9) {
+        coincident = true;
+        let paramText = ``;
+        if (Math.abs(c.b1) > 1e-9) {
+          paramText = `(t, (${c.c1} − ${c.a1}t) / ${c.b1}) para todo t real`;
+        } else {
+          paramText = `(${formatNum(c.c1 / c.a1)}, t) para todo t real`;
+        }
+        diagHtml = `
+          <span class="status-tag">Sistema Compatible Indeterminado (SCI)</span>
+          <p style="margin-top: var(--space-xs);">
+            Ambas ecuaciones representan la <strong>misma recta superpuesta</strong> (proporcionales). Hay <strong>infinitas soluciones</strong>: ${paramText}.
+          </p>
+        `;
+      } else {
+        diagHtml = `
+          <span class="status-tag status-tag--error">Sistema Incompatible (SI)</span>
+          <p style="margin-top: var(--space-xs);">
+            Las rectas son <strong>paralelas y distintas</strong> (misma inclinación, distinto corte). El conjunto de soluciones está vacío (∅).
+          </p>
+        `;
+      }
+
+      const svgEl = document.getElementById(`graph-explorer-svg`);
+      renderCartesianSVG(svgEl, {
+        clipId: `explorer`,
+        a1: c.a1, b1: c.b1, c1: c.c1,
+        a2: c.a2, b2: c.b2, c2: c.c2,
+        intersection: intersection,
+        coincident: coincident
+      });
+
+      const diagEl = document.getElementById(`graph-diagnosis`);
+      if (diagEl) diagEl.innerHTML = diagHtml;
+    }
+
+    // =========================================================================
+    // SECTION 3: METHODS WORKBENCH
+    // =========================================================================
+    function selectMethod(methodKey, preserveStep) {
+      appState.activeMethod = methodKey;
+      if (!preserveStep) {
+        appState.methodStepIndex = 0;
+      }
+      [`sustitucion`, `igualacion`, `reduccion`, `grafico`].forEach(function(k) {
+        const btn = document.getElementById(`method-tab-${k}`);
+        if (btn) btn.classList.toggle(`is-active`, k === methodKey);
+      });
+      renderMethodWorkbench();
+      if (!preserveStep) {
+        persistState();
+      }
+    }
+
+    function setMethodStep(idx) {
+      const m = METHODS_DATA[appState.activeMethod];
+      if (!m) return;
+      appState.methodStepIndex = Math.max(0, Math.min(m.steps.length - 1, idx));
+      renderMethodWorkbench();
+      persistState();
+    }
+
+    function revealAllMethodSteps() {
+      const m = METHODS_DATA[appState.activeMethod];
+      if (!m) return;
+      appState.methodStepIndex = m.steps.length - 1;
+      renderMethodWorkbench();
+      persistState();
+    }
+
+    function renderMethodWorkbench() {
+      const wrap = document.getElementById(`method-workbench`);
+      const m = METHODS_DATA[appState.activeMethod];
+      if (!wrap || !m) return;
+
+      const cur = appState.methodStepIndex;
+      const isGraphic = appState.activeMethod === `grafico`;
+
+      let stepsHtml = ``;
+      m.steps.forEach(function(st, i) {
+        const visible = i <= cur;
+        const cls = i === cur ? `is-current` : (i < cur ? `is-done` : ``);
+        stepsHtml += `
+          <div class="stepper-step-item ${cls}" style="${visible ? `` : `opacity: 0.45;`}">
+            <span class="step-badge step-badge--sm" aria-hidden="true">${i + 1}</span>
+            <div>
+              <strong>${st.label}</strong>
+              ${visible ? `
+                <p style="margin: var(--space-xs) 0 0 0;">${st.text}</p>
+                <div class="math-block">\\(${st.math}\\)</div>
+              ` : `
+                <p class="caption-text" style="margin: var(--space-xs) 0 0 0;">Haz clic en «Siguiente paso» para revelar este procedimiento.</p>
+              `}
+            </div>
+          </div>
+        `;
+      });
+
+      const graphicHtml = isGraphic ? `
+        <div class="svg-plot-wrap" style="margin-top: var(--space-md);">
+          <svg id="method-graphic-svg" class="cartesian-svg" viewBox="0 0 560 400" role="img" aria-label="Gráfica del método gráfico para 2x + y = 5 y x - y = 1"></svg>
+        </div>
+      ` : ``;
+
+      wrap.innerHTML = `
+        <div class="anatomy-card" style="background: var(--surface-container-low); padding: var(--space-md); border-left: 5px solid var(--primary);">
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm);">
+            <div>
+              <h4 style="font-size: 1.2rem;">${m.title}</h4>
+              <div class="caption-text">Sistema ejemplo: \\(${m.systemLatex}\\)</div>
+            </div>
+            <span class="status-tag">Paso ${cur + 1} de ${m.steps.length}</span>
+          </div>
+          <p style="margin-top: var(--space-sm); margin-bottom: 0; font-size: 0.95rem;">${m.tip}</p>
+        </div>
+
+        <div class="button-row" style="margin-top: var(--space-md);">
+          <button type="button" class="button button--secondary" onclick="setMethodStep(${cur - 1})" ${cur === 0 ? `disabled` : ``}>Paso anterior</button>
+          <button type="button" class="button" onclick="setMethodStep(${cur + 1})" ${cur >= m.steps.length - 1 ? `disabled` : ``}>Siguiente paso</button>
+          <button type="button" class="button button--secondary" onclick="revealAllMethodSteps()" ${cur >= m.steps.length - 1 ? `disabled` : ``}>Mostrar todos</button>
+        </div>
+
+        <div class="stepper-steps-list">${stepsHtml}</div>
+        ${graphicHtml}
+      `;
+
+      renderMath(wrap);
+
+      if (isGraphic) {
+        const gSvg = document.getElementById(`method-graphic-svg`);
+        const showPoints = cur >= 1;
+        const showLines = cur >= 2;
+        const showIntersect = cur >= 3;
+        renderCartesianSVG(gSvg, {
+          clipId: `method-graphic`,
+          a1: showLines ? 2 : 0, b1: showLines ? 1 : 0, c1: 5,
+          a2: showLines ? 1 : 0, b2: showLines ? -1 : 0, c2: 1,
+          points1: showPoints ? [{ x: 0, y: 5 }, { x: 1, y: 3 }, { x: 2, y: 1 }, { x: 3, y: -1 }] : [],
+          points2: showPoints ? [{ x: 0, y: -1 }, { x: 1, y: 0 }, { x: 2, y: 1 }, { x: 3, y: 2 }] : [],
+          intersection: showIntersect ? { x: 2, y: 1 } : null,
+          coincident: false
+        });
+      }
+    }
+
+    // =========================================================================
+    // SECTION 4: EVERYDAY APPLICATION SIMULATOR
+    // =========================================================================
+    function updateFlourApp() {
+      const budgetEl = document.getElementById(`sl-app-budget`);
+      const markupEl = document.getElementById(`sl-app-markup`);
+      const outEl = document.getElementById(`flour-app-output`);
+      if (!budgetEl || !markupEl || !outEl) return;
+
+      const total = Number(budgetEl.value);
+      const pct = Number(markupEl.value);
+      appState.appBudget = total;
+      appState.appMarkup = pct;
+
+      const factor = 1 + pct / 100;
+      const denom = 100 + 50 * factor;
+      const x = total / denom;
+      const y = factor * x;
+
+      outEl.innerHTML = `
+        <p style="margin-bottom: var(--space-xs);">
+          Con gasto total de <strong>$${total}</strong> y recargo del <strong>${pct}%</strong> (\\(y = ${factor.toFixed(2)}x\\)):
+        </p>
+        <p style="margin: 0;">
+          <strong>Harina común (x): $${x.toFixed(2)}/kg</strong> · <strong>Harina refinada (y): $${y.toFixed(2)}/kg</strong>
+        </p>
+      `;
+      renderMath(outEl);
+      persistState();
+    }
+
+    // =========================================================================
+    // SECTION 5: INTERACTIVE PRACTICE EXERCISES
+    // =========================================================================
+    function renderExercises() {
+      const container = document.getElementById(`exercises-container`);
+      if (!container) return;
+
+      let html = ``;
+      EXERCISES.forEach(function(ex, idx) {
+        const solved = Boolean(appState.exerciseSolved[ex.id]);
+        const draft = appState.exerciseDrafts[ex.id] || {};
+        const showHint = Boolean(appState.exerciseHintsShown[ex.id]);
+        const showSol = Boolean(appState.exerciseSolutionsShown[ex.id]);
+
+        const statusBadge = solved
+          ? `<span class="status-tag status-tag--positive">Resuelto correctamente</span>`
+          : `<span class="status-tag">Pendiente</span>`;
+
+        let inputsHtml = ``;
+        if (ex.type === `xy`) {
+          inputsHtml = `
+            <div class="exercise-inputs">
+              <div class="field-group">
+                <label class="field-label" for="in-x-${ex.id}">Valor de x</label>
+                <input type="text" id="in-x-${ex.id}" class="text-input" value="${draft.x !== undefined ? draft.x : ``}" oninput="updateExerciseDraft('${ex.id}', 'x', this.value)" autocomplete="off">
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="in-y-${ex.id}">Valor de y</label>
+                <input type="text" id="in-y-${ex.id}" class="text-input" value="${draft.y !== undefined ? draft.y : ``}" oninput="updateExerciseDraft('${ex.id}', 'y', this.value)" autocomplete="off">
+              </div>
+            </div>
+          `;
+        } else {
+          let optsHtml = ``;
+          ex.options.forEach(function(opt) {
+            const checked = draft.choice === opt.value ? `checked` : ``;
+            optsHtml += `
+              <label class="radio-option">
+                <input type="radio" name="choice-${ex.id}" value="${opt.value}" ${checked} onchange="updateExerciseDraft('${ex.id}', 'choice', this.value)">
+                <span>${opt.label}</span>
+              </label>
+            `;
+          });
+          inputsHtml = `<div class="radio-group" role="radiogroup" aria-label="Opciones del ejercicio ${idx + 1}">${optsHtml}</div>`;
+        }
+
+        const feedback = draft.lastFeedback ? `
+          <div class="feedback-box ${draft.lastOk ? `feedback-box--ok` : `feedback-box--err`}" aria-live="polite">
+            ${draft.lastFeedback}
+          </div>
+        ` : ``;
+
+        const hintHtml = showHint ? `
+          <div class="inset inset--warning">
+            <div class="inset-title">Pista</div>
+            <p>${ex.hint}</p>
+          </div>
+        ` : ``;
+
+        const solHtml = showSol ? `
+          <div class="inset">
+            <div class="inset-title">Solución paso a paso</div>
+            <ol style="margin: var(--space-xs) 0 0 0; padding-left: var(--space-lg);">
+              ${ex.solutionSteps.map(function(s) { return `<li style="margin-bottom: var(--space-xs);">${s}</li>`; }).join(``)}
+            </ol>
+          </div>
+        ` : ``;
+
+        html += `
+          <article class="exercise-card" id="card-${ex.id}">
+            <div class="exercise-header">
+              <div style="display: flex; align-items: center; gap: var(--space-sm);">
+                <span class="step-badge step-badge--sm" aria-hidden="true">${idx + 1}</span>
+                <strong>${ex.level}</strong>
+              </div>
+              ${statusBadge}
+            </div>
+
+            <p style="margin: 0;">${ex.prompt}</p>
+            ${ex.latex ? `<div class="math-block">\\(${ex.latex}\\)</div>` : ``}
+
+            ${inputsHtml}
+
+            <div class="button-row">
+              <button type="button" class="button" onclick="checkExercise('${ex.id}')">Comprobar respuesta</button>
+              <button type="button" class="button button--secondary" onclick="toggleHint('${ex.id}')">${showHint ? `Ocultar pista` : `Ver pista`}</button>
+              <button type="button" class="button button--secondary" onclick="toggleSolution('${ex.id}')">${showSol ? `Ocultar solución` : `Ver solución paso a paso`}</button>
+            </div>
+
+            ${feedback}
+            ${hintHtml}
+            ${solHtml}
+          </article>
+        `;
+      });
+
+      container.innerHTML = html;
+      renderMath(container);
+      updateProgressUI();
+    }
+
+    function updateExerciseDraft(exId, field, value) {
+      if (!appState.exerciseDrafts[exId]) appState.exerciseDrafts[exId] = {};
+      appState.exerciseDrafts[exId][field] = value;
+      persistState();
+    }
+
+    function checkExercise(exId) {
+      const ex = EXERCISES.find(function(item) { return item.id === exId; });
+      if (!ex) return;
+      if (!appState.exerciseDrafts[exId]) appState.exerciseDrafts[exId] = {};
+      const draft = appState.exerciseDrafts[exId];
+
+      if (ex.type === `xy`) {
+        const xEl = document.getElementById(`in-x-${exId}`);
+        const yEl = document.getElementById(`in-y-${exId}`);
+        const rawX = xEl ? xEl.value : ``;
+        const rawY = yEl ? yEl.value : ``;
+        draft.x = rawX;
+        draft.y = rawY;
+
+        const xVal = parseNumericInput(rawX);
+        const yVal = parseNumericInput(rawY);
+
+        if (!Number.isFinite(xVal) || !Number.isFinite(yVal)) {
+          draft.lastOk = false;
+          draft.lastFeedback = `<strong>Faltan datos válidos.</strong> Escribe un número o fracción (como <code>14/5</code>) en ambos campos antes de comprobar.`;
+          appState.exerciseSolved[exId] = false;
+        } else {
+          const lhs1 = ex.a1 * xVal + ex.b1 * yVal;
+          const lhs2 = ex.a2 * xVal + ex.b2 * yVal;
+          const ok1 = Math.abs(lhs1 - ex.c1) < 1e-2;
+          const ok2 = Math.abs(lhs2 - ex.c2) < 1e-2;
+
+          if (ok1 && ok2) {
+            draft.lastOk = true;
+            draft.lastFeedback = `<strong>Correcto.</strong> Al sustituir (${formatNum(xVal)}, ${formatNum(yVal)}) se cumplen simultáneamente la ecuación 1 (= ${ex.c1}) y la ecuación 2 (= ${ex.c2}).`;
+            appState.exerciseSolved[exId] = true;
+          } else {
+            draft.lastOk = false;
+            appState.exerciseSolved[exId] = false;
+            const detail = ok1 && !ok2
+              ? `Tu par cumple la primera ecuación, pero en la segunda da ${formatNum(lhs2)} en lugar de ${ex.c2}.`
+              : (!ok1 && ok2
+                ? `Tu par cumple la segunda ecuación, pero en la primera da ${formatNum(lhs1)} en lugar de ${ex.c1}.`
+                : `Ninguna de las dos ecuaciones se cumple con (${formatNum(xVal)}, ${formatNum(yVal)}): dan ${formatNum(lhs1)} y ${formatNum(lhs2)}.`);
+            draft.lastFeedback = `<strong>No es solución aún.</strong> ${detail} Intenta revisar los signos o consulta la pista.`;
+          }
+        }
+      } else {
+        const choice = draft.choice;
+        if (!choice) {
+          draft.lastOk = false;
+          draft.lastFeedback = `<strong>Selecciona una opción</strong> antes de comprobar tu respuesta.`;
+          appState.exerciseSolved[exId] = false;
+        } else if (choice === ex.correctChoice) {
+          draft.lastOk = true;
+          draft.lastFeedback = `<strong>Correcto.</strong> Ambas ecuaciones tienen la misma inclinación pero términos independientes distintos (0 = 3), así que son rectas paralelas sin solución.`;
+          appState.exerciseSolved[exId] = true;
+        } else {
+          draft.lastOk = false;
+          draft.lastFeedback = `<strong>Revisa la relación entre ambas ecuaciones.</strong> Fíjate que el lado izquierdo es idéntico (3x + 2y) pero igualado a 6 y a 9 al mismo tiempo.`;
+          appState.exerciseSolved[exId] = false;
+        }
+      }
+
+      renderExercises();
+      persistState();
+    }
+
+    function toggleHint(exId) {
+      appState.exerciseHintsShown[exId] = !appState.exerciseHintsShown[exId];
+      renderExercises();
+      persistState();
+    }
+
+    function toggleSolution(exId) {
+      appState.exerciseSolutionsShown[exId] = !appState.exerciseSolutionsShown[exId];
+      renderExercises();
+      persistState();
+    }
+
+    function updateProgressUI() {
+      const total = EXERCISES.length;
+      const done = EXERCISES.filter(function(ex) { return Boolean(appState.exerciseSolved[ex.id]); }).length;
+      const pct = Math.round((done / total) * 100);
+
+      const counterEl = document.getElementById(`progress-counter`);
+      const fillEl = document.getElementById(`progress-fill`);
+      const barWrap = document.getElementById(`progress-bar-wrap`);
+      const labelEl = document.getElementById(`progress-label`);
+
+      if (counterEl) counterEl.textContent = `${done} / ${total}`;
+      if (fillEl) fillEl.style.width = `${pct}%`;
+      if (barWrap) barWrap.setAttribute(`aria-valuenow`, String(done));
+      if (labelEl) {
+        labelEl.textContent = done === total
+          ? `Has completado todos los ejercicios`
+          : `Ejercicios resueltos correctamente`;
+      }
+    }
+
+    function handleResetProgress(btn) {
+      const msgEl = document.getElementById(`reset-msg`);
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `Confirmar reinicio`;
+        if (msgEl) msgEl.textContent = `Haz clic otra vez para borrar tus respuestas guardadas.`;
+        return;
+      }
+      btn.dataset.armed = `false`;
+      btn.textContent = `Reiniciar progreso`;
+      if (msgEl) msgEl.textContent = `Progreso reiniciado.`;
+
+      appState.linearityAnswers = {};
+      appState.exerciseDrafts = {};
+      appState.exerciseSolved = {};
+      appState.exerciseHintsShown = {};
+      appState.exerciseSolutionsShown = {};
+
+      renderLinearityQuiz();
+      renderExercises();
+      persistState();
+    }
+
+    // =========================================================================
+    // INITIALIZATION
+    // =========================================================================
+    async function initApp() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+        try {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            if (saved.selectedComponent) appState.selectedComponent = saved.selectedComponent;
+            if (saved.linearityAnswers) appState.linearityAnswers = saved.linearityAnswers;
+            if (saved.graphCoeffs) appState.graphCoeffs = saved.graphCoeffs;
+            if (saved.activeMethod) appState.activeMethod = saved.activeMethod;
+            if (typeof saved.methodStepIndex === `number`) appState.methodStepIndex = saved.methodStepIndex;
+            if (typeof saved.appBudget === `number`) appState.appBudget = saved.appBudget;
+            if (typeof saved.appMarkup === `number`) appState.appMarkup = saved.appMarkup;
+            if (saved.exerciseDrafts) appState.exerciseDrafts = saved.exerciseDrafts;
+            if (saved.exerciseSolved) appState.exerciseSolved = saved.exerciseSolved;
+            if (saved.exerciseHintsShown) appState.exerciseHintsShown = saved.exerciseHintsShown;
+            if (saved.exerciseSolutionsShown) appState.exerciseSolutionsShown = saved.exerciseSolutionsShown;
+          }
+        } catch (err) {
+          // Continue with defaults
+        }
+      }
+
+      // Sync saved UI controls
+      Object.keys(appState.graphCoeffs).forEach(function(k) {
+        const sl = document.getElementById(`sl-${k}`);
+        const num = document.getElementById(`num-${k}`);
+        if (sl) sl.value = String(appState.graphCoeffs[k]);
+        if (num) num.value = String(appState.graphCoeffs[k]);
+      });
+
+      const budgetEl = document.getElementById(`sl-app-budget`);
+      const markupEl = document.getElementById(`sl-app-markup`);
+      if (budgetEl) budgetEl.value = String(appState.appBudget);
+      if (markupEl) markupEl.value = String(appState.appMarkup);
+
+      selectComponent(appState.selectedComponent);
+      renderLinearityQuiz();
+      updateGraphExplorer();
+      selectMethod(appState.activeMethod, true);
+      updateFlourApp();
+      renderExercises();
+      renderMath(document.body);
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener(`DOMContentLoaded`, initApp);
+  </script>
+</body>
+</html>
